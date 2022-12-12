@@ -8,12 +8,12 @@ export default {
 }
 
 export class Api extends ApiRequest {
-    signIn = (username, password) => this.post(`/user/auth`, {username, password});
+    signIn = (password) => this.post(`/user/auth`, {password});
     signOut = () => this.delete(`/user/session`);
     getUser = () => this.get(`/user`);
     getUserInfo = (id) => this.get(`/user`, {id})
-    signUp = (username, password, email, name) => this.post(`/user`, {username, password, email, name});
-    updateUser = (email, username, name) => this.put(`/user`, {email, username, name});
+    signUp = (password, email, name) => this.post(`/user`, {password, email, name});
+    updateUser = (email, name) => this.put(`/user`, {email, name});
     updateUserAvatarImageId = (avatarImageId) => this.put(`/user`, {avatarImageId});
     updatePassword = (oldPassword, newPassword) => this.put(`/user/password`, {oldPassword, newPassword});
     sendRestorePasswordEmail = (email) => this.post(`/user/password/restore`, {email});
@@ -23,7 +23,7 @@ export class Api extends ApiRequest {
     confirmEmailSendMessage = () => this.post(`/user/email/confirm`);
     confirmEmailByCode = (code) => this.put(`/user/email/confirm`, {code});
 
-    getEvents = (filters) => this.get(`/event`, filters); // filters: any of {date, placeId, participantId, }
+    getEvents = (filters) => this.get(`/event`, filters); // filters: any of {date, placeId, participantId, type}; type = one of ['all', 'past', 'next']
     getEventById = (id) => this.get(`/event`, {id});
     createEvent = (name, description, date, timeStart, timeEnd, placeId, eventTimeStart, eventTimeEnd, needPeopleByCategory) => this.post(`/event`, {name, date, timeStart, timeEnd, description, placeId, eventTimeStart, eventTimeEnd, needPeople: needPeopleByCategory});
     editEvent = (id, name, description, date, timeStart, timeEnd, placeId, eventTimeStart, eventTimeEnd, needPeopleByCategory) => this.put(`/event`, {id, name, date, timeStart, timeEnd, description, placeId, eventTimeStart, eventTimeEnd, needPeople: needPeopleByCategory});
