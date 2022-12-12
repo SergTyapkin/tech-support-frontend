@@ -1,5 +1,5 @@
 <style lang="stylus" scoped>
-@require '../../styles/constants.styl'
+@require '../styles/constants.styl'
 
 .events-list
   display flex

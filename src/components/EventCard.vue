@@ -47,7 +47,7 @@ height = 300px
 </template>
 
 <script>
-import CircleLoading from "./loaders/CircleLoading";
+import CircleLoading from "./loaders/CircleLoading.vue";
 export default {
   components: {CircleLoading},
   props: {
