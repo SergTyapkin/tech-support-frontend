@@ -1,0 +1,56 @@
+@require 'constants.styl'
+
+bg-color = linear-gradient(-20deg, empColor1 0%, empColor6 20%, bgColor1 70%, bgColor0 100%)
+link-decoration-color = #d2825c
+link-decoration-color-hover = #fdc57c
+visited-link-color = #b17bc3
+hr-color = linear-gradient(90deg, transparent, empColor1, transparent)
+
+
+html
+    overflow-x hidden
+
+*
+    box-sizing border-box
+
+
+body
+    margin 0
+    width 100vw
+    min-height 100vh
+    position relative
+    color textColor1
+    background bg-color
+    animation bg-move 3s ease normal forwards
+    overflow-x hidden
+    font-family monospace
+
+a
+    text-decoration none
+    color textColor1
+    transition color 0.2s ease
+.link a
+a.link
+    color link-decoration-color
+.link a:hover
+a.link:hover
+    color link-decoration-color-hover
+
+
+hr
+    height 2px
+    border none
+    background hr-color
+
+
+#app
+    width 100%
+    height 100%
+
+
+pc-hide()
+    @media ({desktop})
+        display none
+mobile-hide()
+    @media ({mobile})
+        display none

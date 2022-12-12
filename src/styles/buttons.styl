@@ -1,0 +1,35 @@
+@require 'constants.styl'
+
+button()
+    font-family Arial, monospace
+    text-align center
+    padding 10px
+    border 1px solid secColor1
+    outline rgb(141, 112, 60) solid 1px
+    text-shadow none
+    transition all 0.2s ease
+    cursor pointer
+    box-sizing border-box
+    background linear-gradient(90deg,rgba(71,56,20,.4),rgba(84,69,25,.7))
+    box-shadow 5px 5px 5px colorShadow
+    @media ({mobile})
+        box-shadow none
+    &.half-height
+        padding 0 10px
+    &.bg
+        background linear-gradient(20deg, rgba(45, 36, 13, 0.4) 0%, rgba(90, 56, 25, 0.7) 50%, rgba(55, 43, 16, 0.4) 100%)
+    &.rounded
+        border-radius 10px
+
+
+    &:hover
+        text-shadow textLightingNormal1
+        box-shadow 0 0 15px rgb(255, 235, 164)
+
+
+    &.outline
+        transition all 1s cubic-bezier(0.19, 1, 0.22, 1)
+        outline-offset 0
+    &.outline:hover
+        outline-offset 15px
+        outline-color transparent

@@ -1,0 +1,57 @@
+@require 'constants.styl'
+
+scroll-bg-color = bgColor2
+scroll-thumb-color = empColor1
+scroll-thumb-color-hover = empColor2
+scrollbar-width-worded = bold
+scrollbar-width = 10px
+scrollbar-border = 2px
+
+.scrollable:not(.mobile-not-scrollable)
+  overflow-y auto
+  scrollbar-width scrollbar-width-worded
+  scrollbar-height scrollbar-width-worded
+  scrollbar-color scroll-thumb-color scroll-bg-color
+  &:hover
+    scrollbar-color scroll-thumb-color-hover scroll-bg-color
+  &:hover::-webkit-scrollbar-thumb
+    background-color scroll-thumb-color-hover
+  &::-webkit-scrollbar
+    width scrollbar-width
+    height scrollbar-width
+  &::-webkit-scrollbar-track
+    background scroll-bg-color
+    border-radius (scrollbar-width / 2)
+  &::-webkit-scrollbar-thumb
+    background-color scroll-thumb-color
+    border-radius (scrollbar-width / 2)
+    border scrollbar-border solid scroll-bg-color
+
+  &::-webkit-scrollbar-corner
+    background scroll-bg-color
+
+
+@media({desktop})
+  .scrollable.mobile-not-scrollable
+    overflow-y auto
+    scrollbar-width scrollbar-width-worded
+    scrollbar-height scrollbar-width-worded
+    scrollbar-color scroll-thumb-color scroll-bg-color
+    &:hover
+      scrollbar-color scroll-thumb-color-hover scroll-bg-color
+    &:hover::-webkit-scrollbar-thumb
+      background-color scroll-thumb-color-hover
+    &::-webkit-scrollbar
+      width scrollbar-width
+      height scrollbar-width
+    &::-webkit-scrollbar-track
+      background scroll-bg-color
+      border-radius (scrollbar-width / 2)
+    &::-webkit-scrollbar-thumb
+      background-color scroll-thumb-color
+      border-radius (scrollbar-width / 2)
+      border scrollbar-border solid scroll-bg-color
+
+    &::-webkit-scrollbar-corner
+      background scroll-bg-color
+
