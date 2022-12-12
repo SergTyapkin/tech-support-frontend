@@ -8,14 +8,15 @@ export default {
 }
 
 export class Api extends ApiRequest {
-    signIn = (password) => this.post(`/user/auth`, {password});
+    signIn = (email, password) => this.post(`/user/auth`, {email, password});
     signOut = () => this.delete(`/user/session`);
     getUser = () => this.get(`/user`);
-    getUserInfo = (id) => this.get(`/user`, {id})
+    getAnotherUser = (id) => this.get(`/user`, {id})
     signUp = (password, email, name) => this.post(`/user`, {password, email, name});
-    updateUser = (email, name) => this.put(`/user`, {email, name});
-    updateUserAvatarImageId = (avatarImageId) => this.put(`/user`, {avatarImageId});
+    updateUser = (userId, email, name) => this.put(`/user`, {userId, email, name});
+    updateUserAvatarImageId = (userId, avatarImageId) => this.put(`/user`, {userId, avatarImageId});
     updatePassword = (oldPassword, newPassword) => this.put(`/user/password`, {oldPassword, newPassword});
+    deleteUser = (userId) => this.delete(`/user`, {userId});
     sendRestorePasswordEmail = (email) => this.post(`/user/password/restore`, {email});
     restorePassword = (code, newPassword) => this.put(`/user/password/restore`, {code, newPassword});
     sendSignInEmail = (email) => this.post(`/user/auth/code`, {email});
@@ -25,11 +26,11 @@ export class Api extends ApiRequest {
 
     getEvents = (filters) => this.get(`/event`, filters); // filters: any of {date, placeId, participantId, type}; type = one of ['all', 'past', 'next']
     getEventById = (id) => this.get(`/event`, {id});
-    createEvent = (name, description, date, timeStart, timeEnd, placeId, eventTimeStart, eventTimeEnd, needPeopleByCategory) => this.post(`/event`, {name, date, timeStart, timeEnd, description, placeId, eventTimeStart, eventTimeEnd, needPeople: needPeopleByCategory});
+    createEvent = (name, description, date, timeStart, timeEnd, placeId, eventTimeStart, eventTimeEnd, needPeopleByCategory) => this.post(`/event`, {name, date, timeStart, timeEnd, description, placeId, eventTimeStart, eventTimeEnd, needPeople: needPeopleByCategory}); // needPeopleByCategory: [{positionId: Number, count: Number}, ...]
     editEvent = (id, name, description, date, timeStart, timeEnd, placeId, eventTimeStart, eventTimeEnd, needPeopleByCategory) => this.put(`/event`, {id, name, date, timeStart, timeEnd, description, placeId, eventTimeStart, eventTimeEnd, needPeople: needPeopleByCategory});
     deleteEventById = (id) => this.delete(`/event`, {id});
 
-    participateInEvent = (eventId, userId, position) => this.post(`/participation/event`, {eventId, userId, position});
+    participateInEvent = (eventId, userId, positionId) => this.post(`/participation/event`, {eventId, userId, positionId});
     notParticipateInEvent = (eventId, userId) => this.delete(`/participation/event`, {eventId, userId});
 
     getParticipationRating = () => this.get(`/ratings/participation`);
@@ -46,8 +47,9 @@ export class Api extends ApiRequest {
     editPlace = (id, name) => this.put(`/place`, {id, name});
     deletePlace = (id) => this.delete(`/place`, {id});
 
-    uploadImage = (dataUrl) => this.post('/image', {dataUrl});
-    deleteImage = (imageId) => this.delete('/image', {imageId});
+    uploadImage = (dataUrl) => this.post(`/image`, {dataUrl});
+    deleteImage = (imageId) => this.delete(`/image`, {imageId});
 
-    executeAdminSql = (sql) => this.post('/admin/sql', {sql});
+    executeAdminSql = (sql) => this.post(`/admin/sql`, {sql});
+    setAdminConfirmation = (userId, isConfirmed) => this.put(`/admin/user/confirmation`, {userId, isConfirmed})
 }

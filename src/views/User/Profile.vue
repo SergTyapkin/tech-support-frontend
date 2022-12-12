@@ -417,7 +417,7 @@ export default {
 
     async getAnotherUser() {
       this.loading = true;
-      const user = await this.$api.getUserInfo(this.id);
+      const user = await this.$api.getAnotherUser(this.id);
       this.loading = false;
 
       if (!user.ok_) {
