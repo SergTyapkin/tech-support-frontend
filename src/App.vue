@@ -3,7 +3,7 @@ top-bar-height = 70px
 
 .wrapper
   width 100%
-  min-height "calc(100vh - %s)" % top-bar-height
+  min-height 100vh
 
   > *
     position absolute
@@ -23,8 +23,6 @@ top-bar-height = 70px
 </style>
 
 <template>
-  <Navbar></Navbar>
-
   <div class="wrapper">
     <CircleLoading v-if="!$store.state.user.isGotten" class="loading"></CircleLoading>
     <div v-else-if="!$store.state.user.isConfirmedByAdmin" class="overlay stack activated">

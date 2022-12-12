@@ -8,6 +8,7 @@ import Api from "./Api";
 import './styles/global.styl';
 import './styles/show-hide.styl';
 import './styles/scrollbars.styl';
+import './styles/glitch.styl';
 import {API_URL} from "./constants";
 
 const Router = createVueRouter(Store);
