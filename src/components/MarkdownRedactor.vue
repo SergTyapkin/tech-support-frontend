@@ -23,7 +23,7 @@ markdown-button-width = 30px
 markdown-button-padding = 2px 0 0 0
 markdown-button-divider-color = bgColor1
 markdown-button-bg-color = transparent
-markdown-button-bg-color-hover = empColor1
+markdown-button-bg-color-hover = empColor1_1
 
 markdown-button-svg-photo-stroke = 2px
 markdown-button-svg-photo-fill = transparent

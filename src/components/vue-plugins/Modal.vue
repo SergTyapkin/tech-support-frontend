@@ -55,8 +55,8 @@
       </span>
 
       <div class="info-container">
-        <div class="title text-big-x">{{ title }}</div>
-        <div class="description text-small">{{ description }}</div>
+        <div class="title ">{{ title }}</div>
+        <div class="description ">{{ description }}</div>
       </div>
 
       <div class="fields-container">

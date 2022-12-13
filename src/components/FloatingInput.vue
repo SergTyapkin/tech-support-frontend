@@ -63,7 +63,7 @@ input-bg = linear-gradient(20deg, rgba(45, 36, 13, 0.4) 0%, rgba(62, 39, 17, 0.6
     --border: textColor2;
     --border-hover: textColor1;
     --background: colorNo;
-    --disabled: empColor3;
+    --disabled: empColor1_3;
     --disabled-inner: #E1E6F9;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -201,7 +201,7 @@ input-bg = linear-gradient(20deg, rgba(45, 36, 13, 0.4) 0%, rgba(62, 39, 17, 0.6
   //  cursor: pointer;
   //  border-radius: 2px;
   //  padding: 3px 8px;
-  //  background: linear-gradient(colorNo 0%, empColor1 50%, colorYes 90%) no-repeat;
+  //  background: linear-gradient(colorNo 0%, empColor1_1 50%, colorYes 90%) no-repeat;
   //  background-size 100% 200%
   //  background-position-y 0
   //  box-shadow inset 0 0 5px colorShadow
@@ -232,8 +232,8 @@ input-bg = linear-gradient(20deg, rgba(45, 36, 13, 0.4) 0%, rgba(62, 39, 17, 0.6
         switch: type === 'checkbox',
       }"
     >
-    <label class="text-big-x">{{ title }}</label>
-    <div class="info text-small-x">
+    <label class="">{{ title }}</label>
+    <div class="info -x">
       <slot></slot>
     </div>
   </div>

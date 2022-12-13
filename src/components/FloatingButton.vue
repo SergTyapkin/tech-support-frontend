@@ -16,7 +16,7 @@ padding = 5px
   border-radius (float-button-height / 2)
   padding padding
   padding-right ((float-button-height - image-width) / 2)
-  background empColor1
+  background empColor1_1
   box-shadow 3px 3px 5px colorShadow
 
   .fields
@@ -57,7 +57,7 @@ padding = 5px
 </style>
 
 <template>
-  <div class="float-button text-middle" :class="{green}">
+  <div class="float-button " :class="{green}">
     <router-link class="fields" :to="to" v-if="to">
       <span class="hover-text">{{ title }}</span>
       <span class="image">

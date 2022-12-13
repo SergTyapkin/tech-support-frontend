@@ -66,7 +66,7 @@ thumb-size = 15px
       outline: none;
       border-radius: thumb-size;
       overflow hidden
-      box-shadow: inset 0 0 5px empColor1;
+      box-shadow: inset 0 0 5px empColor1_1;
       @media ({mobile})
         background linear-gradient(170deg, bgColor2, bgColor3)
         box-shadow none
@@ -75,10 +75,10 @@ thumb-size = 15px
       width thumb-size
       height thumb-size
       border-radius 50%
-      background empColor2
+      background empColor2_1
       cursor pointer
       border 4px solid #333
-      box-shadow (- slider-length - 5px) 0 0 (slider-length) mix(empColor1, transparent, 30%)
+      box-shadow (- slider-length - 5px) 0 0 (slider-length) mix(empColor1_1, transparent, 30%)
     .range-labels
       max-width slider-length
       width calc(100% - 10px)
@@ -107,18 +107,18 @@ thumb-size = 15px
 <template>
   <div class="qr-generator">
     <div v-if="!noText">
-      <div class="text-big">Закодировано:</div>
-      <div class="text-middle link">{{ text || '???' }}</div>
+      <div class="">Закодировано:</div>
+      <div class=" link">{{ text || '???' }}</div>
     </div>
 
     <div class="flex-container">
       <div ref="qr" v-html="html" class="qr-image" :class="{invert, blured: !text}"></div>
 
       <div class="range-container container-bg">
-        <label class="text-big title">Размер</label>
+        <label class=" title">Размер</label>
         <div class="slider-container">
           <input type="range" class="slider" min="1" max="3" step="1" v-model="size" @input="onInput">
-          <div class="range-labels text-small">
+          <div class="range-labels ">
             <div>Low</div>
             <div>Mid</div>
             <div>High</div>
@@ -128,9 +128,9 @@ thumb-size = 15px
     </div>
 
     <div class="switch-container container-bg">
-      <label class="text-big">Белый</label>
+      <label class="">Белый</label>
       <FloatingInput type="checkbox" v-model="invert" class="switch"></FloatingInput>
-      <label class="text-big">Черный</label>
+      <label class="">Черный</label>
     </div>
   </div>
 </template>

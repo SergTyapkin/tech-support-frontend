@@ -1,9 +1,10 @@
 <style lang="stylus">
 @require '../styles/constants.styl'
+@require '../styles/buttons.styl'
+@require '../styles/fonts.styl'
 
-input-bg = linear-gradient(20deg, rgba(45, 36, 13, 0.4) 0%, rgba(62, 39, 17, 0.6) 50%, rgba(38, 30, 11, 0.4) 100%) 50% 50% no-repeat
-//form-bg = linear-gradient(20deg, bgColor0 0%, empColor6 50%, empColor4 110%) 50% 50% no-repeat
-form-bg = linear-gradient(20deg, bgColor1 0%, empColor6 50%, bgColor2 100%) 50% 50% no-repeat
+
+form-bg = blocksBgColor
 
 textarea
 input
@@ -21,12 +22,12 @@ textarea
   border-radius 3px
   border transparent 1px solid
 textarea:focus
-  border empColor2 1px solid
+  border empColor2_1 1px solid
 input
 .input-like
   background colorShadowLight-x
   border-radius 5px 5px 0 0
-  border-bottom 1px solid empColor3
+  border-bottom 1px solid empColor1_1
   border-right 100px solid transparent
   border-left 100px solid transparent
   @media ({mobile})
@@ -38,7 +39,7 @@ input:focus
   background colorShadowDark
   border-right-width 0
   border-left-width 0
-  //border-color empColor1
+  //border-color empColor1_1
 .form:not(.no-bg)
   background form-bg
   box-shadow 3px 3px 10px black
@@ -46,11 +47,14 @@ input:focus
   margin-top 100px
 
 .form
+  font-small-extra()
   margin-left auto
   margin-right auto
   width 100%
   max-width 460px
   border-radius 7px
+  backdrop-filter blur(1px)
+  mix-blend-mode difference
   transition all 0.3s ease
 
   .info-container
@@ -66,7 +70,7 @@ input:focus
       margin 20px 0
       transition all 0.3s ease
       > label
-        font-family Arial, monospace
+        font-medium()
       > textarea,
       > input[type=text]
       > input[type=password],
@@ -92,18 +96,7 @@ input:focus
 
   input[type=button]
   input[type=submit]
-    background linear-gradient(20deg, rgba(45, 36, 13, 0.4) 0%, rgba(90, 56, 25, 0.7) 50%, rgba(55, 43, 16, 0.4) 100%) 50% 50% no-repeat
-    width 100%
-    padding 10px
-    text-align center
-    border-color empColor3
-    cursor pointer
-    border 1px empColor3 solid
-    border-radius 3px
-    box-shadow inset 0 0 0 transparent, 5px 5px 10px colorShadowDark
-  input[type=button]:hover
-  input[type=submit]:hover
-    box-shadow inset 0 0 20px rgb(195, 162, 127), 0 0 10px rgb(255, 235, 164)
+    button-submit()
 
 
 .form
@@ -117,23 +110,23 @@ input:focus
 
 .form.error
 .form .error
-  color #ff8e72
+  color colorNo
   *
-    color #ff8e72
+    color colorNo
   textarea
   input
   .input-like
-    border-color #ff8e72
+    border-color colorNo
 //animation error 3s forwards
 .form.success
 .form .success
-  color #c4ff72
+  color colorYes
   *
-    color #c4ff72
+    color colorYes
   textarea,
   input
   .input-like
-    border-color #c4ff72
+    border-color colorYes
 //animation success 3s forwards
 
 .form.disabled

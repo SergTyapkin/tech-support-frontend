@@ -30,7 +30,7 @@ li
       .title-container
         .number
           margin-right 10px
-          color empColor4
+          color empColor2_2
         //.title
       .info
         overflow hidden
@@ -53,7 +53,7 @@ li:last-child
 li.selected,
 li:hover
 li:hover + li
-  border-color empColor1
+  border-color empColor1_1
 li.inside:hover
   border-left-width 20px
   > .all-info
@@ -83,19 +83,19 @@ li.bg
 </style>
 
 <template>
-  <li class="text-big" :class="{inside, bg, selected: !closed}">
+  <li class="" :class="{inside, bg, selected: !closed}">
     <div class="all-info" @click.prevent="onClick">
       <img v-if="!ispublished" src="../res/invisible.svg" alt="unpublished">
       <img v-if="islinkactive" src="../res/link.svg" alt="link active">
 
       <div class="main-info">
         <div class="title-container">
-          <span class="number text-middle" v-if="number">{{ number }}</span>
+          <span class="number " v-if="number">{{ number }}</span>
           <span class="title">{{ title }}</span>
         </div>
-        <div class="text-small info">{{ description }}</div>
+        <div class=" info">{{ description }}</div>
       </div>
-      <span class="text-small choose">
+      <span class=" choose">
         {{ actionText }}<Arrow right ref="arrow" v-if="arrow"></Arrow>
       </span>
     </div>

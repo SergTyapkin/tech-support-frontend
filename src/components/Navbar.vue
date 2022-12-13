@@ -101,7 +101,7 @@ side-item-gradient = "linear-gradient(%s, rgba(184, 134, 11, 0.3) 30%, rgba(218,
     background-position-x calc(100% - 100% * var(--progress))
     background-size 200%
     //box-shadow rgba(231, 190, 28, 0.7) 0 0 5px 0
-    border mix(empColor5, transparent, 30%) 1px solid
+    border mix(empColor1_1, transparent, 30%) 1px solid
     transition background-position-x ease 3s
 
 
@@ -161,7 +161,7 @@ side-item-gradient = "linear-gradient(%s, rgba(184, 134, 11, 0.3) 30%, rgba(218,
             :decimals='1'
             autoinit
         ></vue3autocounter>
-        <span class="text-small info">Прогресс прохождения</span>
+        <span class=" info">Прогресс прохождения</span>
       </div>
     </router-link>
     <div class="center progress" v-else>

@@ -14,7 +14,7 @@ footer
 
   background linear-gradient(20deg, rgba(84, 67, 24, 0) 0%, rgba(84, 67, 24, 0.6) 50%, rgba(84, 67, 24, 0) 100%) no-repeat
   border-top solid 2px
-  border-color empColor2
+  border-color empColor2_1
   box-shadow rgba(231, 190, 28, 0.5) 0 0 8px 0
   list-style none
 

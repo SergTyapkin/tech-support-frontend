@@ -16,13 +16,13 @@ cross-lines-width = 14%
   transform: rotate(135deg) scale(1.1);
 .cross:hover:before,
 .cross:hover:after
-  background empColor2
+  background empColor2_1
 
 .cross:before, .cross:after {
   content: "";
   position: absolute;
   z-index: -1;
-  background: empColor4;
+  background: empColor2_2;
 }
 .cross:before {
   top: 0;

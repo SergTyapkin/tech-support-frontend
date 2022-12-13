@@ -18,7 +18,7 @@ module.exports = {
             template: 'src/index.html',
             favicon: 'src/res/favicon.ico',
             meta: {
-                'theme-color': '#38240b',
+                'theme-color': '#092c26',
             }
         }),
         new VueLoaderPlugin(),

@@ -1,4 +1,6 @@
 <style lang="stylus">
+@require '../../styles/buttons.styl'
+
 logo-size = 140px
 
 .form
@@ -9,6 +11,10 @@ logo-size = 140px
 .text-centered
   text-align center
   margin 10px 0
+  color textColor4
+
+.button
+  button()
 </style>
 
 
@@ -18,7 +24,7 @@ logo-size = 140px
           ref="form"
           title="Вход" description="Ну давай, вспомни пароль, войди в меня"
           :fields="[
-            { title: 'ЛОГИН или E-MAIL', autocomplete: 'on', jsonName: 'username' },
+            { title: 'E-MAIL', autocomplete: 'on', jsonName: 'email' },
             { title: 'ПАРОЛЬ', autocomplete: 'on', jsonName: 'password', type: 'password', info: 'Забыл пароль? - пей таблетки', infoHref: base_url_path + `/password/restore`},
           ]"
           submit-text="Погнали"
@@ -26,7 +32,7 @@ logo-size = 140px
     >
       Нужен аккаунт? <router-link :to="base_url_path + `/signup`" class="link">Создать</router-link>
 
-      <div class="text-small text-centered">или</div>
+      <div class=" text-centered">или</div>
       <div class="button" @click="loginByCode = true">Войти по коду</div>
     </Form>
 
@@ -42,12 +48,12 @@ logo-size = 140px
       <Form :no-bg="true"
             ref="formCode"
             :fields="[
-            { title: 'Одноразовый код', jsonName: 'code'},
-          ]"
+              { title: 'Одноразовый код', jsonName: 'code'},
+            ]"
             submit-text="Войти"
             @submit="signInByEmailCode"
       ></Form>
-      <div class="text-small text-centered">или</div>
+      <div class="text-centered">или</div>
       <div class="button" @click="loginByCode = false">Войти по паролю</div>
     </Form>
   </div>

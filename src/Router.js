@@ -47,8 +47,8 @@ export default function createVueRouter(Store, App) {
         if (!router_got_user) {
             await Store.dispatch('GET_USER');
             router_got_user = true;
-            if (to.path === '/') {
-                if (Store.user.isLogined) {
+            if (to.path === '/' || to.path === '' || to.path === BASE_URL_PATH || to.path === BASE_URL_PATH + '/') {
+                if (Store.state.user.isLogined) {
                     next('/profile');
                     return;
                 }

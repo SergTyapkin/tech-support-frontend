@@ -151,7 +151,7 @@ plate-max-width = 400px
   <router-link class="quest-preview" :to="base_url_path + `/quest?id=${id}`" :class="{placeholder: isPlaceholder}">
     <img class="preview-image" :src="previewurl" alt="preview" v-if="previewurl">
 
-    <div class="preview-image default text-big-xx" v-else>SQ</div>
+    <div class="preview-image default -xx" v-else>SQ</div>
 
     <div class="container" :class="{inactive: branchesOpened}">
       <div class="main-info">
@@ -160,21 +160,15 @@ plate-max-width = 400px
         </router-link>
 
         <div class="text-container">
-          <div class="title"
-               :class="{
-                  'text-big-x': title?.length < 20,
-                  'text-big': title?.length >= 20 && title?.length < 40,
-                  'text-middle': title?.length >= 40
-                }"
-          >
+          <div class="title">
             <span>{{title}}</span>
             <img v-if="islinkactive" src="../res/link.svg" alt="with link" class="quest-modifier">
             <img v-if="!ispublished" src="../res/invisible.svg" alt="unpublished" class="quest-modifier">
           </div>
-          <div class="text-small description" v-if="description">{{description.replace(/([#*_]\ ?|&lt;\w*&gt;)/g, '').slice(0, 80) + '...'}}</div>
+          <div class=" description" v-if="description">{{description.replace(/([#*_]\ ?|&lt;\w*&gt;)/g, '').slice(0, 80) + '...'}}</div>
         </div>
 
-        <div class="statistics text-big-xx">
+        <div class="statistics -xx">
           <span class="rating" :class="{good: rating >= 4.5, bad: rating < 3.5}">
             <img src="../res/star.svg" alt="star">{{rating}}
           </span>
@@ -182,7 +176,7 @@ plate-max-width = 400px
             <img src="../res/time.svg" alt="time">{{time}}
           </span>
         </div>
-        <router-link :to="base_url_path + `/profile?id=${author}`" class="link text-small author-fields">
+        <router-link :to="base_url_path + `/profile?id=${author}`" class="link  author-fields">
           <img src="../res/profile.svg" alt="">
           <span>{{authorname}}</span>
         </router-link>

@@ -5,8 +5,8 @@
 .arrow
   width var(--size)
   height var(--size)
-  border-top 5px solid empColor5
-  border-right 5px solid empColor2
+  border-top 5px solid empColor1_1
+  border-right 5px solid empColor2_1
   border-radius 7px 0 7px 0
   transition all 0.2s ease
   display inline-block

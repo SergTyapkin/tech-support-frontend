@@ -82,7 +82,7 @@ li.last-child
 
 <template>
   <li>
-    <span class="text-big-x orderid">{{ idx + 1 }}</span>
+    <span class=" orderid">{{ idx + 1 }}</span>
     <div v-if="canDelete" class="button rounded delete-button" @click="$emit('delete', idx)"><Cross></Cross></div>
     <div class="move-buttons" v-if="modelValue.confirmed">
       <div class="button half-height rounded" @click="this.$emit('move', {idx, to: idx-1})">˄</div>
@@ -90,7 +90,7 @@ li.last-child
     </div>
     <input type="text" :placeholder="placeholder" :value="modelValue.title" autocomplete="off" @input="updateVModel" ref="input">
 
-    <router-link :to="base_url_path + actionTo(modelValue.id)" v-if="modelValue.confirmed && actionText && modelValue.id" class="text-middle button rounded goto-button">
+    <router-link :to="base_url_path + actionTo(modelValue.id)" v-if="modelValue.confirmed && actionText && modelValue.id" class=" button rounded goto-button">
       <span class="mobile-hide">{{ actionText }}</span> <Arrow right></Arrow>
     </router-link>
   </li>

@@ -43,7 +43,7 @@ hr
 
   .confirm-email-input
     margin-bottom 20px
-    color empColor2
+    color empColor2_1
     font-weight bold
   .password-form-container
     margin-bottom 0
@@ -132,7 +132,7 @@ hr
             <div class="top-container">
               <div class="rating">
                 <div>★{{ user.rating }}</div>
-                <div class="info text-small-x">рейтинг</div>
+                <div class="info ">рейтинг</div>
               </div>
 
               <CircleLoading v-if="loading"></CircleLoading>
@@ -156,19 +156,19 @@ hr
 
               <div class="position">
                 <div>{{ user.position }}</div>
-                <div class="info text-small-x">позиция</div>
+                <div class="info ">позиция</div>
               </div>
             </div>
-            <input v-if="yours" class="username text-big" v-model="username">
-            <div v-else class="username text-big">
+            <input v-if="yours" class="username " v-model="username">
+            <div v-else class="username ">
               <div>{{username}}</div>
-              <div class="text-small another-user-info">{{ user.name }}</div>
+              <div class=" another-user-info">{{ user.name }}</div>
             </div>
           </div>
 
           <hr>
 
-          <div class="quest-statistics text-middle">
+          <div class="quest-statistics ">
             <ArrowListElement :title="`Пройдено веток: ${completedBranches.length}`"
                               closed
                               :elements="completedBranches"
@@ -184,7 +184,7 @@ hr
 
           <hr>
 
-          <div class="now-playing text-small link" v-if="user.chosenquest && user.chosenbranch">
+          <div class="now-playing  link" v-if="user.chosenquest && user.chosenbranch">
             Сейчас играет в: <br>
             Квест: <router-link :to="base_url_path + `/quest?id=${user.chosenquestid}`">{{ user.chosenquest }}</router-link> <br>
             Ветка: <router-link :to="base_url_path + `/quest?id=${user.chosenquestid}`">{{ user.chosenbranch }}</router-link>
@@ -220,10 +220,10 @@ hr
           <input type="submit" value="Сменить пароль">
         </div>
 
-        <button v-if="yours" class="text-middle button bg outline rounded logout" @click="logOut">Выйти</button>
+        <button v-if="yours" class=" button bg outline rounded logout" @click="logOut">Выйти</button>
       </Form>
 
-      <router-link v-if="yours && user.isAdmin" :to="base_url_path + `/admin`" class="admin-button text-big-x button rounded outline">На админскую</router-link>
+      <router-link v-if="yours && user.isAdmin" :to="base_url_path + `/admin`" class="admin-button  button rounded outline">На админскую</router-link>
     </div>
   </div>
 </template>

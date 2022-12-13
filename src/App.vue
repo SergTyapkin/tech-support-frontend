@@ -1,5 +1,92 @@
 <style lang="stylus" scoped>
-top-bar-height = 70px
+@require './styles/constants.styl'
+@require './styles/fonts.styl'
+
+backgroundBorderColor = borderColor
+
+.background
+  position absolute
+  inset 0
+  overflow hidden
+  div
+    opacity 0.3
+    width 100%
+    position absolute
+    border solid 1px borderColor
+    background black
+    border-radius 20px
+    animation bg-move-top ease
+    @keyframes bg-move-top
+      0%
+        opacity 0
+        top 0
+        height 200%
+        width 200%
+      20%
+        top 0
+        height 200%
+        width 200%
+  div:nth-child(2n)
+    animation bg-move-bottom ease
+    @keyframes bg-move-bottom
+      0%
+        opacity 0
+        top 100%
+        height 200%
+        width 200%
+      20%
+        top 100%
+        height 200%
+        width 200%
+
+  div:nth-child(4)
+    animation bg-move-top-scale ease
+    @keyframes bg-move-top-scale
+      0%
+        opacity 0
+        top 100%
+        height 0%
+        width 200%
+      20%
+        top 0%
+        height 0%
+        width 200%
+  div:nth-child(1)
+    top 50%
+    left 50%
+    height 100%
+    width 100%
+    transform rotate(70deg)
+    animation-duration 0.3s
+  div:nth-child(2)
+    top 0%
+    left 20%
+    height 200%
+    width 100%
+    transform rotate(40deg)
+    animation-duration 1.2s
+  div:nth-child(3)
+    top -40%
+    left -50%
+    height 100%
+    width 100%
+    transform rotate(20deg)
+    animation-duration 0.6s
+  div:nth-child(4)
+    top -15%
+    left 20%
+    height 100%
+    width 200%
+    transform rotate(30deg)
+    animation-duration 0.8s
+  div:nth-child(5)
+    top 90%
+    left 30%
+    height 100%
+    width 100%
+    transform rotate(20deg)
+    animation-duration 1s
+
 
 .wrapper
   width 100%
@@ -16,16 +103,27 @@ top-bar-height = 70px
     height 100px
   .overlay
     inset 0
-    background #0005
+    background #0003
     display flex
     justify-content center
     align-items center
+    font-large()
+    text-align center
 </style>
 
 <template>
+  <div class="background">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
   <div class="wrapper">
     <CircleLoading v-if="!$store.state.user.isGotten" class="loading"></CircleLoading>
-    <div v-else-if="!$store.state.user.isConfirmedByAdmin" class="overlay stack activated">
+    <div v-else-if="$store.state.user.isLogined && !$store.state.user.isConfirmedByAdmin" class="overlay stack activated" style="--stacks: 4;">
+      <span style="--index: 0">Ваш аккаунт пока что не подтвержден администратором<br>К сожалению, без этого пользоваться сервисом нельзя</span>
       <span style="--index: 1">Ваш аккаунт пока что не подтвержден администратором<br>К сожалению, без этого пользоваться сервисом нельзя</span>
       <span style="--index: 2">Ваш аккаунт пока что не подтвержден администратором<br>К сожалению, без этого пользоваться сервисом нельзя</span>
       <span style="--index: 3">Ваш аккаунт пока что не подтвержден администратором<br>К сожалению, без этого пользоваться сервисом нельзя</span>
@@ -177,14 +275,14 @@ export default {
 
       console.log(from.path, 'TO', to.path)
 
-      if (to.path === '/profile')
+      if (to.path === this.$base_url_path + '/profile')
         this.transitionName = 'scale-slide-left';
-      else if (from.path === '/profile')
+      else if (from.path === this.$base_url_path + '/profile')
         this.transitionName = 'scale-slide-right';
 
-      else if (from.path === '/signin' && to.path === '/signup')
+      else if (from.path === this.$base_url_path + '/signin' && to.path === this.$base_url_path + '/signup')
         this.transitionName = 'slide-left';
-      else if (from.path === '/signup' && to.path === '/signin')
+      else if (from.path === this.$base_url_path + '/signup' && to.path === this.$base_url_path + '/signin')
         this.transitionName = 'slide-left';
     }
   },
