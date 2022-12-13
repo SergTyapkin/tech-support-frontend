@@ -4,7 +4,7 @@
   "license": "MIT",
   "private": true,
   "author": {
-    "name": "Sergey Tyapkin, Konstantin"
+    "name": "Sergey Tyapkin, Konstantin Naraykin"
   },
   "scripts": {
     "dev": "npx webpack-cli serve --mode development",

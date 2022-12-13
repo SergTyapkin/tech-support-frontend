@@ -1,4 +1,4 @@
-<style lang="stylus">
+<style lang="stylus" scoped>
 @require '../../styles/buttons.styl'
 
 logo-size = 140px
@@ -76,10 +76,10 @@ export default {
   },
 
   methods: {
-    validate(username, password) {
+    validate(email, password) {
       let ok = true;
-      if (username.length === 0) {
-        this.$refs.form.errors.username = 'Логин не может быть пустым';
+      if (email.length === 0) {
+        this.$refs.form.errors.email = 'Email не может быть пустым';
         ok = false;
       }
       if (password.length === 0) {
@@ -97,12 +97,12 @@ export default {
       return ok;
     },
 
-    async signIn({username, password}) {
-      if (!this.validate(username, password))
+    async signIn({email, password}) {
+      if (!this.validate(email, password))
         return;
 
       this.$refs.form.loading = true;
-      const response = await this.$api.signIn(username, password);
+      const response = await this.$api.signIn(email, password);
       this.$refs.form.loading = false;
 
       if (response.ok_) {
@@ -111,13 +111,13 @@ export default {
         this.$refs.form.loading = false;
         // this.$popups.success('Отличный вход!', 'Ну привет...');
         this.$refs.form.errors = {};
-        this.$router.push('/profile');
+        this.$router.push({name: 'profile'});
         return;
       }
 
       if (response.status_ === 401) {
         this.$refs.form.info = 'Неверный логин или пароль';
-        this.$refs.form.errors.username = 'Неверный логин или пароль';
+        this.$refs.form.errors.email = 'Неверный логин или пароль';
         this.$refs.form.errors.password = 'Неверный логин или пароль';
         this.$refs.form.showError();
         return;

@@ -7,9 +7,8 @@ import Profile from '/src/views/User/Profile.vue'
 import RestorePassword from "./views/User/RestorePassword.vue";
 import ConfirmEmail from "./views/User/ConfirmEmail.vue";
 
-import AllEventsList from "/src/views/AllEventsList.vue";
-import MyEventsList from "/src/views/MyEventsList.vue";
-import UserEventsList from "/src/views/UserEventsList.vue";
+import EventsList from "./views/EventsList.vue";
+
 import AdminPage from "/src/views/AdminPage.vue";
 import Ratings from "/src/views/Ratings.vue";
 
@@ -20,15 +19,14 @@ import {BASE_URL_PATH} from "./constants";
 
 export default function createVueRouter(Store, App) {
     const routes = [
+        {path: BASE_URL_PATH + '/', name: 'default'},
         {path: BASE_URL_PATH + '/signin', name: 'signin', component: SignIn, meta: {noLoginRequired: true}},
         {path: BASE_URL_PATH + '/signup', name: 'signup', component: SignUp, meta: {noLoginRequired: true}},
         {path: BASE_URL_PATH + '/profile', name: 'profile', component: Profile, meta: {loginRequired: true}},
         {path: BASE_URL_PATH + '/password/restore', name: 'passwordRestore', component: RestorePassword, meta: {noLoginRequired: true}},
         {path: BASE_URL_PATH + '/email/confirm', name: 'emailConfirm', component: ConfirmEmail},
 
-        {path: BASE_URL_PATH + '/event/all', name: 'allEvents', component: AllEventsList, meta: {loginRequired: true}},
-        {path: BASE_URL_PATH + '/event/my', name: 'myEvents', component: MyEventsList, meta: {loginRequired: true}},
-        {path: BASE_URL_PATH + '/event/user/:userId', name: 'userEvents', component: UserEventsList, meta: {loginRequired: true}},
+        {path: BASE_URL_PATH + '/event', name: 'events', component: EventsList, meta: {loginRequired: true}},
 
         {path: BASE_URL_PATH + '/ratings', name: 'ratings', component: Ratings, meta: {loginRequired: true}},
 
@@ -47,14 +45,15 @@ export default function createVueRouter(Store, App) {
         if (!router_got_user) {
             await Store.dispatch('GET_USER');
             router_got_user = true;
-            if (to.path === '/' || to.path === '' || to.path === BASE_URL_PATH || to.path === BASE_URL_PATH + '/') {
-                if (Store.state.user.isLogined) {
-                    next('/profile');
-                    return;
-                }
-                next('/signin');
+        }
+
+        if (to.path === '/' || to.path === '' || to.path === BASE_URL_PATH || to.path === BASE_URL_PATH + '/') {
+            if (Store.state.user.isLogined) {
+                next('/profile');
                 return;
             }
+            next('/signin');
+            return;
         }
         // window.scroll({top: 0, left: 0, behavior: 'smooth'});
 

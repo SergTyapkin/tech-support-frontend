@@ -31,6 +31,8 @@ export default {
       loading: true,
 
       events: undefined,
+
+      userId: this.$route.query.userId,
     }
   },
 

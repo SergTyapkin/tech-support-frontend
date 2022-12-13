@@ -16,7 +16,7 @@ const Store = new Vuex.Store({
   actions: {
     async GET_USER(state) {
       const u = await this.$app.$api.getUser();
-      if (u.ok_)
+      if (u.ok_) {
         state.commit('SET_USER', {
           avatarImageId: u.avatarimageid,
           email: u.email,
@@ -26,9 +26,11 @@ const Store = new Vuex.Store({
           isConfirmedByAdmin: u.isconfirmedbyadmin,
           joinedDate: u.joineddate,
           name: u.name,
+          completedEvents: u.completedevents,
         });
-      else
+      } else {
         state.commit('DELETE_USER');
+      }
     },
     async DELETE_USER(state) {
       state.commit('DELETE_USER');

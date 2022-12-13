@@ -13,9 +13,8 @@ input
   width 100%
   color textColor1
   box-sizing border-box
-  font-family Arial
   padding 10px
-  font-size 1rem
+  font-medium()
   transition all 0.2s ease
 textarea
   background colorShadowDark
@@ -45,9 +44,10 @@ input:focus
   box-shadow 3px 3px 10px black
   padding 40px 30px
   margin-top 100px
+  margin-bottom 100px
 
 .form
-  font-small-extra()
+  font-small()
   margin-left auto
   margin-right auto
   width 100%

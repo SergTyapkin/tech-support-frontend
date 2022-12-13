@@ -1,11 +1,13 @@
 <style lang="stylus" scoped>
 @require './styles/constants.styl'
 @require './styles/fonts.styl'
+@require './styles/buttons.styl'
 
 backgroundBorderColor = borderColor
 
 .background
-  position absolute
+  z-index -1
+  position fixed
   inset 0
   overflow hidden
   div
@@ -103,12 +105,28 @@ backgroundBorderColor = borderColor
     height 100px
   .overlay
     inset 0
-    background #0003
+    position fixed
+    background #0009
+    backdrop-filter blur(3px)
     display flex
+    flex-direction column
     justify-content center
     align-items center
     font-large()
     text-align center
+    .glitch
+      flex 0.5
+      width 80%
+      display flex
+      align-items center
+    .button-exit
+      button-danger()
+      width 40%
+      opacity 0.9
+      &:hover
+        opacity 1
+
+
 </style>
 
 <template>
@@ -122,17 +140,21 @@ backgroundBorderColor = borderColor
 
   <div class="wrapper">
     <CircleLoading v-if="!$store.state.user.isGotten" class="loading"></CircleLoading>
-    <div v-else-if="$store.state.user.isLogined && !$store.state.user.isConfirmedByAdmin" class="overlay stack activated" style="--stacks: 4;">
-      <span style="--index: 0">Ваш аккаунт пока что не подтвержден администратором<br>К сожалению, без этого пользоваться сервисом нельзя</span>
-      <span style="--index: 1">Ваш аккаунт пока что не подтвержден администратором<br>К сожалению, без этого пользоваться сервисом нельзя</span>
-      <span style="--index: 2">Ваш аккаунт пока что не подтвержден администратором<br>К сожалению, без этого пользоваться сервисом нельзя</span>
-      <span style="--index: 3">Ваш аккаунт пока что не подтвержден администратором<br>К сожалению, без этого пользоваться сервисом нельзя</span>
-    </div>
     <router-view v-else v-slot="{ Component }">
       <transition :name="transitionName">
         <component :is="Component"/>
       </transition>
     </router-view>
+
+    <div v-if="$store.state.user.isLogined && !$store.state.user.isConfirmedByAdmin" class="overlay">
+      <div class="glitch stack activated" style="--stacks: 4;">
+        <span style="--index: 0">Попросите администратора подтвердить вашу регистрацию<br>К сожалению, без этого пользоваться сервисом нельзя</span>
+        <span style="--index: 1">Попросите администратора подтвердить вашу регистрацию<br>К сожалению, без этого пользоваться сервисом нельзя</span>
+        <span style="--index: 2">Попросите администратора подтвердить вашу регистрацию<br>К сожалению, без этого пользоваться сервисом нельзя</span>
+        <span style="--index: 3">Попросите администратора подтвердить вашу регистрацию<br>К сожалению, без этого пользоваться сервисом нельзя</span>
+      </div>
+      <div class="button-exit" @click="logOut">Выйти из аккаунта</div>
+    </div>
   </div>
 
   <Modal ref="modal"></Modal>
@@ -287,7 +309,7 @@ export default {
     }
   },
 
-  mounted() {
+  async mounted() {
     const global = getCurrentInstance().appContext.config.globalProperties;
 
     global.$modal = this.$refs.modal;
@@ -296,5 +318,17 @@ export default {
     global.$user = this.$store.state.user;
     global.$base_url_path = BASE_URL_PATH;
   },
+
+  methods: {
+    async logOut() {
+      const response = await this.$api.signOut();
+      if (!response.ok_) {
+        this.$popups.error('Не получилось выйти из аккаунта', 'Неизвестная ошибка');
+        return;
+      }
+      this.$user.setDefault();
+      await this.$router.push('/');
+    },
+  }
 };
 </script>

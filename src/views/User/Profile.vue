@@ -1,5 +1,7 @@
 <style lang="stylus" scoped>
 @require '../../styles/constants.styl'
+@require '../../styles/buttons.styl'
+@require '../../styles/fonts.styl'
 
 hr
   margin 0
@@ -18,16 +20,7 @@ hr
     .rating
     .position
       flex 1
-      font-size 30px
-    //  .info
-    //    overflow hidden
-    //    max-height 0
-    //    transition all 0.3s ease
-    //.rating:hover
-    //.position:hover
-    //  .info
-    //    max-height 20px
-
+      font-small()
 
     .username
       margin-top 20px
@@ -119,12 +112,24 @@ hr
   .image-loader.in-drag
     .avatar-div::after
       opacity 1
+
+.button-logout
+  button()
+</style>
+
+<style lang="stylus">
+@require '../../styles/constants.styl'
+
+.__text-success
+  color colorYes
+.__text-error
+  color colorNo
 </style>
 
 <template>
   <div>
     <div class="profile-page">
-      <TopButtons arrows clickable :buttons="buttons"></TopButtons>
+      <TopBar></TopBar>
 
       <Form class="profile-plate">
         <div>
@@ -159,46 +164,30 @@ hr
                 <div class="info ">позиция</div>
               </div>
             </div>
-            <input v-if="yours" class="username " v-model="username">
-            <div v-else class="username ">
-              <div>{{username}}</div>
-              <div class=" another-user-info">{{ user.name }}</div>
+            <div v-if="!yours" class="username">
+              <div class="another-user-info">{{ user.name }}</div>
             </div>
           </div>
 
           <hr>
 
           <div class="quest-statistics ">
-            <ArrowListElement :title="`Пройдено веток: ${completedBranches.length}`"
+            <ArrowListElement :title="`Пройдено мероприятий: ${completedEvents.length}`"
                               closed
-                              :elements="completedBranches"
-                              @click-inside="(branchInfo) => $router.push(`/quest?id=${branchInfo.id}`)"
+                              :elements="completedEvents"
+                              @click-inside="(eventData) => $router.push({name: 'events', params: {id: eventData.id}})"
             ></ArrowListElement>
-            <ArrowListElement v-if="createdQuests.length"
-                              :title="`Создано квестов: ${createdQuests.length}`"
-                              closed
-                              :elements="createdQuests"
-                              @click-inside="(quest) => $router.push(`/quest?id=${quest.id}`)"
-            ></ArrowListElement>
-          </div>
-
-          <hr>
-
-          <div class="now-playing  link" v-if="user.chosenquest && user.chosenbranch">
-            Сейчас играет в: <br>
-            Квест: <router-link :to="base_url_path + `/quest?id=${user.chosenquestid}`">{{ user.chosenquest }}</router-link> <br>
-            Ветка: <router-link :to="base_url_path + `/quest?id=${user.chosenquestid}`">{{ user.chosenbranch }}</router-link>
           </div>
 
           <div v-if="yours">
             <FormExtended ref="form" no-bg
                   :fields="[
                     { title: 'ТВОЁ ИМЯ', jsonName: 'name' },
-                    { title: 'ТВОЙ E-mail', jsonName: 'email', type: 'email', info: user.isConfirmed ? `<span style='color: #448c30'>E-mail подтвержден</span>` : `<b style='color: #ff5b5b'>ТВОЙ EMAIL НЕ ПОДТВЕРЖДЕН. ИЗ-ЗА ЭТОГО НЕДОСТУПНЫ МНОГИЕ ФУНКЦИИ СЕРВИСА. ТЫ НЕ МОЖЕШЬ:</b><div style='color: #c46f6f'><div>Быть в рейтингах</div><div>Создавать квесты</div><div>Создавать команды</div><div>Оценивать квесты</div></div>`},
+                    { title: 'ТВОЙ E-mail', jsonName: 'email', type: 'email', info: user.isConfirmedEmail ? `<span class='__text-success'>Email подтвержден</span>` : `<b class='__text-error'>E-MAIL НЕ ПОДТВЕРЖДЕН. ВОССТАНОВИТЬ ПАРОЛЬ НЕ УДАСТСЯ</b>`},
                   ]"
                   :no-submit="true"
             ></FormExtended>
-            <input v-if="!user.isConfirmed && !loadingConfirmEmail" type="submit" value="Подтвердить E-mail" class="confirm-email-input" @click="confirmEmailSendMessage">
+            <input v-if="!user.isConfirmedEmail && !loadingConfirmEmail" type="submit" value="Подтвердить E-mail" class="confirm-email-input" @click="confirmEmailSendMessage">
             <CircleLoading v-if="loadingConfirmEmail"></CircleLoading>
 
             <input v-if="!$refs?.form?.loading" type="submit" value="Изменить данные" @click="changeData">
@@ -220,7 +209,7 @@ hr
           <input type="submit" value="Сменить пароль">
         </div>
 
-        <button v-if="yours" class=" button bg outline rounded logout" @click="logOut">Выйти</button>
+        <button v-if="yours" class="button-logout" @click="logOut">Выйти</button>
       </Form>
 
       <router-link v-if="yours && user.isAdmin" :to="base_url_path + `/admin`" class="admin-button  button rounded outline">На админскую</router-link>
@@ -234,16 +223,16 @@ import Form from "/src/components/Form.vue";
 import FormExtended from "/src/components/FormExtended.vue";
 import FloatingInput from "../../components/FloatingInput.vue";
 import {isClosedRoll, openRoll} from "../../utils/show-hide";
-import TopButtons from "../../components/TopButtons.vue";
 import CircleLoading from "../../components/loaders/CircleLoading.vue";
 import {nextTick} from "vue";
 import {BASE_URL_PATH, IMAGE_MAX_RES, IMAGE_PROFILE_MAX_RES} from "../../constants";
 import ImageUploader from "../../utils/imageUploader";
 import DragNDropLoader from "../../components/DragNDropLoader.vue";
 import ArrowListElement from "../../components/ArrowListElement.vue";
+import TopBar from "../../components/TopBar.vue";
 
 export default {
-  components: {ArrowListElement, DragNDropLoader, CircleLoading, TopButtons, FloatingInput, FormExtended, Form},
+  components: {TopBar, ArrowListElement, DragNDropLoader, CircleLoading, FloatingInput, FormExtended, Form},
 
   data() {
     return {
@@ -252,14 +241,11 @@ export default {
 
       ImageUploader: new ImageUploader(this.$popups, this.$api.uploadImage, IMAGE_PROFILE_MAX_RES, IMAGE_MAX_RES),
 
-      username: '',
-
-      id: this.$route.query.id,
-      yours: this.$route.query.id === undefined,
+      userId: this.$route.query.userId,
+      yours: this.$route.query.userId === undefined,
 
       user: {},
-      completedBranches: [],
-      createdQuests: [],
+      completedEvents: [],
       loading: false,
       loadingConfirmEmail: false,
 
@@ -278,7 +264,6 @@ export default {
     async init() {
       if (this.yours) {
         this.$refs.form.values = this.$user;
-        this.username = this.$user.username;
         this.user = this.$user;
 
         this.buttons = [
@@ -291,46 +276,20 @@ export default {
       }
 
       await this.getAnotherUser();
-      this.username = this.user.username;
-      const prevPage = this.$router.options.history.state.back;
-      if (prevPage && prevPage !== this.base_url_path + '/ratings') {
-        this.buttons = [
-          {name: 'Назад', to: prevPage},
-          {name: 'Рейтинги', to: this.base_url_path + '/ratings'},
-        ];
-      } else {
-        this.buttons = [
-          {name: 'Рейтинги', to: this.base_url_path + '/ratings'},
-        ];
-      }
       this.addTitlesToArrowListings();
     },
 
     addTitlesToArrowListings() {
-      this.completedBranches = this.user.completedbranches.map((branchInfo) => {
-        return {
-          title: branchInfo.questtitle + ' | ' + branchInfo.branchtitle,
-          id: branchInfo.questid,
-          arrow: true,
-          noClose: true,
-        };
-      });
-      this.createdQuests = this.user.createdquests.map((quest) => {
-        return {
-          title: quest.title,
-          id: quest.id,
-          arrow: true,
-          noClose: true,
-        };
-      });
+      this.completedEvents = this.user.completedEvents.map((eventData) => ({
+        title: eventData.name,
+        id: eventData.id,
+        arrow: true,
+        noClose: true,
+      }));
     },
 
-    validate(username, name, email) {
+    validate(name, email) {
       let ok = true;
-      if (username.length === 0) {
-        this.$refs.form.errors.username = 'Логин не может быть пустым';
-        ok = false;
-      }
       if (name.length === 0) {
         this.$refs.form.errors.name = 'Имя не может быть пустым';
         ok = false;
@@ -348,12 +307,11 @@ export default {
 
       const name = this.$refs.form.values.name;
       const email = this.$refs.form.values.email;
-      const username = this.username;
-      if (!this.validate(username, name, email))
+      if (!this.validate(name, email))
         return;
 
       this.$refs.form.loading = true;
-      const response = await this.$api.updateUser(email, username, name);
+      const response = await this.$api.updateUser(this.user.id, email, name);
       this.$refs.form.loading = false;
 
       if (response.ok_) {
@@ -364,8 +322,7 @@ export default {
       }
 
       if (response.status_ === 409) {
-        this.$refs.form.errors.username = 'Такой логин уже занят';
-        this.$refs.form.errors.email = 'Или e-mail уже занят';
+        this.$refs.form.errors.email = 'Такой email уже занят';
       } else {
         this.$popups.error("Не удалось обновить данные", 'Произошла неизвестная ошибка!');
       }
@@ -417,7 +374,7 @@ export default {
 
     async getAnotherUser() {
       this.loading = true;
-      const user = await this.$api.getAnotherUser(this.id);
+      const user = await this.$api.getAnotherUser(this.userId);
       this.loading = false;
 
       if (!user.ok_) {
@@ -465,7 +422,7 @@ export default {
     },
     async saveAvatar() {
       this.loading = true;
-      const res = await this.$api.updateUserAvatarImageId(this.user.avatarimageid);
+      const res = await this.$api.updateUserAvatarImageId(this.user.id, this.user.avatarimageid);
       this.loading = false;
 
       if (!res.ok_) {
@@ -497,13 +454,13 @@ export default {
   },
 
   watch: {
-    '$route.query.id': {
+    '$route.query.userId': {
       handler: async function (to, from) {
         if (this.$route.path !== BASE_URL_PATH + '/profile') // go to another page
           return;
 
-        this.id = to;
-        this.yours = this.id === undefined
+        this.userId = to;
+        this.yours = this.userId === undefined
         await nextTick();
         await this.init();
       },

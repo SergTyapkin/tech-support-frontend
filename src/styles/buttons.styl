@@ -2,7 +2,9 @@
 @require 'fonts.styl'
 
 button()
-    font-small()
+    color textColor2
+    width 100%
+    font-medium()
     text-align center
     padding 10px
     border-radius 3px
@@ -17,14 +19,21 @@ button()
         box-shadow none
 
     &:hover
+        color textColor1
         border-color empColor2_1
         box-shadow 5px 5px 15px colorShadowDark
 
 
 button-submit()
     button()
-    font-small()
     background blocksBgColor
     border-color empColor1_3
     &:hover
         border-color empColor1_2
+
+button-danger()
+    button()
+    background mix(colorNo, transparent)
+    border-color colorNo
+    &:hover
+        border-color mix(colorNo, white)

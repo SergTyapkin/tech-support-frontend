@@ -233,7 +233,7 @@ input-bg = linear-gradient(20deg, rgba(45, 36, 13, 0.4) 0%, rgba(62, 39, 17, 0.6
       }"
     >
     <label class="">{{ title }}</label>
-    <div class="info -x">
+    <div class="info">
       <slot></slot>
     </div>
   </div>
