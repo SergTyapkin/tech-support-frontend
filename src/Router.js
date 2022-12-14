@@ -8,6 +8,7 @@ import RestorePassword from "./views/User/RestorePassword.vue";
 import ConfirmEmail from "./views/User/ConfirmEmail.vue";
 
 import EventsList from "./views/EventsList.vue";
+import EventPage from "./views/EventPage.vue";
 
 import AdminPage from "/src/views/AdminPage.vue";
 import Ratings from "/src/views/Ratings.vue";
@@ -26,7 +27,8 @@ export default function createVueRouter(Store, App) {
         {path: BASE_URL_PATH + '/password/restore', name: 'passwordRestore', component: RestorePassword, meta: {noLoginRequired: true}},
         {path: BASE_URL_PATH + '/email/confirm', name: 'emailConfirm', component: ConfirmEmail},
 
-        {path: BASE_URL_PATH + '/event', name: 'events', component: EventsList, meta: {loginRequired: true}},
+        {path: BASE_URL_PATH + '/event/:eventId', name: 'event', component: EventPage, meta: {loginRequired: true}},
+        {path: BASE_URL_PATH + '/events', name: 'events', component: EventsList, meta: {loginRequired: true}},
 
         {path: BASE_URL_PATH + '/ratings', name: 'ratings', component: Ratings, meta: {loginRequired: true}},
 

@@ -20,12 +20,22 @@ hr
     .rating
     .position
       flex 1
-      font-small()
+      font-large()
+      .info
+        font-small()
+      transition all 0.2s ease
+      &:hover
+        transform scale(1.1)
 
     .username
       margin-top 20px
       padding 5px
       padding-top 2px
+
+    .title
+      margin-top 5px
+      font-medium()
+      color textColor3
 
   .quest-statistics
     padding 10px
@@ -129,16 +139,14 @@ hr
 <template>
   <div>
     <div class="profile-page">
-      <TopBar></TopBar>
-
       <Form class="profile-plate">
         <div>
           <div class="info-container">
             <div class="top-container">
-              <div class="rating">
+              <router-link :to="$base_url_path + '/ratings'" class="rating">
                 <div>★{{ user.rating }}</div>
                 <div class="info ">рейтинг</div>
-              </div>
+              </router-link>
 
               <CircleLoading v-if="loading"></CircleLoading>
 
@@ -148,34 +156,35 @@ hr
                                  :compress-size="compressSize"
                 >
                   <div class="avatar-div" @click.stop="updateAvatar(undefined)">
-                    <img v-if="user.avatarimageid" class="avatar" :src="api_url + '/image/' + user.avatarimageid" alt="avatar">
+                    <img v-if="user.avatarImageId" class="avatar" :src="api_url + '/image/' + user.avatarImageId" alt="avatar">
                     <img v-else class="avatar" src="../../res/favicon.ico" alt="avatar">
                   </div>
                 </DragNDropLoader>
-                <img v-if="user.avatarimageid" class="delete-avatar" src="../../res/trash.svg" alt="delete" @click.stop="deleteAvatarClick">
+                <img v-if="user.avatarImageId" class="delete-avatar" src="../../res/trash.svg" alt="delete" @click.stop="deleteAvatarClick">
               </div>
               <div v-else class="avatar-div">
-                <img v-if="user.avatarimageid" class="avatar" :src="api_url + '/image/' + user.avatarimageid" alt="avatar">
+                <img v-if="user.avatarImageId" class="avatar" :src="api_url + '/image/' + user.avatarImageId" alt="avatar">
                 <img v-else class="avatar" src="../../res/favicon.ico" alt="avatar">
               </div>
 
-              <div class="position">
+              <router-link :to="$base_url_path + '/ratings'" class="position">
                 <div>{{ user.position }}</div>
                 <div class="info ">позиция</div>
-              </div>
+              </router-link>
             </div>
             <div v-if="!yours" class="username">
               <div class="another-user-info">{{ user.name }}</div>
             </div>
+            <div class="title" v-if="user.title !== null">{{ user.title }}</div>
           </div>
 
           <hr>
 
           <div class="quest-statistics ">
-            <ArrowListElement :title="`Пройдено мероприятий: ${completedEvents.length}`"
+            <ArrowListElement :title="`Завершено мероприятий: ${completedEvents.length}`"
                               closed
                               :elements="completedEvents"
-                              @click-inside="(eventData) => $router.push({name: 'events', params: {id: eventData.id}})"
+                              @click-inside="(eventData) => $router.push({name: 'event', params: {eventId: eventData.id}})"
             ></ArrowListElement>
           </div>
 
@@ -395,7 +404,7 @@ export default {
 
       const res = await this.deleteAvatar();
 
-      this.user.avatarimageid = imageId;
+      this.user.avatarImageId = imageId;
       await this.saveAvatar();
     },
     async deleteAvatarClick() {
@@ -404,15 +413,15 @@ export default {
 
       await this.deleteAvatar();
 
-      this.user.avatarimageid = null;
+      this.user.avatarImageId = null;
       await this.saveAvatar();
     },
     async deleteAvatar() {
-      if (!this.user.avatarimageid)
+      if (!this.user.avatarImageId)
         return;
 
       this.loading = true;
-      const res = await this.$api.deleteImage(this.user.avatarimageid);
+      const res = await this.$api.deleteImage(this.user.avatarImageId);
       this.loading = false;
 
       if (!res.ok_) {
@@ -422,7 +431,7 @@ export default {
     },
     async saveAvatar() {
       this.loading = true;
-      const res = await this.$api.updateUserAvatarImageId(this.user.id, this.user.avatarimageid);
+      const res = await this.$api.updateUserAvatarImageId(this.user.id, this.user.avatarImageId);
       this.loading = false;
 
       if (!res.ok_) {
@@ -460,7 +469,7 @@ export default {
           return;
 
         this.userId = to;
-        this.yours = this.userId === undefined
+        this.yours = this.userId === undefined;
         await nextTick();
         await this.init();
       },

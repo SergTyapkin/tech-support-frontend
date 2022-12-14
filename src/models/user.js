@@ -13,7 +13,10 @@ export default class User extends Model {
     name: "",
     password: "",
     avatarImageId: null,
-    completedEvents: []
+    title: null,
+    completedEvents: [],
+    rating: 0,
+    position: 0,
   }
 
   set(data) {

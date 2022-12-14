@@ -43,7 +43,7 @@ input:focus
   background form-bg
   box-shadow 3px 3px 10px black
   padding 40px 30px
-  margin-top 100px
+  margin-top 170px
   margin-bottom 100px
 
 .form

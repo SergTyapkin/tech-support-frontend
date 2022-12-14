@@ -26,7 +26,10 @@ const Store = new Vuex.Store({
           isConfirmedByAdmin: u.isconfirmedbyadmin,
           joinedDate: u.joineddate,
           name: u.name,
+          title: u.title,
           completedEvents: u.completedevents,
+          rating: u.rating,
+          position: u.position,
         });
       } else {
         state.commit('DELETE_USER');

@@ -24,32 +24,36 @@ height = 300px
     > *
       font-small()
       color textColor3
+      margin 10px 0
 
+  .button-info
+    button-submit()
 </style>
 
 <template>
   <div class="root">
-    <header class="header">
-      <div class="text">{{ name }}</div>
-      <div class="time">{{ date }} ({{timeStart}} - {{timeEnd}})</div>
-    </header>
-    <main class="main">
-      <span class="description">{{ description }}</span>
-      <span class="place">Place: {{ placeId }}</span>
-      <span class="time">Event time: {{eventTimeStart}} - {{eventTimeEnd}}</span>
-      <span class="people">People needs: {{needPeopleTotal}}</span>
-    </main>
+    <Form>
+      <header class="header">
+        <div class="text">{{ name }}</div>
+        <div class="time">{{ date }} ({{timeStart}} - {{timeEnd}})</div>
+      </header>
+      <main class="main">
+        <div class="description">{{ description }}</div>
+        <div class="place">Place: {{ placeName }}</div>
+        <div class="time">Event time: {{eventTimeStart}} - {{eventTimeEnd}}</div>
+        <div class="people">People needs: {{needPeopleTotal}}</div>
+      </main>
 
-    <CircleLoading v-if="loading"></CircleLoading>
-    <div v-else-if="!isYouParticipated" class="button-participate" @click="participate">Участвовать</div>
-    <div v-else class="button-not-participate" @click="notParticipate">Не пойду</div>
+      <router-link :to="$base_url_path + '/event/' + id" class="button-info">Подробнее</router-link>
+    </Form>
   </div>
 </template>
 
 <script>
-import CircleLoading from "./loaders/CircleLoading.vue";
+import Form from "./Form.vue";
+
 export default {
-  components: {CircleLoading},
+  components: {Form},
   props: {
     id: Number,
     name: String,
@@ -59,44 +63,18 @@ export default {
     timeEnd: String,
     eventTimeStart: String,
     eventTimeEnd: String,
-    needPeople: Object,
+    needPeople: Array,
     placeId: Number,
+    placeName: String,
+    authorId: Number,
+    authorName: String,
   },
 
   data() {
     return {
       loading: false,
-
-      needPeopleTotal: Object.keys(this.$props.needPeople).length,
-
-      isYouParticipated: false,
+      needPeopleTotal: this.$props.needPeople?.reduce((count, curObj) => count + curObj.value),
     }
   },
-
-  methods: {
-    async participate() {
-      this.loading = true;
-      const res = await this.$api.participateInEvent(id, this.$user.id, 0);
-      this.loading = false;
-
-      if (!res.ok_) {
-        this.$popups.error("Ошибка", "Не удалось записаться на мероприятие");
-        return;
-      }
-      this.isYouParticipated = true;
-    },
-
-    async notParticipate() {
-      this.loading = true;
-      const res = await this.$api.notParticipateInEvent(id, this.$user.id);
-      this.loading = false;
-
-      if (!res.ok_) {
-        this.$popups.error("Ошибка", "Не удалось отказаться от мероприятия");
-        return;
-      }
-      this.isYouParticipated = false;
-    }
-  }
 };
 </script>

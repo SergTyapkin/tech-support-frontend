@@ -141,10 +141,12 @@ backgroundBorderColor = borderColor
   <div class="wrapper">
     <CircleLoading v-if="!$store.state.user.isGotten" class="loading"></CircleLoading>
     <router-view v-else v-slot="{ Component }">
+      <TopBar v-if="$store.state.user.isLogined"></TopBar>
       <transition :name="transitionName">
         <component :is="Component"/>
       </transition>
     </router-view>
+
 
     <div v-if="$store.state.user.isLogined && !$store.state.user.isConfirmedByAdmin" class="overlay">
       <div class="glitch stack activated" style="--stacks: 4;">
@@ -280,10 +282,11 @@ import Popups from "/src/components/vue-plugins/Popups.vue";
 import CircleLoading from "/src/components/loaders/CircleLoading.vue";
 import Navbar from "./components/Navbar.vue";
 import {API_URL, BASE_URL_PATH} from "./constants";
+import TopBar from "./components/TopBar.vue";
 
 
 export default {
-  components: {Navbar, CircleLoading, Modal, Popups},
+  components: {TopBar, Navbar, CircleLoading, Modal, Popups},
 
   data() {
     return {
@@ -327,7 +330,7 @@ export default {
         return;
       }
       this.$user.setDefault();
-      await this.$router.push('/');
+      await this.$router.push({name: "default"});
     },
   }
 };

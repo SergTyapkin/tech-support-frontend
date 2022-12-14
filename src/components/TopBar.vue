@@ -6,6 +6,7 @@ bg = blocksBgColor
 height = 70px
 
 .root
+  z-index 1000
   font-medium()
   margin-bottom 20px
   width 100%
@@ -56,7 +57,7 @@ height = 70px
       <img src="../res/events.svg" alt="">
       <span>Все события</span>
     </router-link>
-    <router-link :to="{name: 'events', params: {userId: $user.id}}" class="my-events button">
+    <router-link :to="{name: 'events', query: {userId: $user.id}}" class="my-events button">
       <img src="../res/my_events.svg" alt="">
       <span>Мои события</span>
     </router-link>

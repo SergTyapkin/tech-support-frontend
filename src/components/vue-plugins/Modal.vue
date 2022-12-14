@@ -1,5 +1,6 @@
 <style lang="stylus" scoped>
   @require '../../styles/constants.styl'
+  @require '../../styles/fonts.styl'
 
   close-btn-size = 20px
 
@@ -43,7 +44,16 @@
         color textColor1
         text-shadow textColor1
         transform scale(1.1)
+
+      .info-container
+        .title
+          font-large()
+          margin-bottom 10px
+        .description
+          font-medium()
+          color textColor3
 </style>
+
 <template>
   <div class="modal" v-show="isShowed" @keydown.enter.prevent="__resolve(true)" @keydown.esc="__resolve(false)">
     <div class="modal-background" @click="__resolve(false)">
