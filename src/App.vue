@@ -280,13 +280,12 @@ import {getCurrentInstance} from "vue";
 import Modal from "/src/components/vue-plugins/Modal.vue";
 import Popups from "/src/components/vue-plugins/Popups.vue";
 import CircleLoading from "/src/components/loaders/CircleLoading.vue";
-import Navbar from "./components/Navbar.vue";
 import {API_URL, BASE_URL_PATH} from "./constants";
 import TopBar from "./components/TopBar.vue";
 
 
 export default {
-  components: {TopBar, Navbar, CircleLoading, Modal, Popups},
+  components: {TopBar, CircleLoading, Modal, Popups},
 
   data() {
     return {
