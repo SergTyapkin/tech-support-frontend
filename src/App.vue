@@ -142,7 +142,7 @@ backgroundBorderColor = borderColor
     <CircleLoading v-if="!$store.state.user.isGotten" class="loading"></CircleLoading>
     <router-view v-else v-slot="{ Component }">
       <TopBar v-if="$store.state.user.isLogined"></TopBar>
-      <transition :name="transitionName">
+      <transition name="rotate-right">
         <component :is="Component"/>
       </transition>
     </router-view>
@@ -174,7 +174,8 @@ backgroundBorderColor = borderColor
 }
 
 
-.slide-left-enter-active,
+
+/*.slide-left-enter-active,
 .slide-left-leave-active {
   transition: all 0.4s ease;
 }
@@ -273,6 +274,33 @@ backgroundBorderColor = borderColor
   transform: scale(0.8);
   opacity: 0;
 }
+
+*/
+
+
+
+
+
+.rotate-right-enter-active {
+  transition: all 0.2s linear;
+  transition-delay: 0.2s;
+}
+.rotate-right-leave-active {
+  transition: all 0.2s linear;
+}
+.rotate-right-enter-from {
+  transform: rotateY(90deg) scale(1.2) rotateX(10deg);
+}
+.rotate-right-enter-to {
+  transform: rotateY(0deg) scale(1) rotateX(0deg);
+}
+.rotate-right-leave-from {
+  transform: rotateY(0deg) scale(1) rotateX(0deg);
+}
+.rotate-right-leave-to {
+  transform: rotateY(90deg) scale(1.2) rotateX(10deg);
+}
+
 </style>
 
 <script>
@@ -282,7 +310,6 @@ import Popups from "/src/components/vue-plugins/Popups.vue";
 import CircleLoading from "/src/components/loaders/CircleLoading.vue";
 import {API_URL, BASE_URL_PATH} from "./constants";
 import TopBar from "./components/TopBar.vue";
-
 
 export default {
   components: {TopBar, CircleLoading, Modal, Popups},
