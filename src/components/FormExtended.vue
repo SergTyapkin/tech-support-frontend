@@ -3,8 +3,10 @@
 @require '../styles/fonts.styl'
 
 .title
-  font-medium()
+  font-large()
   margin-bottom 10px
+  .small-title
+    font-medium()
 .description
   font-small-extra()
   color textColor2
@@ -16,13 +18,18 @@
   mix-blend-mode unset
 
 .input-info
-  color textColor4
+  font-small()
+  &:not(.link)
+    color textColor4
+
+.info
+  font-small()
 </style>
 
 <template>
   <Form @submit="submit" ref="form" :class="{'no-bg': noBg}">
     <div class="info-container">
-      <div class="title" :class="{'': smallTitle}">{{ title }}</div>
+      <div class="title" :class="{'small-title': smallTitle}">{{ title }}</div>
       <div class="description">{{ description }}</div>
     </div>
 
@@ -35,7 +42,7 @@
                      :error="errors[field.jsonName]"
                      v-model="values[field.jsonName]"
       >
-        <router-link v-if="field.infoHref" :to="field.infoHref" class="link" v-html="field.info"></router-link>
+        <router-link v-if="field.infoHref" :to="field.infoHref" class="input-info link" v-html="field.info"></router-link>
         <div class="input-info" v-else v-html="field.info"></div>
       </FloatingInput>
     </div>

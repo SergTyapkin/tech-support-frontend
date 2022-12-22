@@ -4,6 +4,7 @@
 @require './styles/buttons.styl'
 
 backgroundBorderColor = borderColor
+animation-time-rule = cubic-bezier(0.29, 0.82, 0.36, 0.99)
 
 .background
   z-index -1
@@ -17,7 +18,7 @@ backgroundBorderColor = borderColor
     border solid 1px borderColor
     background black
     border-radius 20px
-    animation bg-move-top ease
+    animation bg-move-top animation-time-rule
     @keyframes bg-move-top
       0%
         opacity 0
@@ -29,7 +30,7 @@ backgroundBorderColor = borderColor
         height 200%
         width 200%
   div:nth-child(2n)
-    animation bg-move-bottom ease
+    animation bg-move-bottom animation-time-rule
     @keyframes bg-move-bottom
       0%
         opacity 0
@@ -42,7 +43,7 @@ backgroundBorderColor = borderColor
         width 200%
 
   div:nth-child(4)
-    animation bg-move-top-scale ease
+    animation bg-move-top-scale animation-time-rule
     @keyframes bg-move-top-scale
       0%
         opacity 0

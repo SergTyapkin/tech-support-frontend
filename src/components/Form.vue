@@ -41,20 +41,20 @@ input:focus
   //border-color empColor1_1
 .form:not(.no-bg)
   background form-bg
-  box-shadow 3px 3px 10px black
+  box-shadow 10px 10px 30px colorShadowLight
   padding 40px 30px
   margin-top 170px
   margin-bottom 100px
 
 .form
-  font-small()
+  font-medium()
   margin-left auto
   margin-right auto
   width 100%
   max-width 460px
   border-radius 7px
-  backdrop-filter blur(1px)
-  mix-blend-mode difference
+  backdrop-filter blur(20px)
+  mix-blend-mode screen
   transition all 0.3s ease
 
   .info-container
