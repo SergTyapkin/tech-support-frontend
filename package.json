@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@jitbit/htmlsanitizer": "^1.0.0",
-    "@korolion/get-image-as-dataurl": "^0.2.0",
+    "@korolion/get-image-as-dataurl": "^0.3.0",
     "marked": "^4.0.12",
     "qr-scanner": "^1.4.1",
     "qrcode-generator-es6": "^1.1.4",
