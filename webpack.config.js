@@ -16,7 +16,7 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: 'src/index.html',
-            favicon: 'src/res/favicon.ico',
+            favicon: 'src/res/favicon2.ico',
             meta: {
                 'theme-color': '#092c26',
             }

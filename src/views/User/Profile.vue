@@ -157,7 +157,7 @@ hr
                 >
                   <div class="avatar-div" @click.stop="updateAvatar(undefined)">
                     <img v-if="user.avatarImageId" class="avatar" :src="api_url + '/image/' + user.avatarImageId" alt="avatar">
-                    <img v-else class="avatar" src="../../res/favicon.ico" alt="avatar">
+                    <img v-else class="avatar" src="../../res/default_avatar.png" alt="avatar">
                   </div>
                 </DragNDropLoader>
                 <img v-if="user.avatarImageId" class="delete-avatar" src="../../res/trash.svg" alt="delete" @click.stop="deleteAvatarClick">

@@ -69,3 +69,26 @@ export function secondsToStrTime(seconds) {
     }
     return val.toFixed(1).toString() + ' ' + units;
 }
+
+export function dateToStr(date) {
+    const now = new Date();
+    date = new Date(date);
+
+    const dateYear = date.getFullYear();
+    const dateMonth = date.getMonth();
+    const dateDay = date.getDay();
+
+    let year = '';
+    if (now.getFullYear() !== dateYear)
+        year = ' ' + dateYear;
+    const months = ['янв', 'фев', 'марта', 'апр', 'мая', 'июня', 'июля', 'фвг', 'сент', 'окт', 'ноя', 'дек'];
+    return `${dateDay} ${months[Number(dateMonth)]}${year}`;
+}
+export function timeToStr(time) {
+    time = new Date('0001-01-01T'+time);
+
+    const hours = time.getHours();
+    const minutes = time.getMinutes();
+
+    return `${("0" + hours).slice(-2)}:${("0" + minutes).slice(-2)}`;
+}

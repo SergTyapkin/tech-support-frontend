@@ -4,12 +4,18 @@
 
 .events-list
   display flex
+  flex-wrap wrap
   width 100%
   justify-content space-evenly
   list-style none
+  margin 0
+  padding 0
+  margin-top 100px
   .info
     margin-top 200px
     font-large()
+  .card
+    margin 20px
 </style>
 
 <template>
@@ -17,7 +23,7 @@
     <ul class="events-list">
       <li v-if="!events?.length" class="info">Событий не найдено</li>
 
-      <li v-else v-for="event in events">
+      <li v-else v-for="event in events" class="card">
         <EventCard :name="event.name"
                    :date="event.date"
                    :id="event.id"
@@ -44,6 +50,7 @@ import FormExtended from "/src/components/FormExtended.vue";
 import EventCard from "../components/EventCard.vue";
 import {BASE_URL_PATH} from "../constants";
 import {nextTick} from "vue";
+import {dateToStr, timeToStr} from "../utils/utils";
 
 export default {
   components: {EventCard, FormExtended, Form},
@@ -92,6 +99,20 @@ export default {
         await this.init();
       },
       deep: true,
+    },
+
+    events: {
+      handler: function (to, from) {
+        this.events.forEach((event) => {
+          console.log("WAS:", event);
+          event.date = dateToStr(event.date);
+          event.eventtimestart = timeToStr(event.eventtimestart);
+          event.eventtimeend = timeToStr(event.eventtimeend);
+          event.timestart = timeToStr(event.timestart);
+          event.timeend = timeToStr(event.timeend);
+          console.log(event);
+        })
+      }
     }
   }
 }

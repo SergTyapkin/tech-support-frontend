@@ -24,8 +24,8 @@ logo-size = 140px
           ref="form"
           title="Вход" description="Ну давай, вспомни пароль, войди в меня"
           :fields="[
-            { title: 'E-MAIL', autocomplete: 'on', jsonName: 'email' },
-            { title: 'ПАРОЛЬ', autocomplete: 'on', jsonName: 'password', type: 'password', info: 'Забыл пароль? - пей таблетки', infoHref: base_url_path + `/password/restore`},
+            { title: 'E-MAIL', autocomplete: 'on', jsonName: 'email', name: 'email' },
+            { title: 'ПАРОЛЬ', autocomplete: 'on', jsonName: 'password', name: 'password', type: 'password', info: 'Забыл пароль? - пей таблетки', infoHref: base_url_path + `/password/restore`},
           ]"
           submit-text="Погнали"
           @submit="signIn"
