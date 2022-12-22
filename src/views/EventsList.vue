@@ -104,13 +104,11 @@ export default {
     events: {
       handler: function (to, from) {
         this.events.forEach((event) => {
-          console.log("WAS:", event);
           event.date = dateToStr(event.date);
           event.eventtimestart = timeToStr(event.eventtimestart);
           event.eventtimeend = timeToStr(event.eventtimeend);
           event.timestart = timeToStr(event.timestart);
           event.timeend = timeToStr(event.timeend);
-          console.log(event);
         })
       }
     }
