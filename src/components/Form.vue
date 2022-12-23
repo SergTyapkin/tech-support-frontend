@@ -32,13 +32,18 @@ input
   @media ({mobile})
     border-right-width 10px
     border-left-width 10px
-textarea:focus
-input:focus
-.input-like:focus
+textarea:not([readonly]):focus
+input:not([readonly]):focus
+.input-like:not([readonly]):focus
   background colorShadowDark
   border-right-width 0
   border-left-width 0
   //border-color empColor1_1
+textarea[readonly]
+input[readonly]
+.input-like[readonly]
+  border none
+  cursor default
 .form:not(.no-bg)
   background form-bg
   box-shadow 10px 10px 30px colorShadowLight
@@ -142,7 +147,7 @@ input:focus
 </style>
 
 <template>
-  <form @submit.prevent.stop="submit" class="form" :class="{disabled: loading}" ref="form">
+  <form class="form" :class="{disabled: loading}" ref="form" @submit.prevent.stop="$emit('submit')">
     <slot></slot>
   </form>
 </template>
@@ -161,10 +166,6 @@ export default {
   },
 
   methods: {
-    submit() {
-      this.$emit('submit', this.values);
-    },
-
     showError() {
       setTimedClass([this.$refs.form], 'error');
     },

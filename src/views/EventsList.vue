@@ -84,7 +84,7 @@ export default {
         return;
       }
 
-      this.events = response;
+      this.events = response.events;
     }
   },
 
