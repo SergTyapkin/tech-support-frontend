@@ -9,11 +9,11 @@
     <Form ref="form"
           title="Регистрация" description="Ну давай, покажи всю свою оригинальность"
           :fields="[
-            { title: 'ИМЯ', autocomplete: 'on', jsonName: 'name', info: 'Давай знакомиться'},
-            { title: 'ФАМИЛИЯ', autocomplete: 'on', jsonName: 'secondName', info: 'Ну надо'},
-            { title: 'ПАРОЛЬ', autocomplete: 'on', jsonName: 'password', type: 'password', info: 'Забыл пароль? - пей таблетки'},
-            { title: 'ПАРОЛЬ ЕЩЁ РАЗ', jsonName: 'passwordConfirm', type: 'password', info: 'Не ошибись'},
-            { title: 'E-mail', autocomplete: 'on', jsonName: 'email', type: 'email', info: 'Когда-нибудь пароль придётся восстанавливать'},
+            { title: 'ИМЯ', autocomplete: 'on', jsonName: 'name', name: 'firstname', info: 'Давай знакомиться'},
+            { title: 'ФАМИЛИЯ', autocomplete: 'on', jsonName: 'secondName', name: 'lastname', info: 'Ну надо'},
+            { title: 'ПАРОЛЬ', autocomplete: 'on', jsonName: 'password', name: 'password', type: 'password', info: 'Забыл пароль? - пей таблетки'},
+            { title: 'ПАРОЛЬ ЕЩЁ РАЗ', jsonName: 'passwordConfirm', name: 'password confirm', type: 'password', info: 'Не ошибись'},
+            { title: 'E-mail', autocomplete: 'on', jsonName: 'email', name: 'email', type: 'email', info: 'Когда-нибудь пароль придётся восстанавливать'},
           ]"
           submit-text="Погнали"
           @submit="signUp"

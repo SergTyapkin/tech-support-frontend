@@ -34,6 +34,7 @@ input-bg = linear-gradient(20deg, rgba(45, 36, 13, 0.4) 0%, rgba(62, 39, 17, 0.6
     border-color error-color
     border-right none
   .error-text
+    font-size 14px
     position absolute
     top -6px
     left 80px
@@ -225,7 +226,7 @@ input-bg = linear-gradient(20deg, rgba(45, 36, 13, 0.4) 0%, rgba(62, 39, 17, 0.6
 <template>
   <div :class="{error: error?.length}" class="floating-input-fields">
     <span class="error-text">{{ error }}</span>
-    <input ref="input" :type="type" :autocomplete="autocomplete" placeholder=" " @input="updateVModel" :value="modelValue" :checked="this.modelValue" :disabled="disabled"
+    <input ref="input" :type="type" :autocomplete="autocomplete" :name="name" placeholder=" " @input="updateVModel" :value="modelValue" :checked="this.modelValue" :disabled="disabled"
       :class="{
         left: textAlign === 'left',
         right: textAlign === 'right',
@@ -247,6 +248,9 @@ export default {
     title: String,
     type: {
       default: "text"
+    },
+    name: {
+      default: ""
     },
     autocomplete: {
       default: "off"

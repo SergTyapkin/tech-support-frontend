@@ -39,6 +39,7 @@
                      :title="field.title"
                      :autocomplete="field.autocomplete"
                      :type="field.type"
+                     :name="field.name"
                      :error="errors[field.jsonName]"
                      v-model="values[field.jsonName]"
       >

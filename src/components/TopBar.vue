@@ -35,12 +35,15 @@ height = 70px
     border-bottom transparent 2px solid
     border-right mix(borderColor, transparent) 1px solid
   > *:hover
+  > *.active
     width 150%
     color textColor1
     letter-spacing 2px
     transition all 0.3s ease
     opacity 1
     border-bottom empColor1_1 2px solid
+  > *:hover
+    background blocksBgColor
 
   > *
     img
@@ -53,15 +56,15 @@ height = 70px
 
 <template>
   <div class="root">
-    <router-link :to="{name: 'events'}" class="events button">
+    <router-link :to="routes.events" class="events button" :class="{active: $route.fullPath === routes.events}">
       <img src="../res/events.svg" alt="">
       <span>Все события</span>
     </router-link>
-    <router-link :to="{name: 'events', query: {userId: $user.id}}" class="my-events button">
+    <router-link :to="routes.eventsMy" class="my-events button" :class="{active: $route.fullPath === routes.eventsMy}">
       <img src="../res/my_events.svg" alt="">
       <span>Мои события</span>
     </router-link>
-    <router-link :to="{name: 'profile'}" class="profile button">
+    <router-link :to="routes.profile" class="profile button" :class="{active: $route.fullPath === routes.profile}">
       <img src="../res/profile.svg" alt="">
       <span>Профиль</span>
     </router-link>
@@ -106,8 +109,14 @@ export default {
 
   data() {
     return {
-      base_url_path: this.$base_url_path
+      base_url_path: this.$base_url_path,
+
+      routes: {
+        events: this.$router.resolve({ name: 'events' }).href,
+        eventsMy: this.$router.resolve({ name: 'events', query: {userId: this.$user.id} }).href,
+        profile: this.$router.resolve({ name: 'profile' }).href,
+      }
     }
-  }
+  },
 };
 </script>
