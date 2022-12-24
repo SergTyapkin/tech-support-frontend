@@ -10,7 +10,7 @@ hr
 .profile-plate
   margin-top 100px
   margin-bottom 100px
-  padding 5px 30px 30px 30px
+  padding 10px 30px 30px 30px
   border-radius 150px 150px 10px 10px / 100px 100px 10px 10px
 
   .info-container
@@ -149,7 +149,7 @@ hr
         <div>
           <div class="info-container">
             <div class="top-container">
-              <router-link :to="$base_url_path + '/ratings'" class="rating">
+              <router-link :to="{name: 'ratings'}" class="rating">
                 <div>★{{ user.rating }}</div>
                 <div class="info ">рейтинг</div>
               </router-link>
@@ -173,7 +173,7 @@ hr
                 <img v-else class="avatar" src="../../res/favicon.ico" alt="avatar">
               </div>
 
-              <router-link :to="$base_url_path + '/ratings'" class="position">
+              <router-link :to="{name: 'ratings'}" class="position">
                 <div>{{ user.position }}</div>
                 <div class="info ">позиция</div>
               </router-link>

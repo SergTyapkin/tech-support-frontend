@@ -1,5 +1,6 @@
 <style lang="stylus" scoped>
 @require '../styles/constants.styl'
+@require '../styles/forms.styl'
 
 input-box-shadow = 0 0 15px 0 rgb(24, 19, 3) inset, 0 0 10px 0 rgba(162, 116, 14, 0.7)
 input-bg = linear-gradient(20deg, rgba(45, 36, 13, 0.4) 0%, rgba(62, 39, 17, 0.6) 50%, rgba(38, 30, 11, 0.4) 100%) 50% 50% no-repeat
@@ -24,6 +25,7 @@ error-color = colorNo
     left 4px
     font-size 14px
   input
+    input()
     margin-top 10px
     text-align center
   input:not([type=checkbox]).left

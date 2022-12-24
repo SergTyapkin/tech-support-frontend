@@ -19,7 +19,7 @@ input()
     border-bottom 1px solid empColor1_1
     border-right 100px solid transparent
     border-left 100px solid transparent
-    &:focus
+    &:not([readonly]):focus
         background colorShadowDark
         border-right-width 0
         border-left-width 0
@@ -27,6 +27,12 @@ input()
         border-color colorNo
     &.success
         border-color colorYes
+
+    &[readonly]
+        cursor default
+        border none
+        border-radius 5px
+        background colorShadowLight-x
     @media ({mobile})
         border-right-width 10px
         border-left-width 10px
@@ -38,7 +44,7 @@ textarea()
     border transparent 1px solid
     transition border 0.3s ease
     resize vertical
-    &:focus
+    &:not([readonly]):focus
         border empColor2_1 1px solid
 
 form-no-bg()

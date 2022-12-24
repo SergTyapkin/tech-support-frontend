@@ -319,11 +319,9 @@ export default {
 
   watch: {
     $route(to, from) {
-      //this.transitionName = 'scale-in';
-      this.transitionName = 'rotate-around';
+      this.transitionName = 'scale-in';
 
       console.log(from.path, 'TO', to.path)
-      /*
       if (to.path === this.$base_url_path + '/profile')
         this.transitionName = 'scale-slide-left';
       else if (from.path === this.$base_url_path + '/profile')
@@ -333,7 +331,6 @@ export default {
         this.transitionName = 'slide-left';
       else if (from.path === this.$base_url_path + '/signup' && to.path === this.$base_url_path + '/signin')
         this.transitionName = 'slide-left';
-      */
     }
   },
 

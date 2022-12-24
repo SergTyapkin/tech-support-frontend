@@ -2,6 +2,7 @@
 @require '../styles/constants.styl'
 @require '../styles/buttons.styl'
 @require '../styles/fonts.styl'
+@require '../styles/forms.styl'
 
 .root
   margin-top 120px
@@ -15,10 +16,10 @@
     margin-bottom 20px
     letter-spacing 2px
   .text
+    textarea()
     font-medium()
     margin-top 10px
     color textColor2
-    resize vertical
     transition none
 </style>
 
