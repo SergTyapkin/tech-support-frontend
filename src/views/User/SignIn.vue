@@ -1,12 +1,9 @@
 <style lang="stylus" scoped>
 @require '../../styles/buttons.styl'
 
-logo-size = 140px
-
 .form
-  .logo
-    width logo-size
-    margin-bottom 20px
+  margin-top 100px
+  margin-bottom 100px
 
 .text-centered
   text-align center
@@ -20,7 +17,8 @@ logo-size = 140px
 
 <template>
   <div>
-    <Form v-if="!loginByCode"
+    <Form class="form"
+          v-if="!loginByCode"
           ref="form"
           title="Вход" description="Ну давай, вспомни пароль, войди в меня"
           :fields="[

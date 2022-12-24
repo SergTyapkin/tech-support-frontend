@@ -1,12 +1,16 @@
 <style lang="stylus" scoped>
-.loading
-  margin-left auto
-  margin-right auto
+@require '../../styles/utils.styl'
+
+.form
+  margin-top 100px
+  margin-bottom 100px
+
 </style>
 
 <template>
   <div>
-    <Form ref="form"
+    <Form class="from"
+          ref="form"
           title="Регистрация" description="Ну давай, покажи всю свою оригинальность"
           :fields="[
             { title: 'ИМЯ', autocomplete: 'on', jsonName: 'name', name: 'firstname', info: 'Давай знакомиться'},
