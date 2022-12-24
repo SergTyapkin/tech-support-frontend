@@ -1,0 +1,87 @@
+@require '../styles/constants.styl'
+@require '../styles/buttons.styl'
+@require '../styles/fonts.styl'
+@require '../styles/utils.styl'
+
+
+input()
+    all unset
+    width 100%
+    color textColor1
+    box-sizing border-box
+    padding 10px
+    font-medium()
+    transition all 0.2s ease
+    cursor pointer
+
+    background colorShadowLight-x
+    border-radius 5px 5px 0 0
+    border-bottom 1px solid empColor1_1
+    border-right 100px solid transparent
+    border-left 100px solid transparent
+    &:focus
+        background colorShadowDark
+        border-right-width 0
+        border-left-width 0
+    &.error
+        border-color colorNo
+    &.success
+        border-color colorYes
+    @media ({mobile})
+        border-right-width 10px
+        border-left-width 10px
+
+textarea()
+    input()
+    background colorShadowDark
+    border-radius 3px
+    border transparent 1px solid
+    transition border 0.3s ease
+    resize vertical
+    &:focus
+        border empColor2_1 1px solid
+
+form-no-bg()
+    block()
+    padding 0
+    margin-top 0
+    margin-bottom 0
+    background none
+
+form()
+    block()
+    centered()
+    > div // containers
+        margin 30px 0
+    > div:last-child
+        margin-bottom 0
+    > div:first-child
+        margin-top 0
+
+    input[type=submit]
+        button-submit()
+
+    &.error
+    &.success
+        .form-status
+            opacity 1
+    &.error
+    & .error
+        color colorNo
+        border-color colorNo
+    &.success
+    & .success
+        color colorYes
+        border-color colorYes
+
+
+    &.disabled
+        input()
+            cursor default
+            user-select none
+            filter saturate(0)
+
+@media ({mobile})
+    .form
+        padding-left 10px
+        padding-right 10px

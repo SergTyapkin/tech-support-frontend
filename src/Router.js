@@ -12,6 +12,8 @@ import EventPage from "./views/EventPage.vue";
 
 import AdminPage from "/src/views/AdminPage.vue";
 import Ratings from "/src/views/Ratings.vue";
+import DocsList from "/src/views/DocsList.vue";
+import Doc from "/src/views/Doc.vue";
 
 import Page404 from '/src/views/Page404.vue'
 
@@ -29,6 +31,9 @@ export default function createVueRouter(Store, App) {
 
         {path: BASE_URL_PATH + '/event/:eventId', name: 'event', component: EventPage, meta: {loginRequired: true}},
         {path: BASE_URL_PATH + '/events', name: 'events', component: EventsList, meta: {loginRequired: true}},
+
+        {path: BASE_URL_PATH + '/docs', name: 'docs', component: DocsList, meta: {loginRequired: true}},
+        {path: BASE_URL_PATH + '/doc/:docId', name: 'doc', component: Doc, meta: {loginRequired: true}},
 
         {path: BASE_URL_PATH + '/ratings', name: 'ratings', component: Ratings, meta: {loginRequired: true}},
 

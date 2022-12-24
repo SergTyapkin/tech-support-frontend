@@ -93,7 +93,7 @@ animation-time-rule = cubic-bezier(0.29, 0.82, 0.36, 0.99)
 
 .wrapper
   width 100%
-  min-height 100vh
+  min-height 'calc(100vh - %s)' % header-height
 
   > *
     position absolute
@@ -139,12 +139,12 @@ animation-time-rule = cubic-bezier(0.29, 0.82, 0.36, 0.99)
     <div></div>
   </div>
 
+  <TopBar v-if="$store.state.user.isLogined"></TopBar>
   <div class="wrapper">
     <CircleLoading v-if="!$store.state.user.isGotten" class="loading"></CircleLoading>
     <router-view v-else v-slot="{ Component }">
-      <TopBar v-if="$store.state.user.isLogined"></TopBar>
-      <transition name="rotate-right">
-        <component :is="Component"/>
+      <transition :name="transitionName">
+        <component :is="Component" class="main"/>
       </transition>
     </router-view>
 
@@ -176,7 +176,7 @@ animation-time-rule = cubic-bezier(0.29, 0.82, 0.36, 0.99)
 
 
 
-/*.slide-left-enter-active,
+.slide-left-enter-active,
 .slide-left-leave-active {
   transition: all 0.4s ease;
 }
@@ -276,29 +276,25 @@ animation-time-rule = cubic-bezier(0.29, 0.82, 0.36, 0.99)
   opacity: 0;
 }
 
-*/
 
 
-
-
-
-.rotate-right-enter-active {
+.rotate-around-enter-active {
   transition: all 0.2s linear;
   transition-delay: 0.2s;
 }
-.rotate-right-leave-active {
+.rotate-around-leave-active {
   transition: all 0.2s linear;
 }
-.rotate-right-enter-from {
+.rotate-around-enter-from {
   transform: rotateY(90deg) scale(1.2) rotateX(10deg);
 }
-.rotate-right-enter-to {
+.rotate-around-enter-to {
   transform: rotateY(0deg) scale(1) rotateX(0deg);
 }
-.rotate-right-leave-from {
+.rotate-around-leave-from {
   transform: rotateY(0deg) scale(1) rotateX(0deg);
 }
-.rotate-right-leave-to {
+.rotate-around-leave-to {
   transform: rotateY(90deg) scale(1.2) rotateX(10deg);
 }
 
@@ -323,10 +319,11 @@ export default {
 
   watch: {
     $route(to, from) {
-      this.transitionName = 'scale-in';
+      //this.transitionName = 'scale-in';
+      this.transitionName = 'rotate-around';
 
       console.log(from.path, 'TO', to.path)
-
+      /*
       if (to.path === this.$base_url_path + '/profile')
         this.transitionName = 'scale-slide-left';
       else if (from.path === this.$base_url_path + '/profile')
@@ -336,6 +333,7 @@ export default {
         this.transitionName = 'slide-left';
       else if (from.path === this.$base_url_path + '/signup' && to.path === this.$base_url_path + '/signin')
         this.transitionName = 'slide-left';
+      */
     }
   },
 
