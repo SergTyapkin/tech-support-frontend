@@ -24,7 +24,7 @@ export class Api extends ApiRequest {
     confirmEmailSendMessage = () => this.post(`/user/email/confirm`);
     confirmEmailByCode = (code) => this.put(`/user/email/confirm`, {code});
 
-    getEvents = (filters) => this.get(`/event`, filters); // filters: any of {date, placeId, participantId, type}; type = one of ['all', 'past', 'next']
+    getEvents = (filters) => this.get(`/event`, filters); // filters: any of {date, placeId, participantId, type, search}; type = one of ['all', 'past', 'next'];
     getEventById = (id) => this.get(`/event`, {id});
     createEvent = (name, description, date, timeStart, timeEnd, placeId, eventTimeStart, eventTimeEnd, needPeopleByCategory) => this.post(`/event`, {name, date, timeStart, timeEnd, description, placeId, eventTimeStart, eventTimeEnd, needPeople: needPeopleByCategory}); // needPeopleByCategory: [{positionId: Number, count: Number}, ...]
     editEvent = (id, name, description, date, timeStart, timeEnd, placeId, eventTimeStart, eventTimeEnd, needPeopleByCategory) => this.put(`/event`, {id, name, date, timeStart, timeEnd, description, placeId, eventTimeStart, eventTimeEnd, needPeople: needPeopleByCategory});
@@ -46,6 +46,11 @@ export class Api extends ApiRequest {
     addPlace = (name) => this.post(`/place`, {name});
     editPlace = (id, name) => this.put(`/place`, {id, name});
     deletePlace = (id) => this.delete(`/place`, {id});
+
+    getDocs = (filters) => this.get(`/docs`, filters); // filters: any of {placeId, positionId, search}
+    getDocById = (id) => this.get(`/docs`, {id});
+    editDoc = (id, title, text, placeId, positionId) => this.put(`/docs`, {id, title, text, placeId, positionId});
+    createDoc = (id, title, text, placeId, positionId) => this.post(`/docs`, {id, title, text, placeId, positionId});
 
     uploadImage = (dataUrl) => this.post(`/image`, {dataUrl});
     deleteImage = (imageId) => this.delete(`/image`, {imageId});

@@ -21,7 +21,7 @@
 <template>
   <div>
     <ul class="events-list">
-      <li v-if="!events?.length" class="info">Событий не найдено</li>
+      <li v-if="!events?.length" class="info">Событий нет</li>
 
       <li v-else v-for="event in events" class="card">
         <EventCard :name="event.name"
@@ -84,7 +84,7 @@ export default {
         return;
       }
 
-      this.events = response.events;
+      this.events = response.events || [];
     }
   },
 

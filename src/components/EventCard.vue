@@ -2,6 +2,7 @@
 @require '../styles/constants.styl'
 @require '../styles/fonts.styl'
 @require '../styles/buttons.styl'
+@require '../styles/utils.styl'
 
 width = 300px
 minHeight = 300px
@@ -11,15 +12,12 @@ minHeight = 300px
   min-height minHeight
   height 100%
   .form
-    margin 0
-    height 100%
+    block-clickable()
     display flex
     flex-direction column
     padding-top 20px
     padding-bottom 20px
     transition all 0.2s ease
-    &:hover
-      background blocksBgColorHover
     .header
       border-bottom solid 1px borderColor
       .text
@@ -36,6 +34,8 @@ minHeight = 300px
 
   .main
     flex 1
+    display flex
+    flex-direction column
     .description
     .people
     .place
@@ -44,8 +44,10 @@ minHeight = 300px
       align-items center
       font-small()
       color textColor3
-      margin 10px 0
+      margin 5px 0
     .description
+      flex 1
+      align-items baseline
       color textColor1
       letter-spacing 0.6px
       margin 20px 10px
@@ -60,8 +62,8 @@ minHeight = 300px
 
 <template>
   <div class="root">
-    <router-link :to="$base_url_path + '/event/' + id">
-      <Form class="form">
+    <router-link :to="{name: 'event', params: {eventId: id}}">
+      <div class="form">
         <header class="header">
           <div class="text">{{ name }}</div>
           <div class="datetime">
@@ -73,10 +75,10 @@ minHeight = 300px
         <main class="main">
           <div class="description">{{ description }}</div>
           <div class="place"><img class="icon" src="../res/place.svg" alt="Place:"> {{ placeName }}</div>
-          <div class="time"><img class="icon" src="../res/time_dashed.svg" alt="Time:"> {{eventTimeStart}} - {{eventTimeEnd}}</div>
+          <div class="time" v-if="eventTimeStart && eventTimeEnd"><img class="icon" src="../res/time_dashed.svg" alt="Time:"> {{eventTimeStart}} - {{eventTimeEnd}}</div>
           <div class="people"><img class="icon" src="../res/people.svg" alt="People:"> {{needPeopleTotal || 0}}</div>
         </main>
-      </Form>
+      </div>
     </router-link>
   </div>
 </template>

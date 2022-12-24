@@ -2,11 +2,14 @@
 @require '../../styles/constants.styl'
 @require '../../styles/buttons.styl'
 @require '../../styles/fonts.styl'
+@require '../../styles/utils.styl'
 
 hr
   margin 0
 
 .profile-plate
+  margin-top 100px
+  margin-bottom 100px
   padding 5px 30px 30px 30px
   border-radius 150px 150px 10px 10px / 100px 100px 10px 10px
 
@@ -34,6 +37,9 @@ hr
 
     .title
       margin-top 5px
+      margin-bottom 15px
+      width 100%
+      text-align center
       font-medium()
       color textColor3
 

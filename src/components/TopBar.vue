@@ -3,12 +3,13 @@
 @require '../styles/fonts.styl'
 
 bg = blocksBgColor
-height = 70px
+margin-bottom = 0
+height = (header-height - margin-bottom)
 
 .root
   z-index 1000
   font-medium()
-  margin-bottom 20px
+  margin-bottom margin-bottom
   width 100%
   display flex
   align-content stretch
@@ -64,6 +65,10 @@ height = 70px
       <img src="../res/my_events.svg" alt="">
       <span>Мои события</span>
     </router-link>
+    <router-link :to="routes.docs" class="docs button" :class="{active: $route.fullPath === routes.docs}">
+      <img src="../res/doc.svg" alt="">
+      <span>Документация</span>
+    </router-link>
     <router-link :to="routes.profile" class="profile button" :class="{active: $route.fullPath === routes.profile}">
       <img src="../res/profile.svg" alt="">
       <span>Профиль</span>
@@ -114,6 +119,7 @@ export default {
       routes: {
         events: this.$router.resolve({ name: 'events' }).href,
         eventsMy: this.$router.resolve({ name: 'events', query: {userId: this.$user.id} }).href,
+        docs: this.$router.resolve({ name: 'docs' }).href,
         profile: this.$router.resolve({ name: 'profile' }).href,
       }
     }
