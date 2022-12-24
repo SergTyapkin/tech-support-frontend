@@ -16,6 +16,8 @@ error-color = colorNo
     transition all 0.2s ease
     font-size 16px
     pointer-events none
+  input:not([type=checkbox])[readonly] + label
+    color textColor5
   input:not([type=checkbox]):focus + label
   input:not([type=checkbox]):not(:placeholder-shown) + label
     top -6px
@@ -228,7 +230,7 @@ error-color = colorNo
 <template>
   <div :class="{error: error?.length}" class="floating-input-fields">
     <span class="error-text">{{ error }}</span>
-    <input ref="input" :type="type" :autocomplete="autocomplete" :name="name" placeholder=" " @input="updateVModel" :value="modelValue" :checked="this.modelValue" :disabled="disabled"
+    <input ref="input" :type="type" :autocomplete="autocomplete" :name="name" :list="list" placeholder=" " @input="updateVModel" :value="modelValue" :checked="this.modelValue" :hidden="hidden" :readonly="readonly" :disabled="disabled"
       :class="{
         left: textAlign === 'left',
         right: textAlign === 'right',
@@ -257,10 +259,15 @@ export default {
     autocomplete: {
       default: "off"
     },
+	list: {
+	  default: ""
+	},
     textAlign: {
       default: "left"
     },
     disabled: Boolean,
+    readonly: Boolean,
+	hidden: Boolean,
     info: String,
 
     modelValue: null,

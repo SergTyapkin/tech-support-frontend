@@ -15,7 +15,7 @@
 </style>
 
 <template>
-  <form @submit.prevent.stop="submit" class="form" :class="{disabled: loading}" ref="form">
+  <form class="form" :class="{disabled: loading}" ref="form" @submit.prevent.stop="$emit('submit')">
     <slot></slot>
   </form>
 </template>
@@ -34,10 +34,6 @@ export default {
   },
 
   methods: {
-    submit() {
-      this.$emit('submit', this.values);
-    },
-
     showError() {
       setTimedClass([this.$refs.form], 'error');
     },

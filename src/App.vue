@@ -175,6 +175,7 @@ animation-time-rule = cubic-bezier(0.29, 0.82, 0.36, 0.99)
 }
 
 
+
 .slide-left-enter-active,
 .slide-left-leave-active {
   transition: all 0.4s ease;
@@ -274,6 +275,29 @@ animation-time-rule = cubic-bezier(0.29, 0.82, 0.36, 0.99)
   transform: scale(0.8);
   opacity: 0;
 }
+
+
+
+.rotate-around-enter-active {
+  transition: all 0.2s linear;
+  transition-delay: 0.2s;
+}
+.rotate-around-leave-active {
+  transition: all 0.2s linear;
+}
+.rotate-around-enter-from {
+  transform: rotateY(90deg) scale(1.2) rotateX(10deg);
+}
+.rotate-around-enter-to {
+  transform: rotateY(0deg) scale(1) rotateX(0deg);
+}
+.rotate-around-leave-from {
+  transform: rotateY(0deg) scale(1) rotateX(0deg);
+}
+.rotate-around-leave-to {
+  transform: rotateY(90deg) scale(1.2) rotateX(10deg);
+}
+
 </style>
 
 <script>
@@ -283,7 +307,6 @@ import Popups from "/src/components/vue-plugins/Popups.vue";
 import CircleLoading from "/src/components/loaders/CircleLoading.vue";
 import {API_URL, BASE_URL_PATH} from "./constants";
 import TopBar from "./components/TopBar.vue";
-
 
 export default {
   components: {TopBar, CircleLoading, Modal, Popups},
@@ -296,10 +319,11 @@ export default {
 
   watch: {
     $route(to, from) {
-      this.transitionName = 'scale-in';
+      //this.transitionName = 'scale-in';
+      this.transitionName = 'rotate-around';
 
       console.log(from.path, 'TO', to.path)
-
+      /*
       if (to.path === this.$base_url_path + '/profile')
         this.transitionName = 'scale-slide-left';
       else if (from.path === this.$base_url_path + '/profile')
@@ -309,6 +333,7 @@ export default {
         this.transitionName = 'slide-left';
       else if (from.path === this.$base_url_path + '/signup' && to.path === this.$base_url_path + '/signin')
         this.transitionName = 'slide-left';
+      */
     }
   },
 
