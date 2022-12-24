@@ -34,7 +34,7 @@ export default function createVueRouter(Store, App) {
 
         {path: BASE_URL_PATH + '/admin', name: 'adminPage', component: AdminPage, meta: {loginRequired: true}},
 
-        {path: BASE_URL_PATH + '/:catchAll(.*)', component: Page404}
+        {path: BASE_URL_PATH + '/:catchAll(.*)', component: Page404},
     ]
 
     const Router = createRouter({
