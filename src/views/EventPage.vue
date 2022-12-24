@@ -64,8 +64,6 @@
 			  <div class="main_info">
 				  <div class="input-info">Что?</div>
 				  <FloatingInput v-model="event.name" title="Название" :readonly="!$user.isAdmin" class="name_input" info="Что?"></FloatingInput>
-			  </div>
-			  <div class="main_info">
 				  <div class="input-info">А где?</div>
 				  <FloatingInput v-model="event.placename" list="places" title="Место проведения" :readonly="!$user.isAdmin" class="name_input"></FloatingInput>
 				  <datalist id="places">
