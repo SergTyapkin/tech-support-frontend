@@ -162,15 +162,13 @@ hr
                                  :compress-size="compressSize"
                 >
                   <div class="avatar-div" @click.stop="updateAvatar(undefined)">
-                    <img v-if="user.avatarImageId" class="avatar" :src="api_url + '/image/' + user.avatarImageId" alt="avatar">
-                    <img v-else class="avatar" src="../../res/default_avatar.png" alt="avatar">
+                    <UserAvatar :image-id="user.avatarImageId"></UserAvatar>
                   </div>
                 </DragNDropLoader>
                 <img v-if="user.avatarImageId" class="delete-avatar" src="../../res/trash.svg" alt="delete" @click.stop="deleteAvatarClick">
               </div>
               <div v-else class="avatar-div">
-                <img v-if="user.avatarImageId" class="avatar" :src="api_url + '/image/' + user.avatarImageId" alt="avatar">
-                <img v-else class="avatar" src="../../res/favicon.ico" alt="avatar">
+                <UserAvatar :image-id="user.avatarImageId"></UserAvatar>
               </div>
 
               <router-link :to="{name: 'ratings'}" class="position">
@@ -245,9 +243,10 @@ import ImageUploader from "../../utils/imageUploader";
 import DragNDropLoader from "../../components/DragNDropLoader.vue";
 import ArrowListElement from "../../components/ArrowListElement.vue";
 import TopBar from "../../components/TopBar.vue";
+import UserAvatar from "../../components/UserAvatar.vue";
 
 export default {
-  components: {TopBar, ArrowListElement, DragNDropLoader, CircleLoading, FloatingInput, FormExtended, Form},
+  components: {UserAvatar, TopBar, ArrowListElement, DragNDropLoader, CircleLoading, FloatingInput, FormExtended, Form},
 
   data() {
     return {

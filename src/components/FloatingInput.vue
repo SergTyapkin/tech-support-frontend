@@ -240,7 +240,7 @@ error-color = colorNo
       }"
     >
     <label class="">{{ title }}</label>
-    <div class="info">
+    <div class="info" v-if="!noInfo">
       <slot></slot>
     </div>
   </div>
@@ -261,16 +261,16 @@ export default {
     autocomplete: {
       default: "off"
     },
-	list: {
-	  default: ""
-	},
+    list: {
+      default: ""
+    },
     textAlign: {
       default: "left"
     },
     disabled: Boolean,
+    noInfo: Boolean,
     readonly: Boolean,
-	hidden: Boolean,
-    info: String,
+	  hidden: Boolean,
 
     modelValue: null,
     error: String,

@@ -19,7 +19,7 @@ input()
     border-bottom 1px solid empColor1_1
     border-right 100px solid transparent
     border-left 100px solid transparent
-    &:not([readonly]):focus
+    &:not([readonly]):not([submit]):focus
         background colorShadowDark
         border-right-width 0
         border-left-width 0
@@ -44,6 +44,7 @@ textarea()
     border transparent 1px solid
     transition border 0.3s ease
     resize vertical
+    white-space pre-line
     &:not([readonly]):focus
         border empColor2_1 1px solid
 
