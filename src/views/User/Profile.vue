@@ -162,7 +162,7 @@ hr
                                  :compress-size="compressSize"
                 >
                   <div class="avatar-div" @click.stop="updateAvatar(undefined)">
-                    <img v-if="user.avatarImageId" class="avatar" :src="api_url + '/image/' + user.avatarImageId" alt="avatar">
+                    <img v-if="user.avatarImageId" class="avatar" :src="getImageUrlById(user.avatarImageId, api_url)" alt="avatar">
                     <img v-else class="avatar" src="../../res/default_avatar.png" alt="avatar">
                   </div>
                 </DragNDropLoader>
@@ -242,6 +242,7 @@ import CircleLoading from "../../components/loaders/CircleLoading.vue";
 import {nextTick} from "vue";
 import {BASE_URL_PATH, IMAGE_MAX_RES, IMAGE_PROFILE_MAX_RES} from "../../constants";
 import ImageUploader from "../../utils/imageUploader";
+import {getImageUrlById} from "../../utils/utils";
 import DragNDropLoader from "../../components/DragNDropLoader.vue";
 import ArrowListElement from "../../components/ArrowListElement.vue";
 import TopBar from "../../components/TopBar.vue";
@@ -465,7 +466,11 @@ export default {
       }
 
       this.$popups.error('Не удалось выслать код', response.info || 'Неизвестная ошибка');
-    }
+    },
+	
+	getImageUrlById(id, api_url) {
+	  return getImageUrlById(id, api_url);
+    },
   },
 
   watch: {

@@ -94,5 +94,5 @@ export function timeToStr(time) {
 }
 
 export function getImageUrlById(id, api_url) {
-	return id === null ? api_url + '/image/' + id : "";
+	return api_url + '/image/' + id;
 }

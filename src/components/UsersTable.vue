@@ -1,4 +1,4 @@
-<style lang="stylus">
+<style lang="stylus" scoped>
 @require '../styles/constants.styl'
 @require '../styles/buttons.styl'
 @require '../styles/fonts.styl'
@@ -6,11 +6,13 @@
 .usersList
   display block
   max-width 420px
-  max-height 600px
   min-height 140px
   background bgColor
   border-radius 5px
   overflow scroll-y
+  height 360px
+  @media ({mobile})
+    height 100%
 
 .allUsers
   background colorShadowLight
@@ -50,14 +52,15 @@
   white-space nowrap
   overflow hidden
   margin-top -7px
-.userName::before
+/*.userName:before
   position absolute
+  display block
   width 270px
   height 20px
   content ""
   background linear-gradient(-90deg, #131313, #13131300 30%)
-.user:hover .userName::before
-  background linear-gradient(-90deg, #0f0f0f, #0f0f0f00 30%)
+.user:hover .userName:before
+  background linear-gradient(-90deg, #0f0f0f, #0f0f0f00 30%)*/
 
 .ratingButtons
   display flex
@@ -92,7 +95,7 @@
   background linear-gradient(-90deg, #def5f000, empColor1_3 20%)
   margin-right -5px
   margin-left -50px
-  margin-top 4px
+  margin-top 1px
   height 3px
 
 .eventName
@@ -105,31 +108,29 @@
   white-space nowrap
   overflow hidden
   margin-bottom 10px
-.eventName::before
+/*.eventName::before
   position absolute
   height 40px
   width 375px
-  padding-left 15px
   content ""
-  background linear-gradient(-90deg, #131313, #13131300 40%)
+  background linear-gradient(-90deg, #131313, #13131300 40%)*/
 
 .userDes
   color textColor3
-  font-size 8px
+  font-size 10px
   height 10px
   width 240px
   padding-left 15px
   white-space nowrap
   overflow hidden
-.userDes::before
+/*.userDes::before
   position absolute
   width 240px
-  height 8px
-  padding-left 15px
+  height 10px
   content ""
   background linear-gradient(-90deg, #131313, #13131300 30%)
 .user:hover .userDes::before
-  background linear-gradient(-90deg, #0f0f0f, #0f0f0f00 30%)
+  background linear-gradient(-90deg, #0f0f0f, #0f0f0f00 30%)*/
 
 .nameHr
   background linear-gradient(90deg, #0000, textColor5 5%, textColor5 95%, #0000)
@@ -145,7 +146,8 @@
 	  <div class="eventName">{{usersList.eventName}}</div>
 	  <hr class="nameHr">
 	  <div class="user" v-for="user in usersList.people">
-		<img src="" class="userIcon"> <!--:src="getImageUrlById(user.imageId, this.$api.apiUrl)"  Она почему-то не рабоатет-->
+		<img v-if="user.imageId !== null" :src="getImageUrlById(user.imageId, this.$api.apiUrl)" class="userIcon">
+		<img v-else src="../res/default_avatar.png" class="userIcon">
 		<div class="info">
 			<div class="userName">{{user.name}}</div>
 			<div class="userDes">{{user.description}}</div>
@@ -170,6 +172,7 @@
 
 <script>
 import {setTimedClass} from "../utils/utils";
+import {getImageUrlById} from "../utils/utils";
 
 export default {
   emits: ['submit'],
@@ -183,8 +186,62 @@ export default {
 				people: [
 					{
 						id: 0,
+						name: "UserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUser",
+						description: "droiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroid",
+						imageId: null
+					},
+					{
+						id: 0,
 						name: "User",
-						description: "",
+						description: "droid",
+						imageId: null
+					},
+					{
+						id: 0,
+						name: "User",
+						description: "droid",
+						imageId: null
+					},
+					{
+						id: 0,
+						name: "User",
+						description: "droid",
+						imageId: null
+					},
+					{
+						id: 0,
+						name: "User",
+						description: "droid",
+						imageId: null
+					},
+					{
+						id: 0,
+						name: "User",
+						description: "droid",
+						imageId: null
+					},
+					{
+						id: 0,
+						name: "User",
+						description: "droid",
+						imageId: null
+					},
+					{
+						id: 0,
+						name: "User",
+						description: "droid",
+						imageId: null
+					},
+					{
+						id: 0,
+						name: "User",
+						description: "droid",
+						imageId: null
+					},
+					{
+						id: 0,
+						name: "User",
+						description: "droid",
 						imageId: null
 					},
 					
@@ -208,6 +265,9 @@ export default {
     },
     showSuccess() {
       setTimedClass([this.$refs.form], 'success');
+    },
+	getImageUrlById(id, api_url) {
+	  return getImageUrlById(id, api_url);
     },
   }
 };

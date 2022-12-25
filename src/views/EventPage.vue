@@ -26,12 +26,21 @@
 
 .mero_info
   display flex
+  @media ({mobile})
+    flex-direction column
 
 .buttons
   display flex
+  @media ({mobile})
+    background #86a1ab44
+    bottom 20px
+    position sticky
+    box-shadow 0px 0px 94px 45px #86a1ab55
 
 .form_event
   max-width 800px
+  @media ({mobile})
+    max-width 600px
 
 .form_event.is-admin
   .submit_button
@@ -54,6 +63,15 @@
 .right_description
   padding-left 10px
   width 100%
+
+.usTableBorder
+  padding 10px
+  margin-top 20px
+  display flex
+  flex-direction column
+  align-items center
+  min-width 420px
+
 </style>
 
 <template>
@@ -84,6 +102,10 @@
 		  <div class="discription right_description">
 			  <div class="input-info des">А чё надо то??</div>
 			  <textarea class="d_rename" :readonly="!$user.isAdmin">{{event.description}}</textarea>
+			  
+			  <div class="usTableBorder">
+			    <UsersTable class="usTable"></UsersTable>
+			  </div>
 		  </div>
 	  </div>
 			  <div class="buttons">
@@ -102,9 +124,10 @@
 import Form from "/src/components/Form.vue";
 import CircleLoading from "../components/loaders/CircleLoading.vue";
 import FloatingInput from "../components/FloatingInput.vue";
+import UsersTable from "../components/UsersTable.vue";
 
 export default {
-  components: {CircleLoading, Form, FloatingInput, },
+  components: {CircleLoading, Form, FloatingInput, UsersTable},
 
   data() {
     return {

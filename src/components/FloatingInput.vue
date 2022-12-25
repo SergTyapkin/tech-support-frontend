@@ -16,6 +16,8 @@ error-color = colorNo
     transition all 0.2s ease
     font-size 16px
     pointer-events none
+  input:not([type=checkbox])[readonly]
+    border none
   input:not([type=checkbox])[readonly] + label
     color textColor5
   input:not([type=checkbox]):focus + label
@@ -58,6 +60,9 @@ error-color = colorNo
       padding 10px
     .info
       margin 5px 0
+
+.floating-input-fields input:not([type=checkbox])[readonly]
+  background transparent
 
 
 @supports (-webkit-appearance: none) or (-moz-appearance: none) {

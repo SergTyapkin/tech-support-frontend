@@ -15,6 +15,8 @@ import Ratings from "/src/views/Ratings.vue";
 import DocsList from "/src/views/DocsList.vue";
 import Doc from "/src/views/Doc.vue";
 
+import table from "/src/components/UsersTable.vue";
+
 import Page404 from '/src/views/Page404.vue'
 
 import {BASE_URL_PATH} from "./constants";
@@ -40,6 +42,7 @@ export default function createVueRouter(Store, App) {
         {path: BASE_URL_PATH + '/admin', name: 'adminPage', component: AdminPage, meta: {loginRequired: true}},
 
         {path: BASE_URL_PATH + '/:catchAll(.*)', component: Page404},
+        {path: BASE_URL_PATH + '/table', component: table},
     ]
 
     const Router = createRouter({
