@@ -152,7 +152,7 @@
 			<div class="userName">{{user.name}}</div>
 			<div class="userDes">{{user.description}}</div>
 			<div class="ratingButtons">
-			  <div class="ratingBut handVal">?</div>
+			  <div class="ratingBut handVal">{{user.rating === null ? "?" : user.rating}}</div>
 			  <div class="ratingBut">0</div>
 			  <div class="ratingBut">0.25</div>
 			  <div class="ratingBut">0.5</div>
@@ -161,7 +161,7 @@
 			  <div class="ratingBut">2</div>
 			</div>
 			<form>
-			  <input class="comm" placeholder="Комментарий">
+			  <input class="comm" placeholder="Комментарий" :value="user.comm">
 			</form>
 			<hr class="hrUserL">
 		</div>
@@ -186,63 +186,11 @@ export default {
 				people: [
 					{
 						id: 0,
-						name: "UserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUser",
-						description: "droiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroiddroid",
-						imageId: null
-					},
-					{
-						id: 0,
 						name: "User",
-						description: "droid",
-						imageId: null
-					},
-					{
-						id: 0,
-						name: "User",
-						description: "droid",
-						imageId: null
-					},
-					{
-						id: 0,
-						name: "User",
-						description: "droid",
-						imageId: null
-					},
-					{
-						id: 0,
-						name: "User",
-						description: "droid",
-						imageId: null
-					},
-					{
-						id: 0,
-						name: "User",
-						description: "droid",
-						imageId: null
-					},
-					{
-						id: 0,
-						name: "User",
-						description: "droid",
-						imageId: null
-					},
-					{
-						id: 0,
-						name: "User",
-						description: "droid",
-						imageId: null
-					},
-					{
-						id: 0,
-						name: "User",
-						description: "droid",
-						imageId: null
-					},
-					{
-						id: 0,
-						name: "User",
-						description: "droid",
-						imageId: null
+						description: "",
+						imageId: null,
+						comm: "",
+						rating: null,
 					},
 					
 				],
