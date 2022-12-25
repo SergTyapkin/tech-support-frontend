@@ -2,12 +2,15 @@
 @require '../styles/constants.styl'
 @require '../styles/buttons.styl'
 @require '../styles/fonts.styl'
+@require '../styles/forms.styl'
 
 .root
-  margin-top 120px
-  padding 0 70px
+  padding 40px 60px
   width 100%
-  height 100%
+  flex-direction column
+  @media ({mobile})
+    padding-left 10px
+    padding-right 10px
   .title
     font-large()
     border-bottom 1px solid borderColor
@@ -15,23 +18,53 @@
     margin-bottom 20px
     letter-spacing 2px
   .text
+    textarea()
     font-medium()
     margin-top 10px
     color textColor2
-    resize vertical
     transition none
+    height 500px
+    margin-bottom 20px
+
+  .input
+    margin-top 10px
+
+  .buttons-container
+    > *
+      display flex
+      align-items center
+      justify-content center
+      margin-bottom 20px
+      img
+        width 26px
+        margin-right 10px
+    .save-button
+      button-submit()
+      margin-bottom 50px
+    .delete-button
+      button-danger()
+      width 50%
+      margin 0 auto
 </style>
 
 <template>
   <div class="root">
     <CircleLoading v-if="loading"></CircleLoading>
 
-    <FloatingInput class="title" title="Название" :readonly="!$user.isAdmin" v-model="title"></FloatingInput>
-    <textarea class="text scrollable" rows="10" :readonly="!$user.isAdmin" v-model="text"></textarea>
+    <FloatingInput class="title" title="Название" :readonly="!$user.isAdmin" v-model="title" no-info></FloatingInput>
+    <FloatingInput v-model="placeName" list="places" title="Место проведения" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
+    <datalist id="places">
+      <option v-for="place in allPlaces">{{place.name}}</option>
+    </datalist>
+    <FloatingInput v-model="positionName" list="positions" title="Направленность" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
+    <datalist id="positions">
+      <option v-for="position in allPositions">{{position.name}}</option>
+    </datalist>
+    <textarea class="text scrollable" :readonly="!$user.isAdmin" v-model="text"></textarea>
 
     <div class="buttons-container" v-if="$user.isAdmin">
-      <div class="save-button" @click="saveDoc">Сохранить изменения</div>
-      <div class="delete-button" @click="deleteDoc">Удалить</div>
+      <div class="save-button" @click="saveDoc"><img src="../res/save.svg" alt="">Сохранить изменения</div>
+      <div class="delete-button" @click="deleteDoc"><img src="../res/trash.svg" alt="">Удалить</div>
     </div>
   </div>
 </template>
@@ -49,10 +82,14 @@ export default {
     return {
       loading: true,
 
-      title: '',
-      text: '',
-      placeId: '',
-      positionId: '',
+      title: undefined,
+      text: undefined,
+      placeId: undefined,
+      placeName: undefined,
+      positionId: undefined,
+      positionName: undefined,
+      allPlaces: [],
+      allPositions: [],
 
       docId: this.$route.params.docId,
     }
@@ -76,7 +113,33 @@ export default {
     this.title = response.title;
     this.text = response.text;
     this.placeId = response.placeid;
+    this.placeName = response.placename;
     this.positionId = response.positionid;
+    this.positionName = response.positionname;
+
+
+    this.loading = true;
+    const allPlaces = await this.$api.getPlaces();
+    this.loading = false;
+
+    if (!allPlaces.ok_) {
+      this.$popups.error('Ошибка', 'Не удалось получить список мест проведения мероприятий');
+      return;
+    }
+
+    this.allPlaces = allPlaces.places;
+
+
+    this.loading = true;
+    const allPositions = await this.$api.getPositions();
+    this.loading = false;
+
+    if (!allPositions.ok_) {
+      this.$popups.error('Ошибка', 'Не удалось получить направленностей');
+      return;
+    }
+
+    this.allPositions = allPositions.positions;
   },
 
 

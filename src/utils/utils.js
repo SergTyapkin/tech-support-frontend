@@ -1,3 +1,5 @@
+import {BASE_URL_PATH} from "../constants";
+
 export function getChildrenHeight(el) {
     const children = Array.from(el.children);
     let res = 0;

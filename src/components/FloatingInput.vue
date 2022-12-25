@@ -1,5 +1,6 @@
 <style lang="stylus" scoped>
 @require '../styles/constants.styl'
+@require '../styles/forms.styl'
 
 input-box-shadow = 0 0 15px 0 rgb(24, 19, 3) inset, 0 0 10px 0 rgba(162, 116, 14, 0.7)
 input-bg = linear-gradient(20deg, rgba(45, 36, 13, 0.4) 0%, rgba(62, 39, 17, 0.6) 50%, rgba(38, 30, 11, 0.4) 100%) 50% 50% no-repeat
@@ -9,29 +10,34 @@ error-color = colorNo
 
 .floating-input-fields
   position relative
-  input:not([type=checkbox]) + label
+  input:not([type=checkbox]) ~ label
     position absolute
     top 22px
     left 8px
     transition all 0.2s ease
     font-size 16px
     pointer-events none
-  input:not([type=checkbox])[readonly] + label
+  input:not([type=checkbox])[readonly] ~ label
     color textColor5
-  input:not([type=checkbox]):focus + label
-  input:not([type=checkbox]):not(:placeholder-shown) + label
+  input:not([type=checkbox]):focus ~ label
+  input:not([type=checkbox]):not(:placeholder-shown) ~ label
     top -6px
     left 4px
     font-size 14px
   input
+    input()
     margin-top 10px
     text-align center
+    & + .underline
+      background-size 200%
   input:not([type=checkbox]).left
     text-align left
-    border-left none
+    & + .underline
+      background-position-x -100%
   input:not([type=checkbox]).right
     text-align right
-    border-right none
+    & + .underline
+      background-position-x 100%
 .floating-input-fields.error
   .input-like
   input
@@ -237,8 +243,9 @@ error-color = colorNo
         switch: type === 'checkbox',
       }"
     >
+    <span class="underline"></span>
     <label class="">{{ title }}</label>
-    <div class="info">
+    <div class="info" v-if="!noInfo">
       <slot></slot>
     </div>
   </div>
@@ -259,16 +266,16 @@ export default {
     autocomplete: {
       default: "off"
     },
-	list: {
-	  default: ""
-	},
+    list: {
+      default: ""
+    },
     textAlign: {
       default: "left"
     },
     disabled: Boolean,
+    noInfo: Boolean,
     readonly: Boolean,
-	hidden: Boolean,
-    info: String,
+	  hidden: Boolean,
 
     modelValue: null,
     error: String,
