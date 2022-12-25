@@ -20,7 +20,7 @@ input()
         display block
         height 1px
         width 100%
-        transition background 0.3s ease
+        transition all 0.3s ease
         background linear-gradient(90deg, transparent 0%, empColor1_1 35%, empColor1_1 65%, transparent 100%)
     &[readonly] + .underline
     &[submit] + .underline
@@ -29,10 +29,10 @@ input()
         background colorShadowDark
         & + .underline
             background-size 250%
-    &.error
-        border-color colorNo
-    &.success
-        border-color colorYes
+    &.error + .underline
+        filter invert(1) // to red
+    &.success + .underline
+        filter hue-rotate(300deg) // to green
 
     &[readonly]
         cursor default

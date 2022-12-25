@@ -38,16 +38,23 @@ error-color = colorNo
     text-align right
     & + .underline
       background-position-x 100%
+.floating-input-fields.success
 .floating-input-fields.error
   .input-like
   input
-    border-color error-color
     border-right none
+  .input-like + .underline
+  input + .underline
+     filter invert(1) // to red
   .error-text
     font-size 14px
     position absolute
     top -6px
     left 80px
+.floating-input-fields.success
+  .input-like + .underline
+  input + .underline
+    filter hue-rotate(300deg) // to green
 
 .floating-input-fields
   > div
