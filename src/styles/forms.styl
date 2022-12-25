@@ -12,17 +12,23 @@ input()
     padding 10px
     font-medium()
     transition all 0.2s ease
-    cursor pointer
-
+    cursor text
     background colorShadowLight-x
     border-radius 5px 5px 0 0
-    border-bottom 1px solid empColor1_1
-    border-right 100px solid transparent
-    border-left 100px solid transparent
+    position relative
+    & + .underline
+        display block
+        height 1px
+        width 100%
+        transition background 0.3s ease
+        background linear-gradient(90deg, transparent 0%, empColor1_1 35%, empColor1_1 65%, transparent 100%)
+    &[readonly] + .underline
+    &[submit] + .underline
+        display none
     &:not([readonly]):not([submit]):focus
         background colorShadowDark
-        border-right-width 0
-        border-left-width 0
+        & + .underline
+            background-size 250%
     &.error
         border-color colorNo
     &.success

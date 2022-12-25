@@ -4,54 +4,49 @@
 @require '../styles/fonts.styl'
 
 .root
- width 100%
-.form-event
-  margin 20px auto
   width 100%
-  max-width 800px
-  .event-info
-    display flex
-    .left-description
-      border-right 2px solid borderColorDark
-      padding-right 10px
-    .right-description
-      flex 1
-      padding-left 10px
-      .input-info
-        font-small()
-        color textColor4
+  .form-event
+    margin 20px auto
+    width 100%
+    max-width 800px
+    .event-info
+      display flex
+      .left-description
+        border-right 2px solid borderColorDark
+        padding-right 10px
+      .right-description
+        flex 1
+        padding-left 10px
+        .input-info
+          font-small()
+          color textColor4
 
-    .main-info
-      padding-top 12px
+      .main-info
+        padding-top 12px
 
-      border-radius 7px
-      background colorShadowLight-x
-      border colorShadowLight 1px solid
-      margin-bottom 20px
-      //.input-info
-      //  font-small()
-      //  color textColor4
-      //  margin-bottom 0
-      //  padding-left 10px
-      .input:not(:last-of-type)
+        border-radius 7px
+        background colorShadowLight-x
+        border colorShadowLight 1px solid
         margin-bottom 20px
-    .textarea
-      textarea()
-      margin-top 10px
-      resize none
-      height 300px
+        .input:not(:last-of-type)
+          margin-bottom 20px
+      .textarea
+        textarea()
+        margin-top 10px
+        resize none
+        height 300px
 
-  .buttons
-    display flex
-    .button-submit
-      flex 0.5
-      margin-right 20px
-    .button-participate
-      flex 1
-      button-submit()
-      width unset
-      &.not
-        button-danger()
+    .buttons
+      display flex
+      .button-submit
+        flex 0.5
+        margin-right 20px
+      .button-participate
+        flex 1
+        button-submit()
+        width unset
+        &.not
+          button-danger()
 </style>
 
 <template>
@@ -60,9 +55,7 @@
       <div class="event-info">
         <div class="left-description">
           <div class="main-info">
-<!--            <div class="input-info">Что?</div>-->
             <FloatingInput v-model="event.name" title="Название" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
-<!--            <div class="input-info">А где?</div>-->
             <FloatingInput v-model="event.placename" list="places" title="Место проведения" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
             <datalist id="places">
               <option v-for="place in allPlaces">{{place.name}}</option>
@@ -70,15 +63,12 @@
           </div>
 
           <div class="main-info">
-<!--            <div class="input-info">И когда?</div>-->
             <FloatingInput v-model="event.date" type="date" title="Дата проведения" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
             <FloatingInput v-model="event.timestart" type="time" title="Приходить c" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
             <FloatingInput v-model="event.timeend" type="time" title="Оставаться до" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
           </div>
 
-<!--          <div class="input-info">Кто вообще такое придумал?</div>-->
           <FloatingInput v-model="event.authorname" title="Автор мероприятия" readonly no-info class="input"></FloatingInput>
-<!--          <div class="input-info">Дайте-ка мне его номерочек!</div>-->
           <FloatingInput v-model="event.authoremail" title="Связь с автором" readonly no-info class="input"></FloatingInput>
         </div>
         <div class="right-description">
@@ -88,7 +78,7 @@
       </div>
 
       <div class="buttons">
-        <input v-if="!$user.isAdmin" :disabled="!isEdited" type="submit" value="Сохранить" class="button-submit">
+        <input v-if="$user.isAdmin" :disabled="!isEdited" type="submit" value="Сохранить" class="button-submit">
 
         <CircleLoading v-if="loading"></CircleLoading>
         <div v-else-if="!event.isyouparticipate" class="button-participate" @click="participate">Пойду</div>
@@ -109,14 +99,13 @@ export default {
 
   data() {
     return {
-      loading: true,
+      eventId: this.$route.params.eventId,
 
       event: {},
 
       allPlaces: [],
 
-      eventId: this.$route.params.eventId,
-
+      loading: true,
       isEdited: false,
     }
   },
@@ -127,9 +116,10 @@ export default {
       this.$router.push({name: "default"});
       return;
     }
+
     this.loading = true;
     const response = await this.$api.getEventById(this.eventId);
-
+    this.loading = false;
     if (!response.ok_) {
       this.$popups.error('Ошибка', 'Не удалось получить список мероприятий');
       return;
@@ -137,15 +127,16 @@ export default {
 
     this.event = response;
 
+    this.loading = true;
     const allPlaces = await this.$api.getPlaces();
-      this.loading = false;
+    this.loading = false;
 
     if (!allPlaces.ok_) {
       this.$popups.error('Ошибка', 'Не удалось получить список мест проведения мероприятий');
       return;
     }
 
-    this.allPlaces = allPlaces;
+    this.allPlaces = allPlaces.places;
   },
 
 
@@ -177,6 +168,6 @@ export default {
     async updateEventData() {
       // TODO
     }
-  }
+  },
 }
 </script>

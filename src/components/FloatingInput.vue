@@ -10,17 +10,17 @@ error-color = colorNo
 
 .floating-input-fields
   position relative
-  input:not([type=checkbox]) + label
+  input:not([type=checkbox]) ~ label
     position absolute
     top 22px
     left 8px
     transition all 0.2s ease
     font-size 16px
     pointer-events none
-  input:not([type=checkbox])[readonly] + label
+  input:not([type=checkbox])[readonly] ~ label
     color textColor5
-  input:not([type=checkbox]):focus + label
-  input:not([type=checkbox]):not(:placeholder-shown) + label
+  input:not([type=checkbox]):focus ~ label
+  input:not([type=checkbox]):not(:placeholder-shown) ~ label
     top -6px
     left 4px
     font-size 14px
@@ -28,12 +28,16 @@ error-color = colorNo
     input()
     margin-top 10px
     text-align center
+    & + .underline
+      background-size 200%
   input:not([type=checkbox]).left
     text-align left
-    border-left none
+    & + .underline
+      background-position-x -100%
   input:not([type=checkbox]).right
     text-align right
-    border-right none
+    & + .underline
+      background-position-x 100%
 .floating-input-fields.error
   .input-like
   input
@@ -239,6 +243,7 @@ error-color = colorNo
         switch: type === 'checkbox',
       }"
     >
+    <span class="underline"></span>
     <label class="">{{ title }}</label>
     <div class="info" v-if="!noInfo">
       <slot></slot>
