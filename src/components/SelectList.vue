@@ -29,6 +29,34 @@ field()
   margin 0
   user-select none
 
+  .title
+    position absolute
+    transition all 0.2s ease
+    pointer-events none
+    top -10px
+    left 4px
+    font-size 14px
+
+  &[readonly]
+    pointer-events none
+    user-select text
+    .title
+      color textColor5
+    .selected-item
+      border none
+      padding-left 10px
+      img
+        display none
+  &[disabled]
+    pointer-events none
+    user-select text
+    opacity 0.6
+    .title
+      color textColor5
+    .selected-item
+      img
+        display none
+
   .selected-item
     field()
     justify-content space-between
@@ -45,6 +73,8 @@ field()
       transition transform 0.3s ease
 
   &.unrolled
+    .title
+      top -16px
     .selected-item
       border-color empColor1_1
       background mix(blocksBgColor, white, 90%)
@@ -94,7 +124,7 @@ field()
 </style>
 
 <template>
-  <div class="select-root" :class="{unrolled, solid}">
+  <div class="select-root" :class="{unrolled, solid}" :readonly="readonly">
     <span class="error-text">{{ error }}</span>
     <div class="selected-item" @click="unrolled = !unrolled">
       {{ list[selectedIdx]?.name }}
@@ -103,6 +133,7 @@ field()
     <ul class="list scrollable">
       <li v-for="(item, idx) in list" class="item" :class="{selected: idx === selectedIdx}" @click.stop="selectItem(idx)">{{ item.name }}</li>
     </ul>
+    <span class="title">{{ title }}</span>
   </div>
 </template>
 
@@ -114,6 +145,7 @@ export default {
   emits: ['input', 'update:modelValue'],
 
   props: {
+    title: String,
     list: Array,
     selectedIdx: {
       type: Number,

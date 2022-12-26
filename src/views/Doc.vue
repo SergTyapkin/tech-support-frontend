@@ -134,15 +134,7 @@ export default {
       this.title = response.title;
       this.text = response.text;
       this.placeId = response.placeid;
-      const placeName = response.placename;
       this.positionId = response.positionid;
-      const positionName = response.positionname;
-
-      if (!this.$user.isAdmin) {
-        this.allPlaces = [placeName];
-        this.allPositions = [positionName];
-        return;
-      }
     }
 
     this.loading = true;

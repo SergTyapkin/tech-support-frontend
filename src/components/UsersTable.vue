@@ -146,8 +146,7 @@
 	  <div class="eventName">{{usersList.eventName}}</div>
 	  <hr class="nameHr">
 	  <div class="user" v-for="user in usersList.people">
-		<img v-if="user.imageId !== null" :src="getImageUrlById(user.imageId, this.$api.apiUrl)" class="userIcon">
-		<img v-else src="../res/default_avatar.png" class="userIcon">
+		<UserAvatar :image-id="user.imageId" class="userIcon"></UserAvatar>
 		<div class="info">
 			<div class="userName">{{user.name}}</div>
 			<div class="userDes">{{user.description}}</div>
@@ -172,32 +171,31 @@
 
 <script>
 import {setTimedClass} from "../utils/utils";
-import {getImageUrlById} from "../utils/utils";
+import UserAvatar from "./UserAvatar.vue";
 
 export default {
+  components: {UserAvatar},
   emits: ['submit'],
-  
+
   props: {
-	usersLists: {
-		type: Array,
-		default: [
-			{
-				eventName: "Event",
-				people: [
-					{
-						id: 0,
-						name: "User",
-						description: "",
-						imageId: null,
-						comm: "",
-						rating: null,
-					},
-					
-				],
-			},
-			
-		],
-	},
+    usersLists: {
+      type: Array,
+      default: [
+        {
+          eventName: "Event",
+          people: [
+            {
+              id: 0,
+              name: "User",
+              description: "",
+              imageId: null,
+              comm: "",
+              rating: null,
+            },
+          ],
+        },
+      ],
+    },
   },
 
   data() {
@@ -213,9 +211,6 @@ export default {
     },
     showSuccess() {
       setTimedClass([this.$refs.form], 'success');
-    },
-	getImageUrlById(id, api_url) {
-	  return getImageUrlById(id, api_url);
     },
   }
 };
