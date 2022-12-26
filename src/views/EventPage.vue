@@ -5,6 +5,8 @@
 
 .root
   width 100%
+  display flex
+  align-items center
   .form-event
     margin 20px auto
     width 100%
@@ -34,7 +36,6 @@
         textarea()
         margin-top 10px
         resize none
-        height 300px
 
     .buttons
       display flex
@@ -50,22 +51,24 @@
 </style>
 
 <template>
-  <div class="root">
+  <div class="root" css-fullheight @input="onChange">
     <Form :noSubmit="!$user.isAdmin" class="form-event" :class="{'is-admin': $user.isAdmin}" @submit="updateEventData">
       <div class="event-info">
         <div class="left-description">
           <div class="main-info">
             <FloatingInput v-model="event.name" title="Название" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
-            <FloatingInput v-model="event.placename" list="places" title="Место проведения" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
-            <datalist id="places">
-              <option v-for="place in allPlaces">{{place.name}}</option>
-            </datalist>
+            <SelectList v-model="place" @click="onChange" :selected-id="event.placeid" :list="allPlaces" title="Место проведения" solid :readonly="!$user.isAdmin" class="input"></SelectList>
           </div>
 
           <div class="main-info">
             <FloatingInput v-model="event.date" type="date" title="Дата проведения" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
             <FloatingInput v-model="event.timestart" type="time" title="Приходить c" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
             <FloatingInput v-model="event.timeend" type="time" title="Оставаться до" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
+          </div>
+
+          <div class="main-info">
+            <FloatingInput v-model="event.eventtimestart" type="time" title="Начало мероприятия" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
+            <FloatingInput v-model="event.eventtimeend" type="time" title="Конец мероприятия" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
           </div>
 
           <FloatingInput v-model="event.authorname" title="Автор мероприятия" readonly no-info class="input"></FloatingInput>
@@ -81,10 +84,14 @@
         <input v-if="$user.isAdmin" :disabled="!isEdited" type="submit" value="Сохранить" class="button-submit">
 
         <CircleLoading v-if="loading"></CircleLoading>
-        <div v-else-if="!event.isyouparticipate" class="button-participate" @click="participate">Пойду</div>
-        <div v-else class="button-participate not" @click="notParticipate">Не пойду</div>
+        <div v-else-if="!event.isyouparticipate && event.isnext" class="button-participate" @click="participate">Пойду</div>
+        <div v-else-if="event.isnext" class="button-participate not" @click="notParticipate">Не пойду</div>
       </div>
     </Form>
+
+    <FloatingButton v-if="isEdited" title="Сохранить" green @click="updateEventData">
+      <img src="../res/save.svg" alt="save">
+    </FloatingButton>
   </div>
 </template>
 
@@ -93,15 +100,18 @@
 import Form from "/src/components/Form.vue";
 import CircleLoading from "../components/loaders/CircleLoading.vue";
 import FloatingInput from "../components/FloatingInput.vue";
+import FloatingButton from "../components/FloatingButton.vue";
+import SelectList from "../components/SelectList.vue";
 
 export default {
-  components: {CircleLoading, Form, FloatingInput},
+  components: {SelectList, FloatingButton, CircleLoading, Form, FloatingInput},
 
   data() {
     return {
       eventId: this.$route.params.eventId,
 
       event: {},
+      place: undefined,
 
       allPlaces: [],
 
@@ -118,25 +128,23 @@ export default {
     }
 
     this.loading = true;
-    const response = await this.$api.getEventById(this.eventId);
+    let response = await this.$api.getEventById(this.eventId);
     this.loading = false;
     if (!response.ok_) {
-      this.$popups.error('Ошибка', 'Не удалось получить список мероприятий');
+      this.$popups.error("Ошибка", "Не удалось получить список мероприятий. " + response.info || "");
       return;
     }
-
     this.event = response;
 
     this.loading = true;
-    const allPlaces = await this.$api.getPlaces();
+    response = await this.$api.getPlaces();
     this.loading = false;
 
-    if (!allPlaces.ok_) {
-      this.$popups.error('Ошибка', 'Не удалось получить список мест проведения мероприятий');
+    if (!response.ok_) {
+      this.$popups.error("Ошибка", "Не удалось получить список мест проведения мероприятий. " + response.info || "");
       return;
     }
-
-    this.allPlaces = allPlaces.places;
+    this.allPlaces = response.places;
   },
 
 
@@ -147,7 +155,7 @@ export default {
       this.loading = false;
 
       if (!res.ok_) {
-        this.$popups.error("Ошибка", "Не удалось записаться на мероприятие");
+        this.$popups.error("Ошибка", "Не удалось записаться на мероприятие. " + (res.info || ""));
         return;
       }
       this.event.isyouparticipate = true;
@@ -159,15 +167,29 @@ export default {
       this.loading = false;
 
       if (!res.ok_) {
-        this.$popups.error("Ошибка", "Не удалось отказаться от мероприятия");
+        this.$popups.error("Ошибка", "Не удалось отказаться от мероприятия. " + (res.info || ""));
         return;
       }
       this.event.isyouparticipate = false;
     },
 
     async updateEventData() {
-      // TODO
-    }
+      this.loading = true;
+      const res = await this.$api.editEvent(this.eventId, this.event.name, this.event.description, this.event.date, this.event.timestart, this.event.timeend, this.place.id, this.event.eventtimestart, this.event.eventtimeend);
+      this.loading = false;
+
+      if (!res.ok_) {
+        this.$popups.error("Ошибка", "Не удалось изменить мероприятие. " + (res.info || ""));
+        return;
+      }
+      window.onbeforeunload = null;
+      this.isEdited = false;
+    },
+
+    onChange() {
+      window.onbeforeunload = () => true;
+      this.isEdited = true;
+    },
   },
 }
 </script>

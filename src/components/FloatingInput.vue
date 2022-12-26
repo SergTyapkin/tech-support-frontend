@@ -47,6 +47,7 @@ error-color = colorNo
   input + .underline
      filter invert(1) // to red
   .error-text
+    color colorNo
     font-size 14px
     position absolute
     top -6px
@@ -243,7 +244,7 @@ error-color = colorNo
 <template>
   <div :class="{error: error?.length}" class="floating-input-fields">
     <span class="error-text">{{ error }}</span>
-    <input ref="input" :type="type" :autocomplete="autocomplete" :name="name" :list="list" placeholder=" " @input="updateVModel" :value="modelValue" :checked="this.modelValue" :hidden="hidden" :readonly="readonly" :disabled="disabled"
+    <input ref="input" :type="type" :autocomplete="autocomplete" :name="name" placeholder=" " @input="updateVModel" :value="modelValue" :checked="this.modelValue" :hidden="hidden" :readonly="readonly" :disabled="disabled"
       :class="{
         left: textAlign === 'left',
         right: textAlign === 'right',
@@ -273,9 +274,6 @@ export default {
     autocomplete: {
       default: "off"
     },
-    list: {
-      default: ""
-    },
     textAlign: {
       default: "left"
     },
@@ -288,8 +286,24 @@ export default {
     error: String,
   },
 
+  data() {
+    return {
+      States: {
+        default: 0,
+        success: 1,
+        error: 2,
+      },
+      state: 0,
+
+      error: this.$props.error,
+    }
+  },
+
   methods: {
     updateVModel(event) {
+      this.state = this.States.default;
+      this.error = '';
+
       let value = event.target.value;
       if (this.type === 'checkbox')
         value = event.target.checked;
@@ -299,7 +313,14 @@ export default {
 
     focus() {
       this.$refs.input.focus();
-    }
+    },
+    //
+    // showError() {
+    //   this.state = this.States.error;
+    // },
+    // showSuccess() {
+    //   this.state = this.States.success;
+    // }
   }
 };
 </script>
