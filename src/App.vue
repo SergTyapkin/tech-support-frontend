@@ -98,6 +98,8 @@ animation-time-rule = cubic-bezier(0.29, 0.82, 0.36, 0.99)
   > *
     position absolute
     width 100%
+  > *[css-fullheight]
+    min-height 'calc(100vh - %s)' % header-height
   .loading
     top 50%
     left 50%

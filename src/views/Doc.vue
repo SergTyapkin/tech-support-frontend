@@ -7,6 +7,7 @@
 .root
   padding 40px 60px
   width 100%
+  display flex
   flex-direction column
   @media ({mobile})
     padding-left 10px
@@ -23,8 +24,8 @@
     margin-top 10px
     color textColor2
     transition none
-    height 500px
-    margin-bottom 20px
+    resize none
+    flex 1
 
   .input
     margin-top 10px
@@ -48,7 +49,7 @@
 </style>
 
 <template>
-  <div class="root">
+  <div class="root" css-fullheight>
     <CircleLoading v-if="loading"></CircleLoading>
 
     <FloatingInput class="title" title="Название" :readonly="!$user.isAdmin" v-model="title" no-info></FloatingInput>
