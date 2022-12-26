@@ -66,7 +66,7 @@ height = (header-height - margin-bottom)
       <span>Мои события</span>
     </router-link>
     <router-link :to="routes.docs" class="docs button" :class="{active: $route.fullPath === routes.docs}">
-      <img src="../res/doc.svg" alt="">
+      <img src="../res/none_logo.svg" alt="">
       <span>Документация</span>
     </router-link>
     <router-link :to="routes.profile" class="profile button" :class="{active: $route.fullPath === routes.profile}">

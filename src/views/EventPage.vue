@@ -3,6 +3,7 @@
 @require '../styles/buttons.styl'
 @require '../styles/fonts.styl'
 
+
 .root
   width 100%
   display flex
@@ -22,6 +23,13 @@
         .input-info
           font-small()
           color textColor4
+        .usTableBorder
+          padding 10px
+          margin-top 20px
+          display flex
+          flex-direction column
+          align-items center
+          min-width 420px
 
       .main-info
         padding-top 12px
@@ -77,6 +85,10 @@
         <div class="right-description">
           <div class="input-info">А что мы будем делать?</div>
           <textarea class="textarea scrollable" :readonly="!$user.isAdmin">{{event.description}}</textarea>
+          
+          <div class="usTableBorder">
+			      <UsersTable class="usTable"></UsersTable>
+			    </div>
         </div>
       </div>
 
@@ -102,9 +114,11 @@ import CircleLoading from "../components/loaders/CircleLoading.vue";
 import FloatingInput from "../components/FloatingInput.vue";
 import FloatingButton from "../components/FloatingButton.vue";
 import SelectList from "../components/SelectList.vue";
+import UsersTable from "../components/UsersTable.vue";
+
 
 export default {
-  components: {SelectList, FloatingButton, CircleLoading, Form, FloatingInput},
+  components: {SelectList, FloatingButton, CircleLoading, Form, FloatingInput, UsersTable},
 
   data() {
     return {
