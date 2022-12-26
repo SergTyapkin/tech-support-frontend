@@ -10,7 +10,7 @@ hr
 .profile-plate
   margin-top 100px
   margin-bottom 100px
-  padding 5px 30px 30px 30px
+  padding 10px 30px 30px 30px
   border-radius 150px 150px 10px 10px / 100px 100px 10px 10px
 
   .info-container
@@ -149,7 +149,7 @@ hr
         <div>
           <div class="info-container">
             <div class="top-container">
-              <router-link :to="$base_url_path + '/ratings'" class="rating">
+              <router-link :to="{name: 'ratings'}" class="rating">
                 <div>★{{ user.rating }}</div>
                 <div class="info ">рейтинг</div>
               </router-link>
@@ -162,18 +162,16 @@ hr
                                  :compress-size="compressSize"
                 >
                   <div class="avatar-div" @click.stop="updateAvatar(undefined)">
-                    <img v-if="user.avatarImageId" class="avatar" :src="getImageUrlById(user.avatarImageId, api_url)" alt="avatar">
-                    <img v-else class="avatar" src="../../res/default_avatar.png" alt="avatar">
+                    <UserAvatar :image-id="user.avatarImageId"></UserAvatar>
                   </div>
                 </DragNDropLoader>
                 <img v-if="user.avatarImageId" class="delete-avatar" src="../../res/trash.svg" alt="delete" @click.stop="deleteAvatarClick">
               </div>
               <div v-else class="avatar-div">
-                <img v-if="user.avatarImageId" class="avatar" :src="api_url + '/image/' + user.avatarImageId" alt="avatar">
-                <img v-else class="avatar" src="../../res/favicon.ico" alt="avatar">
+                <UserAvatar :image-id="user.avatarImageId"></UserAvatar>
               </div>
 
-              <router-link :to="$base_url_path + '/ratings'" class="position">
+              <router-link :to="{name: 'ratings'}" class="position">
                 <div>{{ user.position }}</div>
                 <div class="info ">позиция</div>
               </router-link>
@@ -246,9 +244,10 @@ import {getImageUrlById} from "../../utils/utils";
 import DragNDropLoader from "../../components/DragNDropLoader.vue";
 import ArrowListElement from "../../components/ArrowListElement.vue";
 import TopBar from "../../components/TopBar.vue";
+import UserAvatar from "../../components/UserAvatar.vue";
 
 export default {
-  components: {TopBar, ArrowListElement, DragNDropLoader, CircleLoading, FloatingInput, FormExtended, Form},
+  components: {UserAvatar, TopBar, ArrowListElement, DragNDropLoader, CircleLoading, FloatingInput, FormExtended, Form},
 
   data() {
     return {

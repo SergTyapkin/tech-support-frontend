@@ -1,3 +1,5 @@
+import {BASE_URL_PATH} from "../constants";
+
 export function getChildrenHeight(el) {
     const children = Array.from(el.children);
     let res = 0;
@@ -73,10 +75,9 @@ export function secondsToStrTime(seconds) {
 export function dateToStr(date) {
     const now = new Date();
     date = new Date(date);
-
     const dateYear = date.getFullYear();
     const dateMonth = date.getMonth();
-    const dateDay = date.getDay();
+    const dateDay = date.getDate();
 
     let year = '';
     if (now.getFullYear() !== dateYear)
@@ -91,8 +92,4 @@ export function timeToStr(time) {
     const minutes = time.getMinutes();
 
     return `${("0" + hours).slice(-2)}:${("0" + minutes).slice(-2)}`;
-}
-
-export function getImageUrlById(id, api_url) {
-	return api_url + '/image/' + id;
 }

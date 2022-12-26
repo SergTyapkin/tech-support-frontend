@@ -1,5 +1,6 @@
 <style lang="stylus" scoped>
 @require '../styles/constants.styl'
+@require '../styles/forms.styl'
 
 input-box-shadow = 0 0 15px 0 rgb(24, 19, 3) inset, 0 0 10px 0 rgba(162, 116, 14, 0.7)
 input-bg = linear-gradient(20deg, rgba(45, 36, 13, 0.4) 0%, rgba(62, 39, 17, 0.6) 50%, rgba(38, 30, 11, 0.4) 100%) 50% 50% no-repeat
@@ -11,41 +12,52 @@ error-color = colorNo
 
 .floating-input-fields
   position relative
-  input:not([type=checkbox]) + label
+  input:not([type=checkbox]) ~ label
     position absolute
     top 22px
     left 8px
     transition all 0.2s ease
     font-size 16px
     pointer-events none
-  input:not([type=checkbox])[readonly]
-    border none
-  input:not([type=checkbox])[readonly] + label
+  input:not([type=checkbox])[readonly] ~ label
     color textColor5
-  input:not([type=checkbox]):focus + label
-  input:not([type=checkbox]):not(:placeholder-shown) + label
+  input:not([type=checkbox]):focus ~ label
+  input:not([type=checkbox]):not(:placeholder-shown) ~ label
     top -6px
     left 4px
     font-size 14px
   input
+    input()
     margin-top 10px
     text-align center
+    & + .underline
+      background-size 200%
   input:not([type=checkbox]).left
     text-align left
-    border-left none
+    & + .underline
+      background-position-x -100%
   input:not([type=checkbox]).right
     text-align right
-    border-right none
+    & + .underline
+      background-position-x 100%
+.floating-input-fields.success
 .floating-input-fields.error
   .input-like
   input
-    border-color error-color
     border-right none
+  .input-like + .underline
+  input + .underline
+     filter invert(1) // to red
   .error-text
+    color colorNo
     font-size 14px
     position absolute
     top -6px
     left 80px
+.floating-input-fields.success
+  .input-like + .underline
+  input + .underline
+    filter hue-rotate(300deg) // to green
 
 .floating-input-fields
   > div
@@ -237,15 +249,16 @@ error-color = colorNo
 <template>
   <div :class="{error: error?.length}" class="floating-input-fields">
     <span class="error-text">{{ error }}</span>
-    <input ref="input" :type="type" :autocomplete="autocomplete" :name="name" :list="list" :placeholder="placeholder" @input="updateVModel" :value="modelValue" :checked="this.modelValue" :hidden="hidden" :readonly="readonly" :required="required" :disabled="disabled"
+    <input ref="input" :type="type" :autocomplete="autocomplete" :name="name" :placeholder="placeholder" @input="updateVModel" :value="modelValue" :checked="this.modelValue" :hidden="hidden" :readonly="readonly" :required="required" :disabled="disabled"
       :class="{
         left: textAlign === 'left',
         right: textAlign === 'right',
         switch: type === 'checkbox',
       }"
     >
+    <span class="underline"></span>
     <label class="">{{ title }}</label>
-    <div class="info">
+    <div class="info" v-if="!noInfo">
       <slot></slot>
     </div>
   </div>
@@ -264,29 +277,43 @@ export default {
       default: ""
     },
     placeholder: {
-	  default: ""
+	    default: ""
     },
     autocomplete: {
       default: "off"
     },
-	list: {
-	  default: ""
-	},
     textAlign: {
       default: "left"
     },
     disabled: Boolean,
+    noInfo: Boolean,
     readonly: Boolean,
-	required: Boolean,
-	hidden: Boolean,
+    required: Boolean,
+    hidden: Boolean,
     info: String,
 
     modelValue: null,
     error: String,
   },
 
+  data() {
+    return {
+      States: {
+        default: 0,
+        success: 1,
+        error: 2,
+      },
+      state: 0,
+
+      error: this.$props.error,
+    }
+  },
+
   methods: {
     updateVModel(event) {
+      this.state = this.States.default;
+      this.error = '';
+
       let value = event.target.value;
       if (this.type === 'checkbox')
         value = event.target.checked;
@@ -296,7 +323,14 @@ export default {
 
     focus() {
       this.$refs.input.focus();
-    }
+    },
+    //
+    // showError() {
+    //   this.state = this.States.error;
+    // },
+    // showSuccess() {
+    //   this.state = this.States.success;
+    // }
   }
 };
 </script>

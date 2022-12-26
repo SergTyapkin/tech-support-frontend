@@ -12,21 +12,33 @@ input()
     padding 10px
     font-medium()
     transition all 0.2s ease
-    cursor pointer
-
+    cursor text
     background colorShadowLight-x
     border-radius 5px 5px 0 0
-    border-bottom 1px solid empColor1_1
-    border-right 100px solid transparent
-    border-left 100px solid transparent
-    &:focus
+    position relative
+    & + .underline
+        display block
+        height 1px
+        width 100%
+        transition all 0.3s ease
+        background linear-gradient(90deg, transparent 0%, empColor1_1 35%, empColor1_1 65%, transparent 100%)
+    &[readonly] + .underline
+    &[submit] + .underline
+        display none
+    &:not([readonly]):not([submit]):focus
         background colorShadowDark
-        border-right-width 0
-        border-left-width 0
-    &.error
-        border-color colorNo
-    &.success
-        border-color colorYes
+        & + .underline
+            background-size 250%
+    &.error + .underline
+        filter invert(1) // to red
+    &.success + .underline
+        filter hue-rotate(300deg) // to green
+
+    &[readonly]
+        cursor default
+        border none
+        border-radius 5px
+        background colorShadowLight-x
     @media ({mobile})
         border-right-width 10px
         border-left-width 10px
@@ -38,7 +50,8 @@ textarea()
     border transparent 1px solid
     transition border 0.3s ease
     resize vertical
-    &:focus
+    white-space pre-line
+    &:not([readonly]):focus
         border empColor2_1 1px solid
 
 form-no-bg()
@@ -50,6 +63,7 @@ form-no-bg()
 
 form()
     block()
+    max-width 460px
     centered()
     > div // containers
         margin 30px 0

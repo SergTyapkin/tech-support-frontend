@@ -23,6 +23,7 @@
 
     .form
       position relative
+      margin-top 150px
 
       .confirm-button
         width 45%

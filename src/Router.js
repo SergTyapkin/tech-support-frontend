@@ -36,6 +36,7 @@ export default function createVueRouter(Store, App) {
 
         {path: BASE_URL_PATH + '/docs', name: 'docs', component: DocsList, meta: {loginRequired: true}},
         {path: BASE_URL_PATH + '/doc/:docId', name: 'doc', component: Doc, meta: {loginRequired: true}},
+        {path: BASE_URL_PATH + '/doc', name: 'createDoc', component: Doc, meta: {loginRequired: true}},
 
         {path: BASE_URL_PATH + '/ratings', name: 'ratings', component: Ratings, meta: {loginRequired: true}},
 
