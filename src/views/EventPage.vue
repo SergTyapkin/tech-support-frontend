@@ -51,16 +51,13 @@
 </style>
 
 <template>
-  <div class="root" css-fullheight>
+  <div class="root" css-fullheight @input="onChange">
     <Form :noSubmit="!$user.isAdmin" class="form-event" :class="{'is-admin': $user.isAdmin}" @submit="updateEventData">
       <div class="event-info">
         <div class="left-description">
           <div class="main-info">
             <FloatingInput v-model="event.name" title="Название" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
-            <FloatingInput v-model="event.placename" list="places" title="Место проведения" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
-            <datalist id="places">
-              <option v-for="place in allPlaces">{{place.name}}</option>
-            </datalist>
+            <SelectList v-model="place" @click="onChange" :selected-id="event.placeid" :list="allPlaces" title="Место проведения" solid :readonly="!$user.isAdmin" class="input"></SelectList>
           </div>
 
           <div class="main-info">
@@ -91,6 +88,10 @@
         <div v-else-if="event.isnext" class="button-participate not" @click="notParticipate">Не пойду</div>
       </div>
     </Form>
+
+    <FloatingButton v-if="isEdited" title="Сохранить" green @click="updateEventData">
+      <img src="../res/save.svg" alt="save">
+    </FloatingButton>
   </div>
 </template>
 
@@ -99,15 +100,18 @@
 import Form from "/src/components/Form.vue";
 import CircleLoading from "../components/loaders/CircleLoading.vue";
 import FloatingInput from "../components/FloatingInput.vue";
+import FloatingButton from "../components/FloatingButton.vue";
+import SelectList from "../components/SelectList.vue";
 
 export default {
-  components: {CircleLoading, Form, FloatingInput},
+  components: {SelectList, FloatingButton, CircleLoading, Form, FloatingInput},
 
   data() {
     return {
       eventId: this.$route.params.eventId,
 
       event: {},
+      place: undefined,
 
       allPlaces: [],
 
@@ -151,7 +155,7 @@ export default {
       this.loading = false;
 
       if (!res.ok_) {
-        this.$popups.error("Ошибка", "Не удалось записаться на мероприятие. " + res.info || "");
+        this.$popups.error("Ошибка", "Не удалось записаться на мероприятие. " + (res.info || ""));
         return;
       }
       this.event.isyouparticipate = true;
@@ -163,7 +167,7 @@ export default {
       this.loading = false;
 
       if (!res.ok_) {
-        this.$popups.error("Ошибка", "Не удалось отказаться от мероприятия. " + res.info || "");
+        this.$popups.error("Ошибка", "Не удалось отказаться от мероприятия. " + (res.info || ""));
         return;
       }
       this.event.isyouparticipate = false;
@@ -171,15 +175,21 @@ export default {
 
     async updateEventData() {
       this.loading = true;
-      const res = await this.$api.editEvent(this.eventId, this.event.name, this.event.description, this.event.date, this.event.timestart, this.event.timeend, this.event.placeid, this.event.eventtimestart, this.event.eventtimeend);
+      const res = await this.$api.editEvent(this.eventId, this.event.name, this.event.description, this.event.date, this.event.timestart, this.event.timeend, this.place.id, this.event.eventtimestart, this.event.eventtimeend);
       this.loading = false;
 
       if (!res.ok_) {
-        this.$popups.error("Ошибка", "Не удалось изменить мероприятие. " + res.info || "");
+        this.$popups.error("Ошибка", "Не удалось изменить мероприятие. " + (res.info || ""));
         return;
       }
-      this.event.isyouparticipate = false;
-    }
+      window.onbeforeunload = null;
+      this.isEdited = false;
+    },
+
+    onChange() {
+      window.onbeforeunload = () => true;
+      this.isEdited = true;
+    },
   },
 }
 </script>

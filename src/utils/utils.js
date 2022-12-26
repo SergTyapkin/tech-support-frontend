@@ -75,10 +75,9 @@ export function secondsToStrTime(seconds) {
 export function dateToStr(date) {
     const now = new Date();
     date = new Date(date);
-
     const dateYear = date.getFullYear();
     const dateMonth = date.getMonth();
-    const dateDay = date.getDay();
+    const dateDay = date.getDate();
 
     let year = '';
     if (now.getFullYear() !== dateYear)

@@ -1,5 +1,6 @@
 <style lang="stylus" scoped>
 @require '../styles/fonts.styl'
+@require '../styles/utils.styl'
 @require '../styles/constants.styl'
 
 .list
@@ -10,22 +11,19 @@
   list-style none
   margin 0
   padding 0
-  margin-top 100px
+  @media ({desktop})
+    margin-top 40px
   .info
     margin-top 200px
     font-large()
   .doc
-    padding 10px 20px
-    border-radius 10px
+    block-clickable()
+    block-dark-bg()
+    width 100%
+    max-width unset
     margin 20px
-    height 100%
     display flex
     flex-direction column
-    padding-top 20px
-    padding-bottom 20px
-    transition all 0.2s ease
-    &:hover
-      background blocksBgColorHover
     .header
       border-bottom solid 1px borderColor
       font-large()
@@ -44,6 +42,20 @@
     .text
       font-small()
       color textColor3
+
+  .create-doc
+    margin-top 30px
+    block-clickable()
+    background none
+    border 2px dashed borderColor
+    display flex
+    align-items center
+    justify-content center
+    padding 10px
+    width 50%
+    img
+      margin-right 10px
+      width 40px
 </style>
 
 <template>
@@ -62,6 +74,10 @@
         <div class="text">{{ doc.text?.substring(0, 100) }}</div>
       </router-link>
     </li>
+
+    <router-link :to="{name: 'createDoc'}" v-if="$user.isAdmin" class="create-doc">
+      <img src="../res/plus.svg" alt="plus"><div class="text">Создать</div>
+    </router-link>
   </ul>
 </template>
 

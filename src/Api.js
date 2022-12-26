@@ -50,7 +50,8 @@ export class Api extends ApiRequest {
     getDocs = (filters) => this.get(`/docs`, filters); // filters: any of {placeId, positionId, search}
     getDocById = (id) => this.get(`/docs`, {id});
     editDoc = (id, title, text, placeId, positionId) => this.put(`/docs`, {id, title, text, placeId, positionId});
-    createDoc = (id, title, text, placeId, positionId) => this.post(`/docs`, {id, title, text, placeId, positionId});
+    createDoc = (title, text, placeId, positionId) => this.post(`/docs`, {title, text, placeId, positionId});
+    deleteDoc = (id) => this.delete(`/docs`, {id});
 
     uploadImage = (dataUrl) => this.post(`/image`, {dataUrl});
     deleteImage = (imageId) => this.delete(`/image`, {imageId});

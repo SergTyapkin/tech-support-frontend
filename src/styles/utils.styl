@@ -10,11 +10,14 @@ centered()
 block()
     font-medium()
     background blocksBgColor
-    max-width 460px
     border-radius 7px
     backdrop-filter blur(10px) brightness(3)
     transition all 0.3s ease
     padding 30px
+
+block-dark-bg()
+    block()
+    backdrop-filter blur(10px)
 
 block-clickable()
     block()
