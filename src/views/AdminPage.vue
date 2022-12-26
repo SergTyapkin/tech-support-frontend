@@ -169,26 +169,6 @@ export default {
 	},
 	
 	async generateEvent () {
-	  let name = document.getElementById("eventName").childNodes[1].value;
-	  let des = document.getElementById("eventDes").value;
-	  let date = document.getElementById("eventDate").childNodes[1].value;
-	  let begin = document.getElementById("eventBegin").childNodes[1].value;
-	  let end = document.getElementById("eventEnd").childNodes[1].value;
-	  let place = document.getElementById("eventPlace").childNodes[1].value;
-	  let tBegin = document.getElementById("techBegin").childNodes[1].value;
-	  let tEnd = document.getElementById("techEnd").childNodes[1].value;
-	  let people = document.getElementById("peopleNeed").childNodes[1].value;
-	  
-	  place = 1;
-	  console.log(name, des, date, tBegin, tEnd, 1, begin, end, people, typeof(date))
-	  const response = await this.$api.createEvent(name, des, date, tBegin, tEnd, place, begin, end, people);
-	  
-	  if (response.ok_) {
-        this.$popups.success('Готово', 'Мероприятие создано');
-        return;
-      }
-	  
-	  this.$popups.error('Не удалось создать мероприятие', 'Неизвестная ошибка');
 	}
   },
 }
