@@ -137,9 +137,10 @@ hr
 @require '../../styles/constants.styl'
 
 .__text-success
-  color colorYes
+    color colorYes
 .__text-error
-  color colorNo
+    color colorNo
+
 </style>
 
 <template>

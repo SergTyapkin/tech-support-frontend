@@ -2,179 +2,107 @@
 @require '../styles/constants.styl'
 @require '../styles/buttons.styl'
 @require '../styles/fonts.styl'
+@require '../styles/utils.styl'
+
+avatar-size = 80px
+user-padding-left = 20px
 
 .usersList
   display block
-  max-width 420px
-  min-height 140px
-  background bgColor
+  min-height 200px
+  height 400px
+  background borderColorDark
   border-radius 5px
   overflow scroll-y
-  height 360px
   @media ({mobile})
     height 100%
 
-.allUsers
-  background colorShadowLight
-  border-radius 5px
-  margin-bottom 10px
-  padding-bottom 10px
+  .eventUsersList
+    border-radius 5px
 
-.user
-  width 100%
-  height 120px
-  border-radius 5px
-  padding 10px
-  padding-left 20px
-  display flex
-  border 1px solid #0000
-.user:hover
-  background colorShadowLight
+    .eventName
+      font-large()
+      padding 0 15px
+      margin 10px 0 5px 0
+      width 100px
+      white-space nowrap
+    .nameHr
+      background linear-gradient(90deg, textColor1 0%, textColor5 70%, transparent)
+      width 100%
+      height 1px
+      margin 0
 
-.userIcon
-  border-radius 50%
-  outline 3px solid empColor1_3
-  outline-offset 2px
-  width 90px
-  min-width 90px
-  height 90px
-  min-height 90px
-  margin 2px
-  overflow hidden
+    .user
+      position relative
+      width 100%
+      padding 15px 10px 15px user-padding-left
+      display flex
+      .userIcon
+        align-self flex-end
+        border-radius 50%
+        outline 1px solid empColor1_1
+        outline-offset 2px
+        width (avatar-size - 4px)
+        height (avatar-size - 4px)
+        margin 2px
+      .info
+        padding 0 7px
+        overflow hidden
+        width 100%
+        .userName
+          font-medium()
+          line-height 0.8em
+          white-space nowrap
+          overflow hidden
+        .userTitle
+          color textColor3
+          font-small-extra()
+          white-space nowrap
 
-.info
-  padding 7px
+        .range
+          w 1
+        .comm
+          display inline
+          height 10px
+          width 270px
+          border none
+          cursor text
 
-.userName
-  font-size 20px
-  height 24px
-  width 270px
-  white-space nowrap
-  overflow hidden
-  margin-top -7px
-/*.userName:before
-  position absolute
-  display block
-  width 270px
-  height 20px
-  content ""
-  background linear-gradient(-90deg, #131313, #13131300 30%)
-.user:hover .userName:before
-  background linear-gradient(-90deg, #0f0f0f, #0f0f0f00 30%)*/
-
-.ratingButtons
-  display flex
-  justify-content center
-  margin 7px
-
-.ratingBut
-  width 30px
-  height 20px
-  border 1px solid empColor2_2
-  background empColor2_4
-  border-radius 3px
-  margin 1px
-  text-align center
-  color empColor2_1
-  font-size 10px
-  cursor pointer
-  overflow hidden
-  white-space nowrap
-
-.handVal
-  margin-right 7px
-
-.comm
-  display inline
-  height 10px
-  width 270px
-  border none
-  cursor text
-
-.hrUserL
-  background linear-gradient(-90deg, #def5f000, empColor1_3 20%)
-  margin-right -5px
-  margin-left -50px
-  margin-top 1px
-  height 3px
-
-.eventName
-  height 40px
-  font-size 30px
-  padding-top 10px
-  badding-bottom 7px
-  padding-left 15px
-  width 400px
-  white-space nowrap
-  overflow hidden
-  margin-bottom 10px
-/*.eventName::before
-  position absolute
-  height 40px
-  width 375px
-  content ""
-  background linear-gradient(-90deg, #131313, #13131300 40%)*/
-
-.userDes
-  color textColor3
-  font-size 10px
-  height 10px
-  width 240px
-  padding-left 15px
-  white-space nowrap
-  overflow hidden
-/*.userDes::before
-  position absolute
-  width 240px
-  height 10px
-  content ""
-  background linear-gradient(-90deg, #131313, #13131300 30%)
-.user:hover .userDes::before
-  background linear-gradient(-90deg, #0f0f0f, #0f0f0f00 30%)*/
-
-.nameHr
-  background linear-gradient(90deg, #0000, textColor5 5%, textColor5 95%, #0000)
-  width 407px
-  height 3px
-  margin-left 7px
-  margin-bottom 20px
+      .hrUserL
+        position absolute
+        bottom 4px
+        left (avatar-size / 2) + user-padding-left
+        right 0
+        height 1px
+        background linear-gradient(90deg, empColor1_1 80%, transparent 100%)
 </style>
 
 <template>
   <div class="usersList scrollable" :class="{disabled: loading}">
-	<div class="allUsers" v-for="usersList in usersLists">
-	  <div class="eventName">{{usersList.eventName}}</div>
-	  <hr class="nameHr">
-	  <div class="user" v-for="user in usersList.people">
-		<UserAvatar :image-id="user.imageId" class="userIcon"></UserAvatar>
-		<div class="info">
-			<div class="userName">{{user.name}}</div>
-			<div class="userDes">{{user.description}}</div>
-			<div class="ratingButtons">
-			  <div class="ratingBut handVal">{{user.rating === null ? "?" : user.rating}}</div>
-			  <div class="ratingBut">0</div>
-			  <div class="ratingBut">0.25</div>
-			  <div class="ratingBut">0.5</div>
-			  <div class="ratingBut">0.75</div>
-			  <div class="ratingBut">1</div>
-			  <div class="ratingBut">2</div>
-			</div>
-			<form>
-			  <input class="comm" placeholder="Комментарий" :value="user.comm">
-			</form>
-			<hr class="hrUserL">
-		</div>
-	  </div>
-	</div>
+    <div class="eventUsersList" v-for="usersList in usersLists">
+      <div class="eventName">{{usersList.eventName}}</div>
+      <hr class="nameHr">
+      <div class="user" v-for="user in usersList.participations">
+        <UserAvatar :image-id="user.imageId" class="userIcon"></UserAvatar>
+        <div class="info">
+          <div class="userName">{{user.name}}</div>
+          <div class="userTitle">{{user.title}}</div>
+          <Range class="range" :min="0.25" :max="2"></Range>
+          <input class="comm" @change="saveComment" placeholder="Комментарий" v-model="user.comm">
+        </div>
+        <hr class="hrUserL">
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import {setTimedClass} from "../utils/utils";
 import UserAvatar from "./UserAvatar.vue";
+import Range from "./Range.vue";
 
 export default {
-  components: {UserAvatar},
+  components: {Range, UserAvatar},
   emits: ['submit'],
 
   props: {
@@ -183,11 +111,11 @@ export default {
       default: [
         {
           eventName: "Event",
-          people: [
+          participations: [
             {
-              id: 0,
-              name: "User",
-              description: "",
+              id: 1,
+              name: "Сергей Тяпкин",
+              title: "Дроидекъ",
               imageId: null,
               comm: "",
               rating: null,

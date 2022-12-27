@@ -23,6 +23,12 @@ button()
         border-color empColor2_1
         box-shadow 5px 5px 15px colorShadowDark
 
+    &:disabled
+        pointer-events none
+        color textColor4
+        background saturation(empColor2_3, 20%)
+        box-shadow none
+
 
 button-submit()
     button()
@@ -31,6 +37,9 @@ button-submit()
     border-color empColor1_3
     &:hover
         border-color empColor1_2
+    &:disabled
+        background #444444AA
+        border-color empColor1_4
 
 button-danger()
     button()

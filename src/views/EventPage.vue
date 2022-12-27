@@ -23,13 +23,9 @@
         .input-info
           font-small()
           color textColor4
-        .usTableBorder
-          padding 10px
-          margin-top 20px
-          display flex
-          flex-direction column
-          align-items center
-          min-width 420px
+        .users-table
+          width 100%
+          margin 20px auto
 
       .main-info
         padding-top 12px
@@ -85,10 +81,8 @@
         <div class="right-description">
           <div class="input-info">А что мы будем делать?</div>
           <textarea class="textarea scrollable" :readonly="!$user.isAdmin">{{event.description}}</textarea>
-          
-          <div class="usTableBorder">
-			      <UsersTable class="usTable"></UsersTable>
-			    </div>
+
+          <UsersTable class="users-table"></UsersTable>
         </div>
       </div>
 
@@ -198,6 +192,7 @@ export default {
       }
       window.onbeforeunload = null;
       this.isEdited = false;
+      this.$popups.success("Обновлено", "Данные мероприятия сохранены");
     },
 
     onChange() {
