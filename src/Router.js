@@ -28,6 +28,7 @@ export default function createVueRouter(Store, App) {
         {path: BASE_URL_PATH + '/signin', name: 'signin', component: SignIn, meta: {noLoginRequired: true}},
         {path: BASE_URL_PATH + '/signup', name: 'signup', component: SignUp, meta: {noLoginRequired: true}},
         {path: BASE_URL_PATH + '/profile', name: 'profile', component: Profile, meta: {loginRequired: true}},
+        {path: BASE_URL_PATH + '/profile/:userId', name: 'userProfile', component: Profile, meta: {loginRequired: true}},
         {path: BASE_URL_PATH + '/password/restore', name: 'passwordRestore', component: RestorePassword, meta: {noLoginRequired: true}},
         {path: BASE_URL_PATH + '/email/confirm', name: 'emailConfirm', component: ConfirmEmail},
 
