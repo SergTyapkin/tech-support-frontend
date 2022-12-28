@@ -33,6 +33,7 @@
                    :time-start="event.timestart"
                    :time-end="event.timeend"
                    :need-people="event.needpeople"
+                   :participants-total="event.participantstotal"
                    :place-name="event.placename"
                    :place-id="event.placeid"
                    :author-name="event.authorname"

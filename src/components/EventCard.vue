@@ -23,14 +23,14 @@ minHeight = 300px
       .text
         font-large()
         color textColor1
-      .datetime
+      .date
+      .time
         display flex
         align-items center
-        padding 10px 5px
-        .date
-        .time
-          font-small()
-          color textColor2
+        padding 3px 5px
+        font-small()
+        color textColor2
+      padding-bottom 5px
 
   .main
     flex 1
@@ -66,17 +66,14 @@ minHeight = 300px
       <div class="form">
         <header class="header">
           <div class="text">{{ name }}</div>
-          <div class="datetime">
-            <img class="icon" src="../res/time.svg" alt="Date:">
-            <span class="date">{{ date }},</span>
-            <span class="date">{{timeStart}} - {{timeEnd}}</span>
-          </div>
+          <div class="date"><img class="icon" src="../res/date.svg" alt="Date:">{{ date }}</div>
+          <div class="time"><img class="icon" src="../res/time.svg" alt="Date:">{{timeStart}} - {{timeEnd}}</div>
         </header>
         <main class="main">
           <div class="description">{{ description }}</div>
           <div class="place"><img class="icon" src="../res/place.svg" alt="Place:"> {{ placeName }}</div>
           <div class="time" v-if="eventTimeStart && eventTimeEnd"><img class="icon" src="../res/time_dashed.svg" alt="Time:"> {{eventTimeStart}} - {{eventTimeEnd}}</div>
-          <div class="people"><img class="icon" src="../res/people.svg" alt="People:"> {{needPeopleTotal || 0}}</div>
+          <div class="people"><img class="icon" src="../res/people.svg" alt="People:"> {{ needPeople || 0}} / {{ participantsTotal || 0 }}</div>
         </main>
       </div>
     </router-link>
@@ -97,7 +94,8 @@ export default {
     timeEnd: String,
     eventTimeStart: String,
     eventTimeEnd: String,
-    needPeople: Array,
+    needPeople: Number,
+    participantsTotal: Number,
     placeId: Number,
     placeName: String,
     authorId: Number,
@@ -107,7 +105,6 @@ export default {
   data() {
     return {
       loading: false,
-      needPeopleTotal: this.$props.needPeople?.reduce((count, curObj) => count + curObj.value),
     }
   },
 };
