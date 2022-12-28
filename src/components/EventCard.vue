@@ -23,6 +23,7 @@ minHeight = 300px
       .text
         font-large()
         color textColor1
+        margin-bottom 10px
       .date
       .time
         display flex
@@ -51,6 +52,8 @@ minHeight = 300px
       color textColor1
       letter-spacing 0.6px
       margin 20px 10px
+      max-height 150px
+      overflow hidden
 
   .button-info
     button-submit()
@@ -105,6 +108,7 @@ export default {
   data() {
     return {
       loading: false,
+      description: this.$props.description.substring(0, 200),
     }
   },
 };

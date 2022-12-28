@@ -11,8 +11,10 @@
   list-style none
   margin 0
   padding 0
+  margin-bottom 20px
   @media ({desktop})
     margin-top 40px
+    margin-bottom 40px
   .info
     margin-top 200px
     font-large()
