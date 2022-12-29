@@ -189,7 +189,7 @@ export default {
       return;
     }
 
-    this.selectItem(this.selectedIdx);
+    this.selectItem(this.selectedIdx, true);
   },
 
   methods: {
@@ -197,10 +197,11 @@ export default {
       this.unrolled = true;
     },
 
-    selectItem(idx) {
+    selectItem(idx, disableEmitting = false) {
       this.state = this.States.default;
       this.selectedIdx = idx;
-      this.$emit('input', idx, this.list[idx]);
+      if (!disableEmitting)
+        this.$emit('input', idx, this.list[idx]);
 
       this.$emit('update:modelValue', this.list[idx]);
       this.unrolled = false;
@@ -217,7 +218,7 @@ export default {
         }
       }
 
-      this.selectItem(this.selectedIdx);
+      this.selectItem(this.selectedIdx, true);
     }
   }
 };

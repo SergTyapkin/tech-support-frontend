@@ -13,6 +13,9 @@
   .place-3
     text-align center
     margin 0 40px
+    transition transform 0.2s ease
+    &:hover
+      transform scale(1.1)
     .avatar
       border-radius 50%
       outline-width 2px
@@ -98,7 +101,7 @@
 <template>
   <div>
     <header class="top-3">
-      <div class="place-2" v-if="users[1] !== undefined">
+      <router-link :to="{name: 'userProfile', params: {userId: users[1].id}}" class="place-2" v-if="users[1] !== undefined">
         <div class="position">#2</div>
         <UserAvatar class="avatar" :image-id="users[1].imageId"></UserAvatar>
         <div class="name">{{ users[1].name }}</div>
@@ -106,8 +109,8 @@
           {{ users[1].title }}
           <span class="rating">★{{ users[1].rating }}</span>
         </div>
-      </div>
-      <div class="place-1" v-if="users[0] !== undefined">
+      </router-link>
+      <router-link :to="{name: 'userProfile', params: {userId: users[0].id}}" class="place-1" v-if="users[0] !== undefined">
         <div class="position">#1</div>
         <UserAvatar class="avatar" :image-id="users[0].avatarimageid"></UserAvatar>
         <div class="name">{{ users[0].name }}</div>
@@ -115,8 +118,8 @@
           {{ users[0].title }}
           <span class="rating">★{{ users[0].rating }}</span>
         </div>
-      </div>
-      <div class="place-3" v-if="users[2] !== undefined">
+      </router-link>
+      <router-link :to="{name: 'userProfile', params: {userId: users[2].id}}" class="place-3" v-if="users[2] !== undefined">
         <div class="position">#3</div>
         <UserAvatar class="avatar" :image-id="users[2].avatarimageid"></UserAvatar>
         <div class="name">{{ users[2].name }}</div>
@@ -124,7 +127,7 @@
           {{ users[2].title }}
           <span class="rating">★{{ users[2].rating }}</span>
         </div>
-      </div>
+      </router-link>
     </header>
 
     <main class="users-list">
@@ -166,58 +169,7 @@ export default {
       return;
     }
 
-    // this.users = response.ratings;
-    this.users = [
-      {
-        "avatarimageid": null,
-        "id": 1,
-        "name": "\u0421\u0435\u0440\u0433\u0435\u0439 \u0422\u044f\u043f\u043a\u0438\u043d",
-        "rating": 562,
-        "title": "\u0414\u0440\u043e\u0438\u0434\u0435\u043a"
-      },
-      {
-        "avatarimageid": null,
-        "id": 1,
-        "name": "\u0421\u0435\u0440\u0433\u0435\u0439 \u0422\u044f\u043f\u043a\u0438\u043d",
-        "rating": 107,
-        "title": "\u0414\u0440\u043e\u0438\u0434\u0435\u043a"
-      },
-      {
-        "avatarimageid": null,
-        "id": 1,
-        "name": "\u0421\u0435\u0440\u0433\u0435\u0439 \u0422\u044f\u043f\u043a\u0438\u043d",
-        "rating": 23,
-        "title": "\u0414\u0440\u043e\u0438\u0434\u0435\u043a"
-      },
-      {
-        "avatarimageid": null,
-        "id": 1,
-        "name": "\u0421\u0435\u0440\u0433\u0435\u0439 \u0422\u044f\u043f\u043a\u0438\u043d",
-        "rating": 14,
-        "title": "\u0414\u0440\u043e\u0438\u0434\u0435\u043a"
-      },
-      {
-        "avatarimageid": null,
-        "id": 1,
-        "name": "\u0421\u0435\u0440\u0433\u0435\u0439 \u0422\u044f\u043f\u043a\u0438\u043d",
-        "rating": 10,
-        "title": "\u0414\u0440\u043e\u0438\u0434\u0435\u043a"
-      },
-      {
-        "avatarimageid": null,
-        "id": 1,
-        "name": "\u0421\u0435\u0440\u0433\u0435\u0439 \u0422\u044f\u043f\u043a\u0438\u043d",
-        "rating": 1,
-        "title": "\u0414\u0440\u043e\u0438\u0434\u0435\u043a"
-      },
-      {
-        "avatarimageid": null,
-        "id": 1,
-        "name": "\u0421\u0435\u0440\u0433\u0435\u0439 \u0422\u044f\u043f\u043a\u0438\u043d",
-        "rating": 12,
-        "title": "\u0414\u0440\u043e\u0438\u0434\u0435\u043a"
-      },
-    ];
+    this.users = response.ratings;
   }
 }
 </script>
