@@ -32,6 +32,8 @@ export class Api extends ApiRequest {
 
     participateInEvent = (eventId, userId, positionId) => this.post(`/participation/event`, {eventId, userId, positionId});
     notParticipateInEvent = (eventId, userId) => this.delete(`/participation/event`, {eventId, userId});
+    updateParticipationScore = (id, score) => this.put(`/participation/event`, {id, score});
+    updateParticipationComment = (id, comment) => this.put(`/participation/event`, {id, comment});
 
     getParticipationRating = () => this.get(`/ratings`);
 

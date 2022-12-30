@@ -14,12 +14,22 @@
     max-width 800px
     .event-info
       display flex
+      @media ({mobile})
+        flex-direction column
       .left-description
         border-right 2px solid borderColorDark
         padding-right 10px
+        @media ({mobile})
+          border-right none
+          border-bottom 2px solid borderColorDark
+          padding-right 0
+          padding-bottom 10px
       .right-description
         flex 1
         padding-left 10px
+        @media ({mobile})
+          padding-left 0
+          padding-top 20px
         .input-info
           font-small()
           color textColor4
@@ -78,11 +88,12 @@
           <FloatingInput v-model="event.authorname" title="Автор мероприятия" readonly no-info class="input"></FloatingInput>
           <FloatingInput v-model="event.authoremail" title="Связь с автором" readonly no-info class="input"></FloatingInput>
         </div>
+
         <div class="right-description">
           <div class="input-info">А что мы будем делать?</div>
           <textarea class="textarea scrollable" :readonly="!$user.isAdmin">{{event.description}}</textarea>
 
-          <UsersTable class="users-table"></UsersTable>
+          <UsersTable class="users-table" :users-lists="[{participations: event.participations}]" @change.stop="" @input.stop=""></UsersTable>
         </div>
       </div>
 
@@ -199,6 +210,10 @@ export default {
       window.onbeforeunload = () => true;
       this.isEdited = true;
     },
+
+    log(a) {
+      console.log(a)
+    }
   },
 }
 </script>

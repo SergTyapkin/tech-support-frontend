@@ -3,45 +3,56 @@
 @require '../styles/fonts.styl'
 
 
-slider-width = 5px
+slider-width = 7px
 slider-length = 200px
 thumb-size = 3px
 
 .slider-container
   display flex
   align-items center
-  .value
+  .value-container
     display flex
     align-items center
-    justify-content center
+    justify-content flex-end
     font-medium()
-    padding 1px 8px
-    border 1px solid empColor2_2
-    background empColor2_4
-    border-radius 3px
-    text-align center
-    color empColor2_1
-    margin-right 10px
+    width 56px
+    .value
+      all unset
+      box-sizing border-box
+      display block
+      padding 1px 8px
+      border 1px solid empColor2_2
+      background empColor2_4
+      border-radius 3px
+      text-align center
+      width 100%
+      color empColor2_1
+
+      -moz-appearance textfield
+      -webkit-appearance textfield
+      appearance textfield
+      &::-webkit-outer-spin-button
+      &::-webkit-inner-spin-button
+        display none
 
   .input-container
     flex 1
     display flex
     flex-direction column
+    input-margin = 10px
+    input-margin-bottom = 0
     .slider
       all unset
-      margin 10px
-      margin-bottom 3px
+      margin input-margin
+      margin-bottom input-margin-bottom
       height slider-width
       max-width slider-length
       width calc(100% - 10px)
-      background: bgColor;
-      outline: none;
-      border-radius: thumb-size;
+      background linear-gradient(170deg, empColor1_2, empColor2_2)
+      outline none
+      border-radius thumb-size
       overflow hidden
-      box-shadow: inset 0 0 5px empColor1_1;
-      @media ({mobile})
-        background linear-gradient(170deg, empColor1_1, empColor2_1)
-        box-shadow none
+      cursor pointer
     .slider::-webkit-slider-thumb
       -webkit-appearance none
       width thumb-size
@@ -50,34 +61,58 @@ thumb-size = 3px
       background empColor2_1
       cursor pointer
       border 4px solid #333
-      box-shadow (- slider-length - 5px) 0 0 (slider-length) mix(empColor1_1, transparent, 30%)
 
     .range-labels
       color textColor3
       font-size 10px
-      max-width slider-length
-      width calc(100% - 10px)
+      max-width (slider-length + 7px)
+      width calc(100% - 7px)
       display flex
       flex-direction row
       justify-content space-between
-      margin 0 10px
+      margin 0 5px 0 2px
+      > *
+        padding 0 6px
+        padding-top 3px
+        cursor pointer
+        text-align center
+        transition all 0.1s ease
+        &:hover
+          color textColor1
+          transform translateY(2px)
+      > *:first-child
+        padding-left 0
+      > *:last-child
+        padding-right 0
 
+    position relative
+    .splitters-container
+      mix-blend-mode overlay
+      pointer-events none
+      .splitter
+        position absolute
+        top 10px
+        left "calc(%s + %s / var(--count) * (var(--num) + 0.25))" % ((thumb-size * 2) (slider-length - thumb-size * 2.5))
+        width 2px
+        height slider-width
+        background bgColor
+        &:first-child
+        &:last-child
+          display none
 </style>
 
 <template>
   <div class="slider-container">
-    <div class="value">{{ value }}1</div>
+    <div class="value-container">
+      <input type="number" aria-controls="off" ref="value" class="value" v-model="modelValue" :step="step" @change="updateVModel">
+    </div>
     <div class="input-container">
-      <input type="range" class="slider" min="1" max="3" step="1" v-model="size" @input="onInput">
+      <input type="range" class="slider" ref="range" :min="min" :max="max" :step="step" v-model="modelValue" @change="updateVModel">
       <div class="range-labels">
-        <div>0.25</div>
-        <div>0.5</div>
-        <div>0.75</div>
-        <div>1</div>
-        <div>1.25</div>
-        <div>1.5</div>
-        <div>1.75</div>
-        <div>2</div>
+        <div v-for="val in ((max-min) / step + 1)" @click="setModelValue(min + (val - 1) * step)">{{ min + (val - 1) * step }}</div>
+      </div>
+      <div class="splitters-container">
+        <div class="splitter" v-for="i in ((max-min) / step + 1)" :style="{'--num': i - 1, '--count': (max-min) / step}"></div>
       </div>
     </div>
   </div>
@@ -85,6 +120,8 @@ thumb-size = 3px
 
 <script>
 export default {
+  emits: ['change', 'update:modelValue'],
+
   props: {
     min: {
       type: Number,
@@ -94,7 +131,12 @@ export default {
       type: Number,
       required: true,
     },
+    step: {
+      type: Number,
+      required: true,
+    },
 
+    modelValue: null,
     labels: Array,
   },
 
@@ -102,6 +144,20 @@ export default {
     return {
 
     }
+  },
+
+  methods: {
+    updateVModel(event) {
+      let value = event.target.value;
+      this.$emit('update:modelValue', value);
+      this.$emit('change');
+    },
+
+    setModelValue(value) {
+      this.$refs.value.value = value;
+      this.$refs.value.dispatchEvent(new Event('input'));
+      this.$emit('change');
+    },
   }
 }
 </script>
