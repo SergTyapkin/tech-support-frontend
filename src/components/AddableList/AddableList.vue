@@ -1,42 +1,109 @@
 <style lang="stylus" scoped>
 @require '../../styles/constants.styl'
+@require '../../styles/utils.styl'
+@require '../../styles/buttons.styl'
+
+//.addable-list-root
 
 .addable-list
-  padding 0
+  padding 10px 0
+  margin 0
   list-style none
   overflow-x hidden
+  &.locked
+    overflow-y hidden
 
-.button
+.buttons
+  position relative
   display flex
   align-items center
   justify-content center
-  padding 0
-  img
-    width 40px
+  padding 20px
+  .add-button
+    margin 0 auto
+    padding 2px 20px
+    border 2px dashed borderColor
+    display flex
+    align-items center
+    border-radius 100px
+    width min-content
+    backdrop-filter blur(10px)
+    cursor pointer
+    transition all 0.2s ease
+    &:hover
+      background blocksBgColorHover
+    img
+      margin-right 10px
+      width 40px
+      height 40px
+  .save-button
+    position absolute
+    right 20px
+    bottom 18px
+    button-success()
+    border-radius 50%
+    width min-content
+    img
+      width 30px
+      height 30px
+
+.addable-list-root
+  position relative
+  .lock-plate
+    position absolute
+    inset 0
+    background #0009
+    backdrop-filter blur(5px)
+    border-bottom-left-radius 7px
+    border-bottom-right-radius 7px
+    .unlock-button
+      position absolute
+      top 50%
+      left 50%
+      transform translate(-50%, -50%)
+      display flex
+      align-items center
+      border 1px dashed textColor3
+      border-radius 1000px
+      padding 5px 10px
+      opacity 0.7
+      transition all 0.2s ease
+      cursor pointer
+      &:hover
+        opacity 1
+      img
+        width 30px
+        height 30px
+        margin-right 10px
 </style>
 
 <template>
-  <div>
-    <label class="">{{ title }} <span></span></label>
-    <div class="info " v-html="description"></div>
-
+  <div class="addable-list-root" :class="{locked}">
     <ul class="addable-list roll-active closed" ref="list">
       <ListItem v-for="(item, idx) in modelValue"
                 v-model="modelValue[idx]"
                 :idx="idx"
-                :action-text="this.$props.actionText"
                 @delete="deleteItem"
                 @move="moveItem"
-                :action-to="actionTo"
                 :can-delete="canDelete"
                 :placeholder="placeholder"
                 :class="{'last-child': (item.confirmed) && ((idx + 1 >= modelValue.length) || (!modelValue[idx + 1].confirmed))}"
                 @keydown.tab="() => {if (idx === modelValue.length - 1) addItem();}"
+                @input="setEdited(item)"
       ></ListItem>
     </ul>
 
-    <div class="button rounded" @click="addItem">
-      <img src="../../res/plus.svg" alt="add"> {{ addText }}
+    <div class="buttons">
+      <div class="add-button" @click="addItem">
+        <img src="../../res/plus.svg" alt="add"> {{ addText }}
+      </div>
+      <div v-if="isEdited" class="save-button" @click="saveItems">
+        <img src="../../res/save.svg" alt="save">
+      </div>
+    </div>
+
+    <div v-if="locked" class="lock-plate">
+      <div class="unlock-button" @click="unlock"><img src="../../res/edit.svg" alt="edit">Изменить</div>
     </div>
   </div>
 </template>
@@ -49,23 +116,31 @@
   export default {
     components: {ListItem},
 
-    emits: ['add', 'delete', 'update:modelValue', 'input'],
+    emits: ['add', 'delete', 'update:modelValue', 'input', 'save'],
 
     props: {
       modelValue: Array, // aka "items"
-      title: String,
-      description: String,
       addText: String,
-      actionText: String,
-      actionTo: Function,
       placeholder: String,
+      unlockTitle: String,
+      unlockDescription: String,
       canDelete: {
         type: Boolean,
         default: true,
-      }
+      },
+      locked: Boolean,
     },
 
-    async mounted() {
+    data() {
+      return {
+        isEdited: false,
+
+        locked: this.$props.locked,
+
+        toCreate: new Set(),
+        toEdit: new Set(),
+        toDelete: new Set(),
+      }
     },
 
     methods: {
@@ -73,9 +148,12 @@
         this.$emit('add');
         this.$emit('input');
 
-        this.modelValue.push({
+        const newElement = {
           title: ''
-        });
+        };
+
+        this.modelValue.push(newElement);
+        this.toCreate.add(newElement);
         this.updateVModel();
       },
 
@@ -85,7 +163,17 @@
 
         closeRollList(this.$refs.list);
 
+        const deletedElement = this.modelValue[idx];
         this.modelValue.splice(idx, 1);
+
+        if (this.toCreate.has(deletedElement)) {
+          this.toCreate.delete(deletedElement);
+        } else {
+          if (this.toEdit.has(deletedElement))
+            this.toEdit.delete(deletedElement);
+          this.toDelete.add(deletedElement);
+        }
+
         this.updateVModel();
       },
 
@@ -103,6 +191,7 @@
       },
 
       updateVModel() {
+        this.setEdited()
         this.$emit('update:modelValue', this.modelValue);
         this.rollOpenList();
       },
@@ -110,6 +199,29 @@
       async rollOpenList() {
         await nextTick();
         openRollList(this.$refs.list);
+      },
+
+      saveItems() {
+        this.$emit('save', this.toCreate, this.toEdit, this.toDelete);
+        this.toCreate = new Set();
+        this.toEdit = new Set();
+        this.toDelete = new Set();
+        window.onbeforeunload = null;
+        this.isEdited = false;
+      },
+
+      setEdited(element) {
+        if (element !== undefined && !this.toCreate.has(element))
+          this.toEdit.add(element);
+        window.onbeforeunload = () => true;
+        this.isEdited = true;
+      },
+
+      async unlock() {
+        if (!await this.$modal.confirm(this.unlockTitle, this.unlockDescription))
+          return;
+
+        this.locked = false;
       }
     },
 

@@ -10,10 +10,10 @@ user-padding-left = 20px
 .usersList
   display block
   min-height 200px
-  height 400px
+  height 100%
   background borderColorDark
   border-radius 5px
-  overflow scroll-y
+  overflow-y auto
   @media ({mobile})
     height 100%
 
@@ -27,6 +27,10 @@ user-padding-left = 20px
       margin 10px 0 5px 0
       width 100px
       white-space nowrap
+      .date
+        margin-left 20px
+        color textColor5
+        font-small()
     .nameHr
       background linear-gradient(90deg, empColor2_1 0%, empColor2_3 70%, transparent)
       width 100%
@@ -37,7 +41,10 @@ user-padding-left = 20px
 <template>
   <div class="usersList scrollable">
     <div class="eventUsersList" v-for="usersList in usersLists">
-      <div class="eventName" v-if="usersList.eventName">{{usersList.eventName}}</div>
+      <div class="eventName" v-if="usersList.eventName">
+        <span class="name">{{usersList.eventName}}</span>
+        <span class="date">{{dateToStr(usersList.eventDate)}}</span>
+      </div>
       <hr class="nameHr" v-if="usersList.eventName">
       <User v-for="participation in usersList.participations"
             :user-image-id="participation.userimageid"
@@ -59,6 +66,7 @@ import UserAvatar from "./UserAvatar.vue";
 import Range from "./Range.vue";
 import CircleLoading from "./loaders/CircleLoading.vue";
 import User from "./UserTableItem.vue";
+import {dateToStr} from "../utils/utils";
 
 export default {
   components: {User, CircleLoading, Range, UserAvatar},
@@ -69,6 +77,8 @@ export default {
       default: [
         {
           eventName: "Event",
+          eventId: 1,
+          eventDate: new Date(),
           participations: [
             {
               id: 1,
@@ -85,5 +95,9 @@ export default {
       ],
     },
   },
+
+  methods: {
+    dateToStr: dateToStr,
+  }
 };
 </script>

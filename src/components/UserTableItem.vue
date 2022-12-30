@@ -2,6 +2,7 @@
 @require '../styles/constants.styl'
 @require '../styles/buttons.styl'
 @require '../styles/fonts.styl'
+@require '../styles/forms.styl'
 @require '../styles/utils.styl'
 
 avatar-size = 80px
@@ -38,13 +39,17 @@ user-padding-left = 20px
       margin-top 4px
 
     .comm
+      input()
       font-small()
+      color mix(empColor2_1, textColor1)
       padding 2px 5px
       margin-top 4px
       display inline
       width 270px
       border none
       cursor text
+      &:focus
+        color textColor1
       &.success
         color colorYes
       &.error
@@ -52,9 +57,7 @@ user-padding-left = 20px
 
   .hrUserL
     position absolute
-    bottom 5px
-    @media ({mobile})
-      bottom 4px
+    bottom 4px
     left (avatar-size / 2) + user-padding-left
     right 0
     height 1px

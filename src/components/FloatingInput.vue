@@ -7,9 +7,6 @@ input-bg = linear-gradient(20deg, rgba(45, 36, 13, 0.4) 0%, rgba(62, 39, 17, 0.6
 
 error-color = colorNo
 
-::-webkit-input-placeholder
-  color textColor1
-
 .floating-input-fields
   position relative
   input:not([type=checkbox]) ~ label
@@ -277,7 +274,7 @@ export default {
       default: ""
     },
     placeholder: {
-	    default: ""
+	    default: " "
     },
     autocomplete: {
       default: "off"

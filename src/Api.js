@@ -10,7 +10,10 @@ export default {
 export class Api extends ApiRequest {
     signIn = (email, password) => this.post(`/user/auth`, {email, password});
     signOut = () => this.delete(`/user/session`);
-    getUser = () => this.get(`/user`);
+    getUser = () => this.get(`/user`)
+    getUnconfirmedUsers = () => this.get(`/user/all`, {confirmedByAdmin: false});
+    getAllUsers = () => this.get(`/user/all`, {confirmedByAdmin: true});
+    getUsersBySearch = (search) => this.get(`/user/all`, {search});
     getAnotherUser = (id) => this.get(`/user`, {id})
     signUp = (password, email, name) => this.post(`/user`, {password, email, name});
     updateUser = (userId, email, name) => this.put(`/user`, {userId, email, name});
@@ -34,6 +37,7 @@ export class Api extends ApiRequest {
     notParticipateInEvent = (eventId, userId) => this.delete(`/participation/event`, {eventId, userId});
     updateParticipationScore = (id, score) => this.put(`/participation/event`, {id, score});
     updateParticipationComment = (id, comment) => this.put(`/participation/event`, {id, comment});
+    getUnvotedParticipations = () => this.get(`/participation/unvoted`);
 
     getParticipationRating = () => this.get(`/ratings`);
 

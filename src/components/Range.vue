@@ -156,6 +156,7 @@ export default {
     setModelValue(value) {
       this.$refs.value.value = value;
       this.$refs.value.dispatchEvent(new Event('input'));
+      this.$emit('update:modelValue', value);
       this.$emit('change');
     },
   }

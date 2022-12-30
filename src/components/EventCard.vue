@@ -18,6 +18,7 @@ minHeight = 300px
     padding-top 20px
     padding-bottom 20px
     transition all 0.2s ease
+    height 100%
     .header
       border-bottom solid 1px borderColor
       .text
@@ -76,7 +77,7 @@ minHeight = 300px
           <div class="description">{{ description }}</div>
           <div class="place"><img class="icon" src="../res/place.svg" alt="Place:"> {{ placeName }}</div>
           <div class="time" v-if="eventTimeStart && eventTimeEnd"><img class="icon" src="../res/time_dashed.svg" alt="Time:"> {{eventTimeStart}} - {{eventTimeEnd}}</div>
-          <div class="people"><img class="icon" src="../res/people.svg" alt="People:"> {{ needPeople || 0}} / {{ participantsTotal || 0 }}</div>
+          <div class="people"><img class="icon" src="../res/people.svg" alt="People:">{{ participationsCount }} / {{ needPeople }}</div>
         </main>
       </div>
     </router-link>
@@ -98,7 +99,7 @@ export default {
     eventTimeStart: String,
     eventTimeEnd: String,
     needPeople: Number,
-    participantsTotal: Number,
+    participationsCount: Number,
     placeId: Number,
     placeName: String,
     authorId: Number,

@@ -32,8 +32,8 @@
                    :event-time-end="event.eventtimeend"
                    :time-start="event.timestart"
                    :time-end="event.timeend"
-                   :need-people="event.needpeople"
-                   :participants-total="event.participantstotal"
+                   :need-people="event.peopleneeds"
+                   :participations-count="event.participationscount"
                    :place-name="event.placename"
                    :place-id="event.placeid"
                    :author-name="event.authorname"
@@ -52,6 +52,7 @@ import EventCard from "../components/EventCard.vue";
 import {BASE_URL_PATH} from "../constants";
 import {nextTick} from "vue";
 import {dateToStr, timeToStr} from "../utils/utils";
+
 
 export default {
   components: {EventCard, FormExtended, Form},

@@ -26,24 +26,27 @@
     margin 20px
     display flex
     flex-direction column
-    .header
-      border-bottom solid 1px borderColor
-      font-large()
-      color textColor1
-    .info-characters
-      padding 5px 0
-      > *
-        img
-          width 24px
-          margin-right 10px
-        margin 5px 0
-        display flex
-        align-items center
+    padding 0
+    .link-container
+      padding 30px
+      .header
+        border-bottom solid 1px borderColor
+        font-large()
+        color textColor1
+      .info-characters
+        padding 5px 0
+        > *
+          img
+            width 24px
+            margin-right 10px
+          margin 5px 0
+          display flex
+          align-items center
+          font-small()
+          color textColor4
+      .text
         font-small()
-        color textColor4
-    .text
-      font-small()
-      color textColor3
+        color textColor3
 
   .create-doc
     margin-top 30px
@@ -67,7 +70,7 @@
     <li v-else-if="!docs.length" class="info">Документации пока нет</li>
 
     <li v-for="doc in docs" class="doc">
-      <router-link :to="{name: 'doc', params: {docId: doc.id}}">
+      <router-link :to="{name: 'doc', params: {docId: doc.id}}" class="link-container">
         <div class="header">{{ doc.title }}</div>
         <div class="info-characters">
           <div><img src="../res/place.svg" alt="Place:">{{ doc.placename }}</div>

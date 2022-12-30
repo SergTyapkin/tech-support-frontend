@@ -317,7 +317,7 @@ export default {
     },
 
     async changeData() {
-      if (!await this.$modal.confirm("Изменение данных", "Если вы изменили E-mail, он станет неподтверждённым. Придётся подтвердать заново"))
+      if (!await this.$modal.confirm("Изменение данных", "Если вы изменили E-mail, он станет неподтверждённым. Придётся подтверждать заново"))
         return;
 
       const name = this.$refs.form.values.name;
