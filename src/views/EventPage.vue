@@ -11,15 +11,29 @@
   .form-event
     margin 20px auto
     width 100%
-    max-width 800px
+    max-width 1400px
+    @media ({mobile})
+      padding 20px
     .event-info
       display flex
+      @media ({mobile})
+        flex-direction column
       .left-description
         border-right 2px solid borderColorDark
-        padding-right 10px
+        padding-right 20px
+        @media ({mobile})
+          border-right none
+          border-bottom 2px solid borderColorDark
+          padding-right 0
+          padding-bottom 10px
       .right-description
         flex 1
-        padding-left 10px
+        padding-left 30px
+        display flex
+        flex-direction column
+        @media ({mobile})
+          padding-left 0
+          padding-top 20px
         .input-info
           font-small()
           color textColor4
@@ -52,6 +66,15 @@
         width unset
         &.not
           button-danger()
+    .button-delete
+      button-danger()
+      display flex
+      align-items center
+      justify-content center
+      width min-content
+      padding 10px 20px
+      img
+        width 30px
 </style>
 
 <template>
@@ -61,13 +84,14 @@
         <div class="left-description">
           <div class="main-info">
             <FloatingInput v-model="event.name" title="Название" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
-            <SelectList v-model="place" @click="onChange" :selected-id="event.placeid" :list="allPlaces" title="Место проведения" solid :readonly="!$user.isAdmin" class="input"></SelectList>
+            <SelectList v-model="place" @input="onChange" :selected-id="event.placeid" :list="allPlaces" title="Место проведения" solid :readonly="!$user.isAdmin" class="input"></SelectList>
           </div>
 
           <div class="main-info">
             <FloatingInput v-model="event.date" type="date" title="Дата проведения" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
             <FloatingInput v-model="event.timestart" type="time" title="Приходить c" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
             <FloatingInput v-model="event.timeend" type="time" title="Оставаться до" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
+            <FloatingInput v-model="event.peopleneeds" type="number" title="Людей необходимо" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
           </div>
 
           <div class="main-info">
@@ -78,11 +102,12 @@
           <FloatingInput v-model="event.authorname" title="Автор мероприятия" readonly no-info class="input"></FloatingInput>
           <FloatingInput v-model="event.authoremail" title="Связь с автором" readonly no-info class="input"></FloatingInput>
         </div>
+
         <div class="right-description">
           <div class="input-info">А что мы будем делать?</div>
           <textarea class="textarea scrollable" :readonly="!$user.isAdmin">{{event.description}}</textarea>
 
-          <UsersTable class="users-table"></UsersTable>
+          <UsersTable class="users-table" :users-lists="[{participations: event.participations}]" @change.stop="" @input.stop=""></UsersTable>
         </div>
       </div>
 
@@ -93,6 +118,7 @@
         <div v-else-if="!event.isyouparticipate && event.isnext" class="button-participate" @click="participate">Пойду</div>
         <div v-else-if="event.isnext" class="button-participate not" @click="notParticipate">Не пойду</div>
       </div>
+      <div v-if="$user.isAdmin" class="button-delete" @click="deleteEvent"><img src="../res/trash.svg" alt="delete">Удалить</div>
     </Form>
 
     <FloatingButton v-if="isEdited" title="Сохранить" green @click="updateEventData">
@@ -183,7 +209,7 @@ export default {
 
     async updateEventData() {
       this.loading = true;
-      const res = await this.$api.editEvent(this.eventId, this.event.name, this.event.description, this.event.date, this.event.timestart, this.event.timeend, this.place.id, this.event.eventtimestart, this.event.eventtimeend);
+      const res = await this.$api.editEvent(this.eventId, this.event.name, this.event.description, this.event.date, this.event.timestart, this.event.timeend, this.place.id, this.event.eventtimestart, this.event.eventtimeend, this.event.peopleneeds);
       this.loading = false;
 
       if (!res.ok_) {
@@ -199,6 +225,22 @@ export default {
       window.onbeforeunload = () => true;
       this.isEdited = true;
     },
+
+    async deleteEvent() {
+      if (!await this.$modal.confirm("Удаление мероприятия", "Будут так же удалены все записи людей и их рейтинги за это мероприятие! Вы уверены?"))
+        return;
+
+      this.loading = true;
+      const res = await this.$api.deleteEventById(this.eventId);
+      this.loading = false;
+
+      if (!res.ok_) {
+        this.$popups.error("Ошибка", "Не удалось удалить мероприятие");
+        return;
+      }
+      this.$popups.success("Удалено", "Мероприятия будто никогда и не сущестовало");
+      this.$router.push({name: "events"});
+    }
   },
 }
 </script>

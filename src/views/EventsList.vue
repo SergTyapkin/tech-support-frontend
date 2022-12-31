@@ -1,6 +1,7 @@
 <style lang="stylus" scoped>
 @require '../styles/constants.styl'
 @require '../styles/fonts.styl'
+@require '../styles/utils.styl'
 
 .events-list
   display flex
@@ -16,6 +17,20 @@
     font-large()
   .card
     margin 20px
+
+  .create-event
+    block-clickable()
+    block-dark-bg()
+    background none
+    border 2px dashed borderColor
+    display flex
+    align-items center
+    justify-content center
+    width 300px
+    min-height 300px
+    img
+      margin-right 10px
+      width 40px
 </style>
 
 <template>
@@ -32,13 +47,19 @@
                    :event-time-end="event.eventtimeend"
                    :time-start="event.timestart"
                    :time-end="event.timeend"
-                   :need-people="event.needpeople"
+                   :need-people="event.peopleneeds"
+                   :participations-count="event.participationscount"
                    :place-name="event.placename"
                    :place-id="event.placeid"
                    :author-name="event.authorname"
                    :author-id="event.authorid"
         ></EventCard>
       </li>
+
+      <router-link :to="{name: 'createEvent'}" class="card create-event">
+        <img src="../res/plus.svg" alt="plus">
+        <div class="text">Создать</div>
+      </router-link>
     </ul>
   </div>
 </template>
@@ -51,6 +72,7 @@ import EventCard from "../components/EventCard.vue";
 import {BASE_URL_PATH} from "../constants";
 import {nextTick} from "vue";
 import {dateToStr, timeToStr} from "../utils/utils";
+
 
 export default {
   components: {EventCard, FormExtended, Form},

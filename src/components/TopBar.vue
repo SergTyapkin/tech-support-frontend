@@ -23,11 +23,14 @@ height = (header-height - margin-bottom)
     padding 20px
     transition all 0.3s ease
     color textColor1
+    font-small()
     @media ({mobile})
+      font-small-extra()
       padding 10px
       min-height 60px
-
     display flex
+    flex-direction column
+    white-space nowrap
     align-content center
     align-items center
     justify-content center

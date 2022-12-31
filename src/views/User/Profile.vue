@@ -4,6 +4,7 @@
 @require '../../styles/fonts.styl'
 @require '../../styles/utils.styl'
 
+
 hr
   margin 0
 
@@ -64,15 +65,21 @@ hr
 
 .another-user-info
   margin-top 5px
+  text-align center
+  font-large()
+  margin-bottom -10px
 
 .now-playing
   margin-top 5px
 
 .admin-button
-  margin 30px auto
+  button()
+  margin 0 auto
+  margin-top 40px
   width 30%
   min-width 300px
   display block
+  margin-bottom -60px
 
 
 .avatar
@@ -146,6 +153,7 @@ hr
 <template>
   <div>
     <div class="profile-page">
+      <router-link v-if="yours && user.isAdmin" :to="{name: 'admin'}" class="admin-button  button rounded outline">На админскую</router-link>
       <Form class="profile-plate">
         <div>
           <div class="info-container">
@@ -180,7 +188,8 @@ hr
             <div v-if="!yours" class="username">
               <div class="another-user-info">{{ user.name }}</div>
             </div>
-            <div class="title" v-if="user.title !== null">{{ user.title }}</div>
+            <input v-if="$user.isAdmin" type="text" class="title" v-model="user.title" @change="saveAnotherUserTitle" @keydown.enter="(event) => event.target.blur()">
+            <div v-else class="title" v-if="user.title !== null">{{ user.title }}</div>
           </div>
 
           <hr>
@@ -225,8 +234,6 @@ hr
 
         <button v-if="yours" class="button-logout" @click="logOut">Выйти</button>
       </Form>
-
-      <router-link v-if="yours && user.isAdmin" :to="base_url_path + `/admin`" class="admin-button  button rounded outline">На админскую</router-link>
     </div>
   </div>
 </template>
@@ -256,8 +263,8 @@ export default {
 
       ImageUploader: new ImageUploader(this.$popups, this.$api.uploadImage, IMAGE_PROFILE_MAX_RES, IMAGE_MAX_RES),
 
-      userId: this.$route.query.userId,
-      yours: this.$route.query.userId === undefined,
+      userId: this.$route.params.userId,
+      yours: this.$route.params.userId === undefined,
 
       user: {},
       completedEvents: [],
@@ -317,7 +324,7 @@ export default {
     },
 
     async changeData() {
-      if (!await this.$modal.confirm("Изменение данных", "Если вы изменили E-mail, он станет неподтверждённым. Придётся подтвердать заново"))
+      if (!await this.$modal.confirm("Изменение данных", "Если вы изменили E-mail, он станет неподтверждённым. Придётся подтверждать заново"))
         return;
 
       const name = this.$refs.form.values.name;
@@ -353,7 +360,14 @@ export default {
 
     async changePassword({oldPassword, newPassword, newPasswordConfirm}) {
       if (newPassword !== newPasswordConfirm) {
-        this.$refs.passwordForm.errors.newPasswordConfirm = this.errors.newPassword = 'Пароли не совпадают';
+        this.$refs.passwordForm.info = this.$refs.passwordForm.errors.newPasswordConfirm = this.$refs.passwordForm.errors.newPassword = 'Пароли не совпадают';
+        this.$refs.passwordForm.showError();
+        return;
+      }
+      if (newPassword?.length === 0) {
+        this.$refs.passwordForm.info = 'Пароль не может быть пустым'
+        this.$refs.passwordForm.errors.newPassword = 'Пароль не может быть пустым';
+        this.$refs.passwordForm.showError();
         return;
       }
 
@@ -396,8 +410,19 @@ export default {
         this.$popups.error("Ошибка", "Не удалось получить информацио о пользователе");
         return;
       }
-
-      this.user = user;
+      console.log(this.userId);
+      this.user = {
+        avatarImageId: user.avatarimageid,
+        completedEvents: user.completedevents,
+        id: user.id,
+        isAdmin: user.isAdmin,
+        joinedDate: user.joineddate,
+        name: user.name,
+        position: user.position,
+        rating: user.rating,
+        telegram: user.telegram,
+        title: user.title,
+      };
     },
 
 
@@ -466,6 +491,18 @@ export default {
 
       this.$popups.error('Не удалось выслать код', response.info || 'Неизвестная ошибка');
     },
+
+    async saveAnotherUserTitle() {
+      this.loadingConfirmEmail = true;
+      const response = await this.$api.updateUserTitle(this.userId, this.user.title);
+      this.loadingConfirmEmail = false;
+
+      if (!response.ok_) {
+        this.$popups.error('Ошибка', 'Не удалось сохранить титул');
+        return;
+      }
+      this.$popups.success('Сохранено', 'Титул есть - можно поесть');
+    }
   },
 
   watch: {

@@ -10,10 +10,14 @@ export default {
 export class Api extends ApiRequest {
     signIn = (email, password) => this.post(`/user/auth`, {email, password});
     signOut = () => this.delete(`/user/session`);
-    getUser = () => this.get(`/user`);
+    getUser = () => this.get(`/user`)
+    getUnconfirmedUsers = () => this.get(`/user/all`, {confirmedByAdmin: false});
+    getAllUsers = () => this.get(`/user/all`, {confirmedByAdmin: true});
+    getUsersBySearch = (search) => this.get(`/user/all`, {search});
     getAnotherUser = (id) => this.get(`/user`, {id})
     signUp = (password, email, name) => this.post(`/user`, {password, email, name});
     updateUser = (userId, email, name) => this.put(`/user`, {userId, email, name});
+    updateUserTitle = (userId, title) => this.put(`/user`, {userId, title});
     updateUserAvatarImageId = (userId, avatarImageId) => this.put(`/user`, {userId, avatarImageId});
     updatePassword = (oldPassword, newPassword) => this.put(`/user/password`, {oldPassword, newPassword});
     deleteUser = (userId) => this.delete(`/user`, {userId});
@@ -26,14 +30,17 @@ export class Api extends ApiRequest {
 
     getEvents = (filters) => this.get(`/event`, filters); // filters: any of {date, placeId, participantId, type, search}; type = one of ['all', 'past', 'next'];
     getEventById = (id) => this.get(`/event`, {id});
-    createEvent = (name, description, date, timeStart, timeEnd, placeId, eventTimeStart, eventTimeEnd, needPeopleByCategory) => this.post(`/event`, {name, date, timeStart, timeEnd, description, placeId, eventTimeStart, eventTimeEnd, needPeople: needPeopleByCategory}); // needPeopleByCategory: [{positionId: Number, count: Number}, ...]
-    editEvent = (id, name, description, date, timeStart, timeEnd, placeId, eventTimeStart, eventTimeEnd, needPeopleByCategory) => this.put(`/event`, {id, name, date, timeStart, timeEnd, description, placeId, eventTimeStart, eventTimeEnd, needPeople: needPeopleByCategory});
+    createEvent = (name, description, date, timeStart, timeEnd, placeId, eventTimeStart, eventTimeEnd, peopleNeeds) => this.post(`/event`, {name, date, timeStart, timeEnd, description, placeId, eventTimeStart, eventTimeEnd, peopleNeeds});
+    editEvent = (id, name, description, date, timeStart, timeEnd, placeId, eventTimeStart, eventTimeEnd, peopleNeeds) => this.put(`/event`, {id, name, date, timeStart, timeEnd, description, placeId, eventTimeStart, eventTimeEnd, peopleNeeds});
     deleteEventById = (id) => this.delete(`/event`, {id});
 
     participateInEvent = (eventId, userId, positionId) => this.post(`/participation/event`, {eventId, userId, positionId});
     notParticipateInEvent = (eventId, userId) => this.delete(`/participation/event`, {eventId, userId});
+    updateParticipationScore = (id, score) => this.put(`/participation/event`, {id, score});
+    updateParticipationComment = (id, comment) => this.put(`/participation/event`, {id, comment});
+    getUnvotedParticipations = () => this.get(`/participation/unvoted`);
 
-    getParticipationRating = () => this.get(`/ratings/participation`);
+    getParticipationRating = () => this.get(`/ratings`);
 
     getPositions = () => this.get(`/position/all`);
     getPositionById = (id) => this.get(`/position`, {id});

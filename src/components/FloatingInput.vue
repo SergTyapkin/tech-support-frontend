@@ -7,9 +7,6 @@ input-bg = linear-gradient(20deg, rgba(45, 36, 13, 0.4) 0%, rgba(62, 39, 17, 0.6
 
 error-color = colorNo
 
-::-webkit-input-placeholder
-  color textColor1
-
 .floating-input-fields
   position relative
   input:not([type=checkbox]) ~ label
@@ -249,7 +246,19 @@ error-color = colorNo
 <template>
   <div :class="{error: error?.length}" class="floating-input-fields">
     <span class="error-text">{{ error }}</span>
-    <input ref="input" :type="type" :autocomplete="autocomplete" :name="name" :placeholder="placeholder" @input="updateVModel" :value="modelValue" :checked="this.modelValue" :hidden="hidden" :readonly="readonly" :required="required" :disabled="disabled"
+    <input ref="input"
+           :type="type"
+           :autocomplete="autocomplete"
+           :name="name"
+           :placeholder="placeholder"
+           @input="updateVModel"
+           :value="modelValue"
+           :checked="this.modelValue"
+           :hidden="hidden"
+           :readonly="readonly"
+           :required="required"
+           :disabled="disabled"
+           :pattern="pattern"
       :class="{
         left: textAlign === 'left',
         right: textAlign === 'right',
@@ -277,7 +286,7 @@ export default {
       default: ""
     },
     placeholder: {
-	    default: ""
+	    default: " "
     },
     autocomplete: {
       default: "off"
@@ -291,6 +300,7 @@ export default {
     required: Boolean,
     hidden: Boolean,
     info: String,
+    pattern: String,
 
     modelValue: null,
     error: String,

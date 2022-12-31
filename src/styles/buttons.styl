@@ -34,6 +34,7 @@ button-submit()
     button()
     background blocksBgColor
     background #444444
+    border-radius 1000px
     border-color empColor1_3
     &:hover
         border-color empColor1_2
@@ -47,3 +48,9 @@ button-danger()
     border-color colorNo
     &:hover
         border-color mix(colorNo, white)
+button-success()
+    button()
+    background mix(colorYes, transparent)
+    border-color colorYes
+    &:hover
+        border-color mix(colorYes, white)

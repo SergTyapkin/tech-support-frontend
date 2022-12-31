@@ -25,6 +25,7 @@
     transition none
     resize none
     flex 1
+    margin-bottom 20px
   .error-text
     color colorNo
     margin-top 10px
@@ -55,7 +56,7 @@
         margin-right 10px
     .save-button
       button-submit()
-      margin-bottom 50px
+      margin-bottom 30px
     .delete-button
       button-danger()
       width min-content
@@ -63,12 +64,11 @@
 </style>
 
 <template>
-  <div class="root" css-fullheight>
-
+  <div class="root" css-fullheight @input="onChange">
     <FloatingInput title="Название" ref="title" :readonly="!$user.isAdmin" v-model="title" no-info class="title input"></FloatingInput>
     <div class="info-inputs">
-      <SelectList v-model="place" :selected-id="placeId" :list="allPlaces" ref="place" title="Место" :readonly="!$user.isAdmin" class="place input"></SelectList>
-      <SelectList v-model="position" :selected-id="positionId" :list="allPositions" ref="position" title="Направленность" :readonly="!$user.isAdmin" class="position input"></SelectList>
+      <SelectList v-model="place" @input="onChange" :selected-id="placeId" :list="allPlaces" ref="place" title="Место" :readonly="!$user.isAdmin" class="place input"></SelectList>
+      <SelectList v-model="position" @input="onChange" :selected-id="positionId" :list="allPositions" ref="position" title="Направленность" :readonly="!$user.isAdmin" class="position input"></SelectList>
     </div>
     <div class="error-text" v-if="errorText.length">{{ errorText }}</div>
     <textarea class="text scrollable" :class="{error: errorText.length}" @input="errorText = ''" ref="text" :readonly="!$user.isAdmin" v-model="text"></textarea>
@@ -81,6 +81,10 @@
       <div class="save-button" @click="updateDoc"><img src="../res/save.svg" alt="">Сохранить изменения</div>
       <div class="delete-button" @click="deleteDoc"><img src="../res/trash.svg" alt="">Удалить</div>
     </div>
+
+    <FloatingButton v-if="isEdited" title="Сохранить" green @click="updateDoc">
+      <img src="../res/save.svg" alt="save">
+    </FloatingButton>
   </div>
 </template>
 
@@ -90,9 +94,10 @@ import FormExtended from "/src/components/FormExtended.vue";
 import CircleLoading from "../components/loaders/CircleLoading.vue";
 import FloatingInput from "../components/FloatingInput.vue";
 import SelectList from "../components/SelectList.vue";
+import FloatingButton from "../components/FloatingButton.vue";
 
 export default {
-  components: {SelectList, FloatingInput, CircleLoading, FormExtended},
+  components: {FloatingButton, SelectList, FloatingInput, CircleLoading, FormExtended},
 
   data() {
     return {

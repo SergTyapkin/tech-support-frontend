@@ -25,7 +25,7 @@ input()
     &[readonly] + .underline
     &[submit] + .underline
         display none
-    &:not([readonly]):not([submit]):focus
+    &:not([readonly]):not([type=submit]):not([type=range]):focus
         background colorShadowDark
         & + .underline
             background-size 250%
@@ -48,7 +48,7 @@ textarea()
     background colorShadowDark
     border-radius 3px
     border transparent 1px solid
-    transition border 0.3s ease
+    transition border 0.2s ease
     resize vertical
     white-space pre-line
     &:not([readonly]):focus

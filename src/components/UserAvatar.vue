@@ -3,7 +3,7 @@
 </style>
 
 <template>
-  <img v-if="imageId instanceof Number" class="avatar" :src="api_url + '/image/' + imageId" alt="avatar">
+  <img v-if="imageId" class="avatar" :src="api_url + '/image/' + imageId" alt="avatar">
   <img v-else class="avatar" src="../res/default_avatar.png" alt="avatar">
 </template>
 
