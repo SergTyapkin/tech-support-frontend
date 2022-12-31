@@ -1,6 +1,7 @@
 <style lang="stylus" scoped>
 @require '../styles/constants.styl'
 @require '../styles/fonts.styl'
+@require '../styles/utils.styl'
 
 .events-list
   display flex
@@ -16,6 +17,20 @@
     font-large()
   .card
     margin 20px
+
+  .create-event
+    block-clickable()
+    block-dark-bg()
+    background none
+    border 2px dashed borderColor
+    display flex
+    align-items center
+    justify-content center
+    width 300px
+    min-height 300px
+    img
+      margin-right 10px
+      width 40px
 </style>
 
 <template>
@@ -40,6 +55,11 @@
                    :author-id="event.authorid"
         ></EventCard>
       </li>
+
+      <router-link :to="{name: 'createEvent'}" class="card create-event">
+        <img src="../res/plus.svg" alt="plus">
+        <div class="text">Создать</div>
+      </router-link>
     </ul>
   </div>
 </template>

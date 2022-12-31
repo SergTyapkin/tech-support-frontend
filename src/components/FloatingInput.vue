@@ -246,7 +246,19 @@ error-color = colorNo
 <template>
   <div :class="{error: error?.length}" class="floating-input-fields">
     <span class="error-text">{{ error }}</span>
-    <input ref="input" :type="type" :autocomplete="autocomplete" :name="name" :placeholder="placeholder" @input="updateVModel" :value="modelValue" :checked="this.modelValue" :hidden="hidden" :readonly="readonly" :required="required" :disabled="disabled"
+    <input ref="input"
+           :type="type"
+           :autocomplete="autocomplete"
+           :name="name"
+           :placeholder="placeholder"
+           @input="updateVModel"
+           :value="modelValue"
+           :checked="this.modelValue"
+           :hidden="hidden"
+           :readonly="readonly"
+           :required="required"
+           :disabled="disabled"
+           :pattern="pattern"
       :class="{
         left: textAlign === 'left',
         right: textAlign === 'right',
@@ -288,6 +300,7 @@ export default {
     required: Boolean,
     hidden: Boolean,
     info: String,
+    pattern: String,
 
     modelValue: null,
     error: String,
