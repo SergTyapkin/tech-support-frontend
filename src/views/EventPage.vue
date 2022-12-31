@@ -118,7 +118,7 @@
         <div v-else-if="!event.isyouparticipate && event.isnext" class="button-participate" @click="participate">Пойду</div>
         <div v-else-if="event.isnext" class="button-participate not" @click="notParticipate">Не пойду</div>
       </div>
-      <div class="button-delete" @click="deleteEvent"><img src="../res/trash.svg" alt="delete">Удалить</div>
+      <div v-if="$user.isAdmin" class="button-delete" @click="deleteEvent"><img src="../res/trash.svg" alt="delete">Удалить</div>
     </Form>
 
     <FloatingButton v-if="isEdited" title="Сохранить" green @click="updateEventData">

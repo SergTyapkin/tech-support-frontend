@@ -35,25 +35,33 @@ user-padding-left = 20px
       font-small-extra()
       white-space nowrap
 
-    .range
-      margin-top 4px
+    .range-input-container
+      display flex
+      flex-direction column
+      &.in-row
+        flex-direction row
+        margin-top 10px
+      .range
+        margin-top 4px
 
-    .comm
-      input()
-      font-small()
-      color mix(empColor2_1, textColor1)
-      padding 2px 5px
-      margin-top 4px
-      display inline
-      width 270px
-      border none
-      cursor text
-      &:focus
-        color textColor1
-      &.success
-        color colorYes
-      &.error
-        color colorNo
+      .comm
+        input()
+        font-small()
+        color mix(empColor2_1, textColor1)
+        padding 2px 5px
+        margin-top 4px
+        display inline
+        width 270px
+        border none
+        cursor text
+        &:not([readonly]):focus
+          color textColor1
+        &.success
+          color colorYes
+        &.error
+          color colorNo
+        &[readonly]::placeholder
+          opacity 0
 
   .hrUserL
     position absolute
@@ -78,8 +86,10 @@ user-padding-left = 20px
     <div class="info">
       <div class="userName">{{userName}}</div>
       <div class="userTitle">{{userTitle}}</div>
-      <Range class="range" :min="0.25" :max="2" :step="0.25" v-model="score" @change="saveRating"></Range>
-      <input class="comm" ref="comment" placeholder="Комментарий" v-model="comment" @change="saveComment" @keydown.enter="$refs.comment.blur()">
+      <div class="range-input-container" :class="{'in-row': !$user.isAdmin}">
+        <Range class="range" :min="0.25" :max="2" :step="0.25" v-model="score" @change="saveRating" :readonly="!$user.isAdmin"></Range>
+        <input class="comm" ref="comment" placeholder="Комментарий" v-model="comment" @change="saveComment" @keydown.enter="$refs.comment.blur()" :readonly="!$user.isAdmin">
+      </div>
     </div>
     <hr class="hrUserL">
 

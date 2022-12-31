@@ -104,9 +104,9 @@ thumb-size = 3px
 <template>
   <div class="slider-container">
     <div class="value-container">
-      <input type="number" aria-controls="off" ref="value" class="value" v-model="modelValue" :step="step" @change="updateVModel">
+      <input type="number" aria-controls="off" ref="value" class="value" v-model="modelValue" :step="step" @change="updateVModel" :readonly="readonly">
     </div>
-    <div class="input-container">
+    <div class="input-container" v-if="!readonly">
       <input type="range" class="slider" ref="range" :min="min" :max="max" :step="step" v-model="modelValue" @change="updateVModel">
       <div class="range-labels">
         <div v-for="val in ((max-min) / step + 1)" @click="setModelValue(min + (val - 1) * step)">{{ min + (val - 1) * step }}</div>
@@ -135,6 +135,7 @@ export default {
       type: Number,
       required: true,
     },
+    readonly: Boolean,
 
     modelValue: null,
     labels: Array,
