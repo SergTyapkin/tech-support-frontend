@@ -285,7 +285,6 @@ export default {
   methods: {
     async init() {
       if (this.yours) {
-        console.log("YOURS");
         this.$refs.form.values = this.$user;
         this.user = this.$user;
 
@@ -298,13 +297,11 @@ export default {
         return;
       }
 
-      console.log("NOT YOURS");
       await this.getAnotherUser();
       this.addTitlesToArrowListings();
     },
 
     addTitlesToArrowListings() {
-      console.log(this.user)
       this.completedEvents = this.user.completedEvents.map((eventData) => ({
         title: eventData.name,
         id: eventData.id,
@@ -363,7 +360,14 @@ export default {
 
     async changePassword({oldPassword, newPassword, newPasswordConfirm}) {
       if (newPassword !== newPasswordConfirm) {
-        this.$refs.passwordForm.errors.newPasswordConfirm = this.errors.newPassword = 'Пароли не совпадают';
+        this.$refs.passwordForm.info = this.$refs.passwordForm.errors.newPasswordConfirm = this.$refs.passwordForm.errors.newPassword = 'Пароли не совпадают';
+        this.$refs.passwordForm.showError();
+        return;
+      }
+      if (newPassword?.length === 0) {
+        this.$refs.passwordForm.info = 'Пароль не может быть пустым'
+        this.$refs.passwordForm.errors.newPassword = 'Пароль не может быть пустым';
+        this.$refs.passwordForm.showError();
         return;
       }
 
