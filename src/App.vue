@@ -124,6 +124,7 @@ animation-time-rule = cubic-bezier(0.29, 0.82, 0.36, 0.99)
       width 80%
       display flex
       align-items center
+      justify-content center
     .button-exit
       button-danger()
       width 40%
