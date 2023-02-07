@@ -43,9 +43,9 @@ module.exports = {
             ]
         },
         proxy: {
-            '/support/api': {
+            '/api': {
                 target: 'http://127.0.0.1:9000',
-                pathRewrite: { '^/support': '' },
+                pathRewrite: { '^/': '' },
                 secure: false,
                 changeOrigin: false
             }

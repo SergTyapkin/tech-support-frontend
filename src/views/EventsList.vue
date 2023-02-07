@@ -56,7 +56,7 @@
         ></EventCard>
       </li>
 
-      <router-link :to="{name: 'createEvent'}" class="card create-event">
+      <router-link :to="{name: 'createEvent'}" class="card create-event" v-if="$user.isAdmin">
         <img src="../res/plus.svg" alt="plus">
         <div class="text">Создать</div>
       </router-link>
