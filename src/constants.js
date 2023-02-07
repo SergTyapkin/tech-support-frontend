@@ -1,4 +1,4 @@
-export const BASE_URL_PATH = '/support';
+export const BASE_URL_PATH = '';
 
 export const API_URL = BASE_URL_PATH + '/api';
 
