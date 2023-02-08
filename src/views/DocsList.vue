@@ -16,8 +16,9 @@
     margin-top 40px
     margin-bottom 40px
   .info
-    margin-top 200px
     font-large()
+    width 100%
+    text-align center
   .doc
     block-clickable()
     block-dark-bg()
