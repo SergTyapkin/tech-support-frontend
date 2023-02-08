@@ -13,8 +13,9 @@
   padding 0
   margin-top 100px
   .info
-    margin-top 200px
     font-large()
+    width 100%
+    text-align center
   .card
     margin 20px
 
@@ -35,6 +36,11 @@
 
 <template>
   <div>
+    <Filters :filters="filters" @change="onChangeFilters">
+      <FloatingInput placeholder="Название мероприятия" no-info class="search-input" v-model="searchText" @input="getEvents"></FloatingInput>
+      <SelectList v-model="placeSearch" @input="getEvents" :list="allPlaces" :selected-id="-1" title="Место проведения"></SelectList>
+    </Filters>
+
     <ul class="events-list">
       <li v-if="!events?.length" class="info">Событий нет</li>
 
@@ -69,13 +75,16 @@
 import Form from "/src/components/Form.vue";
 import FormExtended from "/src/components/FormExtended.vue";
 import EventCard from "../components/EventCard.vue";
+import Filters from "../components/Filters.vue";
+import FloatingInput from "../components/FloatingInput.vue";
+import SelectList from "../components/SelectList.vue";
 import {BASE_URL_PATH} from "../constants";
 import {nextTick} from "vue";
 import {dateToStr, timeToStr} from "../utils/utils";
 
 
 export default {
-  components: {EventCard, FormExtended, Form},
+  components: {SelectList, FloatingInput, Filters, EventCard, FormExtended, Form},
 
   data() {
     return {
@@ -84,21 +93,61 @@ export default {
       events: undefined,
 
       userId: this.$route.query.userId,
+
+      allPlaces: [],
+
+      filters: [{id: 0, name: 'Прошедшие'}, {id: 1, name: 'Все'}, {id: 2, name: 'Предстояшие', value: true}],
+      searchText: '',
+      placeSearch: undefined,
     }
   },
 
   async mounted() {
-    await this.init();
+    this.getPlaces();
+    this.init();
   },
 
   methods: {
     async init() {
+      await this.getEvents();
+    },
+
+    onChangeFilters(filter) {
+      // Drop all other filters
+      this.filters.forEach((filt) => {
+        if (filt !== filter)
+          filt.value = false;
+      });
+
+      this.getEvents();
+    },
+
+    async getEvents() {
+      const filtersObj = {};
+
+      if (this.filters[0].value) {
+        filtersObj.type = "past";
+      } else if (this.filters[1].value) {
+        ;
+      } else if (this.filters[2].value) {
+        filtersObj.type = "next";
+      }
+
+      if (this.searchText)
+        filtersObj.search = this.searchText;
+
+      if (this.placeSearch !== undefined && this.placeSearch.id !== -1)
+        filtersObj.placeId = this.placeSearch.id;
+
+
       this.loading = true;
       let response;
-      if (this.userId === undefined)
-        response = await this.$api.getEvents({});
-      else
-        response = await this.$api.getEvents({participantId: this.userId});
+      if (this.userId === undefined) {
+        response = await this.$api.getEvents(filtersObj);
+      } else {
+        filtersObj.participantId = this.userId;
+        response = await this.$api.getEvents(filtersObj);
+      }
       this.loading = false;
 
       if (!response.ok_) {
@@ -107,6 +156,21 @@ export default {
       }
 
       this.events = response.events || [];
+    },
+
+    async getPlaces() {
+      this.loading = true;
+      const response = await this.$api.getPlaces();
+      this.loading = false;
+
+      if (!response.ok_) {
+        this.$popups.error("Ошибка", "Не удалось получить список мест проведения мероприятий. " + response.info || "");
+        return;
+      }
+
+      response.places.push({id: -1, name: "---"});
+      console.log(response.places);
+      this.allPlaces = response.places;
     }
   },
 

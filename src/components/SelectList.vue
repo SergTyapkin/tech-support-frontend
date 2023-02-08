@@ -200,11 +200,12 @@ export default {
     selectItem(idx, disableEmitting = false) {
       this.state = this.States.default;
       this.selectedIdx = idx;
-      if (!disableEmitting)
-        this.$emit('input', idx, this.list[idx]);
 
       this.$emit('update:modelValue', this.list[idx]);
       this.unrolled = false;
+
+      if (!disableEmitting)
+        this.$emit('input', idx, this.list[idx]);
     }
   },
 
