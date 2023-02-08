@@ -9,6 +9,7 @@ error-color = colorNo
 
 .floating-input-fields
   position relative
+  min-width 150px
   input:not([type=checkbox]) ~ label
     position absolute
     top 22px

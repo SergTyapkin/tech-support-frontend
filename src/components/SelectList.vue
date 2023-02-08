@@ -19,7 +19,7 @@ field()
   align-items center
   padding 0 20px
   cursor pointer
-  transition all 0.2s ease
+  transition all 0.2s e ase
 
 
 .select-root
@@ -28,6 +28,7 @@ field()
   padding 0
   margin 0
   user-select none
+  min-width 150px
 
   .title
     position absolute
@@ -112,6 +113,7 @@ field()
       field()
       color textColor3
       height item-height
+      white-space nowrap
       &.selected
         color textColor1
         background mix(blocksBgColor, white, 92%)

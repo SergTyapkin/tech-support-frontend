@@ -3,6 +3,9 @@
 @require '../styles/fonts.styl'
 @require '../styles/utils.styl'
 
+.search-input
+  flex 1
+
 .events-list
   display flex
   flex-wrap wrap
@@ -32,11 +35,16 @@
     img
       margin-right 10px
       width 40px
+
+@media ({mobile})
+  .filters
+    > *
+      width 100%
 </style>
 
 <template>
   <div>
-    <Filters :filters="filters" @change="onChangeFilters">
+    <Filters :filters="filters" @change="onChangeFilters" class="filters">
       <FloatingInput placeholder="Название мероприятия" no-info class="search-input" v-model="searchText" @input="getEvents"></FloatingInput>
       <SelectList v-model="placeSearch" @input="getEvents" :list="allPlaces" :selected-id="-1" title="Место проведения"></SelectList>
     </Filters>
