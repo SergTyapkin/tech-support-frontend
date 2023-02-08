@@ -60,7 +60,7 @@
         <FloatingInput v-model="timeStart" title="Приходить с" type="time" class="right-input"></FloatingInput>
         <FloatingInput v-model="timeEnd" title="Оставаться до" type="time" class="right-input"></FloatingInput>
         <FloatingInput v-model="peopleNeeds" title="Сколько людей нужно" type="number" class="right-input"></FloatingInput>
-        <SelectList v-model="place" :list="allPlaces" title="Место проведения"  class="right-input"></SelectList>
+        <SelectList v-model="place" :list="allPlaces" title="Место проведения"  class="right-input" solid></SelectList>
         <input class="submit-input" value="Создать" type="submit" @click="createEvent">
       </div>
     </Form>

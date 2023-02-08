@@ -16,6 +16,7 @@
     margin-top 40px
     margin-bottom 40px
   .info
+    margin-top 50px
     font-large()
     width 100%
     text-align center
