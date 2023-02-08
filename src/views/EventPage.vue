@@ -64,6 +64,8 @@
         flex 1
         display flex
         gap 20px
+        @media ({mobile})
+          flex-direction column
       .button-participate
         button-submit()
         &.not
