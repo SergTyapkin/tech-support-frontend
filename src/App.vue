@@ -11,6 +11,7 @@ animation-time-rule = cubic-bezier(0.29, 0.82, 0.36, 0.99)
   position fixed
   inset 0
   overflow hidden
+  filter blur(5px)
   div
     opacity 0.3
     width 100%
@@ -327,15 +328,15 @@ export default {
       this.transitionName = 'scale-in';
 
       console.log(from.path, 'TO', to.path)
-      if (to.path === this.$base_url_path + '/profile')
-        this.transitionName = 'scale-slide-left';
-      else if (from.path === this.$base_url_path + '/profile')
-        this.transitionName = 'scale-slide-right';
-
-      else if (from.path === this.$base_url_path + '/signin' && to.path === this.$base_url_path + '/signup')
-        this.transitionName = 'slide-left';
-      else if (from.path === this.$base_url_path + '/signup' && to.path === this.$base_url_path + '/signin')
-        this.transitionName = 'slide-left';
+      // if (to.path === this.$base_url_path + '/profile')
+      //   this.transitionName = 'scale-slide-left';
+      // else if (from.path === this.$base_url_path + '/profile')
+      //   this.transitionName = 'scale-slide-right';
+      //
+      // else if (from.path === this.$base_url_path + '/signin' && to.path === this.$base_url_path + '/signup')
+      //   this.transitionName = 'slide-left';
+      // else if (from.path === this.$base_url_path + '/signup' && to.path === this.$base_url_path + '/signin')
+      //   this.transitionName = 'slide-left';
     }
   },
 

@@ -72,6 +72,10 @@ field()
       width 30px
       transform rotate(90deg)
       transition transform 0.3s ease
+  &.solid
+    .selected-item:hover
+      backdrop-filter unset
+      background mix(blocksBgColor, white, 90%)
 
   &.unrolled
     .title
