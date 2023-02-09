@@ -6,13 +6,17 @@
 @require '../styles/utils.styl'
 
 avatar-size = 80px
+avatar-size-mobile = 50px
 user-padding-left = 20px
+user-padding-left-mobile = 5px
 
 .user
   position relative
   width 100%
   padding 15px 10px 15px user-padding-left
   display flex
+  @media ({mobile})
+    padding-left user-padding-left-mobile
   .userIcon
     align-self flex-end
     border-radius 50%
@@ -21,6 +25,9 @@ user-padding-left = 20px
     width (avatar-size - 4px)
     height (avatar-size - 4px)
     margin 2px
+    @media ({mobile})
+      width (avatar-size-mobile - 4px)
+      height (avatar-size-mobile - 4px)
   .info
     padding 0 7px
     width 100%
@@ -28,10 +35,14 @@ user-padding-left = 20px
       font-medium()
       line-height 0.8em
       white-space nowrap
+      @media ({mobile})
+        margin-left (- avatar-size-mobile)
     .userTitle
       color textColor3
       font-small-extra()
       white-space nowrap
+      @media ({mobile})
+        margin-left (- avatar-size-mobile)
 
     .range-input-container
       display flex
@@ -49,7 +60,8 @@ user-padding-left = 20px
         padding 2px 5px
         margin-top 4px
         display inline
-        width 270px
+        max-width 270px
+        width 100%
         border none
         cursor text
         &:not([readonly]):focus
@@ -65,6 +77,8 @@ user-padding-left = 20px
     position absolute
     bottom 6px
     left (avatar-size / 2) + user-padding-left
+    @media ({mobile})
+      left (avatar-size-mobile / 2) + user-padding-left-mobile
     right 0
     height 1px
     background linear-gradient(90deg, empColor1_1 80%, transparent 100%)

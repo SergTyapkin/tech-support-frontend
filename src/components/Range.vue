@@ -10,12 +10,18 @@ thumb-size = 3px
 .slider-container
   display flex
   align-items center
+  position relative
   .value-container
     display flex
     align-items center
     justify-content flex-end
     font-medium()
+    min-width 50px
     width 56px
+    @media ({mobile})
+      position absolute
+      top -30px
+      right 40px
     .value
       all unset
       box-sizing border-box

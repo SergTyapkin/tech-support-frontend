@@ -13,7 +13,7 @@
     width 100%
     max-width 1400px
     @media ({mobile})
-      padding 20px
+      padding 10px
     .event-info
       display flex
       @media ({mobile})
