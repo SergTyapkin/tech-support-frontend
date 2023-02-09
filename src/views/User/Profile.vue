@@ -189,7 +189,7 @@ hr
               <div class="another-user-info">{{ user.name }}</div>
             </div>
             <input v-if="$user.isAdmin" type="text" class="title" v-model="user.title" @change="saveAnotherUserTitle" @keydown.enter="(event) => event.target.blur()">
-            <div v-else class="title" v-if="user.title !== null">{{ user.title }}</div>
+            <div v-else class="title">{{ user.title }}</div>
           </div>
 
           <hr>
