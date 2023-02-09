@@ -109,7 +109,7 @@
 
         <div class="right-description">
           <div class="input-info">А что мы будем делать?</div>
-          <textarea class="textarea scrollable" :readonly="!$user.isAdmin">{{event.description}}</textarea>
+          <textarea class="textarea scrollable" :readonly="!$user.isAdmin" v-model="event.description"></textarea>
 
           <UsersTable class="users-table" :users-lists="[{participations: event.participations}]" @change.stop="" @input.stop=""></UsersTable>
         </div>

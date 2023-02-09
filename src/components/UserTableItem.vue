@@ -63,7 +63,7 @@ user-padding-left = 20px
 
   .hrUserL
     position absolute
-    bottom 4px
+    bottom 6px
     left (avatar-size / 2) + user-padding-left
     right 0
     height 1px
