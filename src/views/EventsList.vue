@@ -40,17 +40,24 @@
   .filters
     > *
       width 100%
+
+.loading
+  width 100%
 </style>
 
 <template>
   <div>
     <Filters :filters="filters" @change="onChangeFilters" class="filters">
       <FloatingInput placeholder="Название мероприятия" no-info class="search-input" v-model="searchText" @input="getEvents"></FloatingInput>
-      <SelectList v-model="placeSearch" @input="getEvents" :list="allPlaces" :selected-id="-1" title="Место проведения"></SelectList>
+      <SelectList v-model="placeSearch" @input="getEvents" :list="allPlaces" :selected-id="-1" title="Место проведения" solid></SelectList>
     </Filters>
 
     <ul class="events-list">
-      <li v-if="!events?.length" class="info">Событий нет</li>
+      <li v-if="loading" class="loading">
+        <CircleLoading></CircleLoading>
+      </li>
+
+      <li v-else-if="!events?.length" class="info">Событий нет</li>
 
       <li v-else v-for="event in events" class="card">
         <EventCard :name="event.name"
@@ -86,13 +93,14 @@ import EventCard from "../components/EventCard.vue";
 import Filters from "../components/Filters.vue";
 import FloatingInput from "../components/FloatingInput.vue";
 import SelectList from "../components/SelectList.vue";
+import CircleLoading from "../components/loaders/CircleLoading.vue";
 import {BASE_URL_PATH} from "../constants";
 import {nextTick} from "vue";
 import {dateToStr, timeToStr} from "../utils/utils";
 
 
 export default {
-  components: {SelectList, FloatingInput, Filters, EventCard, FormExtended, Form},
+  components: {CircleLoading, SelectList, FloatingInput, Filters, EventCard, FormExtended, Form},
 
   data() {
     return {

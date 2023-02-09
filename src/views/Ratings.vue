@@ -133,7 +133,7 @@
     <main class="users-list">
       <div class="list">
         <router-link v-for="(user, idx) in users.slice(3)" :to="{name: 'userProfile', params: {userId: user.id}}" class="user">
-          <div class="counter">{{ idx + 3 }}</div>
+          <div class="counter">{{ idx + 4 }}</div>
           <div class="rating">★{{ user.rating }}</div>
           <UserAvatar :image-id="user.avatarimageid" class="avatar"></UserAvatar>
           <div class="text">

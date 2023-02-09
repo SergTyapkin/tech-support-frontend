@@ -23,13 +23,11 @@ user-padding-left = 20px
     margin 2px
   .info
     padding 0 7px
-    overflow hidden
     width 100%
     .userName
       font-medium()
       line-height 0.8em
       white-space nowrap
-      overflow hidden
     .userTitle
       color textColor3
       font-small-extra()
