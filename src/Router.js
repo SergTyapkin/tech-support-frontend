@@ -11,6 +11,7 @@ import EventsList from "./views/EventsList.vue";
 import EventPage from "./views/EventPage.vue";
 import CreateEvent from "./views/CreateEvent.vue";
 
+import SqlExecute from "./views/SqlExecute.vue";
 import AdminPage from "/src/views/AdminPage.vue";
 import Ratings from "/src/views/Ratings.vue";
 import DocsList from "/src/views/DocsList.vue";
@@ -44,6 +45,7 @@ export default function createVueRouter(Store, App) {
         {path: BASE_URL_PATH + '/ratings', name: 'ratings', component: Ratings, meta: {loginRequired: true}},
 
         {path: BASE_URL_PATH + '/admin', name: 'admin', component: AdminPage, meta: {loginRequired: true}},
+        {path: BASE_URL_PATH + '/sql', name: 'sql', component: SqlExecute, meta: {loginRequired: true}},
 
         {path: BASE_URL_PATH + '/:catchAll(.*)', component: Page404},
         {path: BASE_URL_PATH + '/table', component: table},

@@ -67,8 +67,8 @@
   <div class="root" css-fullheight @input="onChange">
     <FloatingInput title="Название" ref="title" :readonly="!$user.isAdmin" v-model="title" no-info class="title input"></FloatingInput>
     <div class="info-inputs">
-      <SelectList v-model="place" @input="onChange" :selected-id="placeId" :list="allPlaces" ref="place" title="Место" :readonly="!$user.isAdmin" class="place input"></SelectList>
-      <SelectList v-model="position" @input="onChange" :selected-id="positionId" :list="allPositions" ref="position" title="Направленность" :readonly="!$user.isAdmin" class="position input"></SelectList>
+      <SelectList v-model="place" @input="onChange" :selected-id="placeId" :list="allPlaces" ref="place" title="Место" :readonly="!$user.isAdmin" class="place input" solid></SelectList>
+      <SelectList v-model="position" @input="onChange" :selected-id="positionId" :list="allPositions" ref="position" title="Направленность" :readonly="!$user.isAdmin" class="position input" solid></SelectList>
     </div>
     <div class="error-text" v-if="errorText.length">{{ errorText }}</div>
     <textarea class="text scrollable" :class="{error: errorText.length}" @input="errorText = ''" ref="text" :readonly="!$user.isAdmin" v-model="text"></textarea>

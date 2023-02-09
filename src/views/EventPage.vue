@@ -13,7 +13,7 @@
     width 100%
     max-width 1400px
     @media ({mobile})
-      padding 20px
+      padding 10px
     .event-info
       display flex
       @media ({mobile})
@@ -60,10 +60,14 @@
       .button-submit
         flex 0.5
         margin-right 20px
-      .button-participate
+      .button-participate-group
         flex 1
+        display flex
+        gap 20px
+        @media ({mobile})
+          flex-direction column
+      .button-participate
         button-submit()
-        width unset
         &.not
           button-danger()
     .button-delete
@@ -105,7 +109,7 @@
 
         <div class="right-description">
           <div class="input-info">А что мы будем делать?</div>
-          <textarea class="textarea scrollable" :readonly="!$user.isAdmin">{{event.description}}</textarea>
+          <textarea class="textarea scrollable" :readonly="!$user.isAdmin" v-model="event.description"></textarea>
 
           <UsersTable class="users-table" :users-lists="[{participations: event.participations}]" @change.stop="" @input.stop=""></UsersTable>
         </div>
@@ -115,7 +119,10 @@
         <input v-if="$user.isAdmin" :disabled="!isEdited" type="submit" value="Сохранить" class="button-submit">
 
         <CircleLoading v-if="loading"></CircleLoading>
-        <div v-else-if="!event.isyouparticipate && event.isnext" class="button-participate" @click="participate">Пойду</div>
+        <div v-else-if="!event.isyouparticipate && event.isnext" class="button-participate-group">
+          <div class="button-participate" @click="participate">Пойду</div>
+          <SelectList v-model="position" :list="allPositions" title="Чем займёшься" solid class="input"></SelectList>
+        </div>
         <div v-else-if="event.isnext" class="button-participate not" @click="notParticipate">Не пойду</div>
       </div>
       <div v-if="$user.isAdmin" class="button-delete" @click="deleteEvent"><img src="../res/trash.svg" alt="delete">Удалить</div>
@@ -145,9 +152,11 @@ export default {
       eventId: this.$route.params.eventId,
 
       event: {},
+      position: undefined,
       place: undefined,
 
       allPlaces: [],
+      allPositions: [],
 
       loading: true,
       isEdited: false,
@@ -161,17 +170,10 @@ export default {
       return;
     }
 
-    this.loading = true;
-    let response = await this.$api.getEventById(this.eventId);
-    this.loading = false;
-    if (!response.ok_) {
-      this.$popups.error("Ошибка", "Не удалось получить список мероприятий. " + response.info || "");
-      return;
-    }
-    this.event = response;
+    await this.getEventData();
 
     this.loading = true;
-    response = await this.$api.getPlaces();
+    let response = await this.$api.getPlaces();
     this.loading = false;
 
     if (!response.ok_) {
@@ -179,13 +181,39 @@ export default {
       return;
     }
     this.allPlaces = response.places;
+
+    this.loading = true;
+    response = await this.$api.getPositions();
+    this.loading = false;
+
+    if (!response.ok_) {
+      this.$popups.error("Ошибка", "Не удалось получить список возможных направленностей работы. " + response.info || "");
+      return;
+    }
+    this.allPositions = response.positions;
   },
 
 
   methods: {
-    async participate() {
+    async getEventData() {
       this.loading = true;
-      const res = await this.$api.participateInEvent(this.eventId, this.$user.id, 1);
+      let response = await this.$api.getEventById(this.eventId);
+      this.loading = false;
+      if (!response.ok_) {
+        this.$popups.error("Ошибка", "Не удалось получить список мероприятий. " + response.info || "");
+        return;
+      }
+      this.event = response;
+    },
+
+    async participate() {
+      if (!this.position) {
+        this.$modal.alert("Не выбрана направленность работы", "Выбери, чем будешь заниматься");
+        return;
+      }
+
+      this.loading = true;
+      const res = await this.$api.participateInEvent(this.eventId, this.$user.id, this.position.id);
       this.loading = false;
 
       if (!res.ok_) {
@@ -193,6 +221,8 @@ export default {
         return;
       }
       this.event.isyouparticipate = true;
+
+      await this.getEventData();
     },
 
     async notParticipate() {
@@ -205,6 +235,8 @@ export default {
         return;
       }
       this.event.isyouparticipate = false;
+
+      await this.getEventData();
     },
 
     async updateEventData() {

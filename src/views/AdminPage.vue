@@ -219,7 +219,7 @@
       <div class="searchUsersBoard">
         <header class="header">
           Поиск пользователей
-          <FloatingInput placeholder="имя пользователя" no-info class="search-input" v-model="search" @input="getUsersBySearch"></FloatingInput>
+          <FloatingInput placeholder="Имя пользователя" no-info class="search-input" v-model="searchText" @input="getUsersBySearch"></FloatingInput>
         </header>
 
         <CircleLoading v-if="searchLoading" class="loading"></CircleLoading>
@@ -263,7 +263,7 @@ export default {
       places: [],
       positions: [],
 
-      search: "",
+      searchText: "",
 
       loading: false,
       searchLoading: false,
@@ -325,7 +325,7 @@ export default {
 
     async getUsersBySearch() {
       this.searchLoading = true;
-      const res = await this.$api.getUsersBySearch(this.search);
+      const res = await this.$api.getUsersBySearch(this.searchText);
       this.searchLoading = false;
 
       if (!res.ok_) {

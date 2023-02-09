@@ -19,7 +19,7 @@ field()
   align-items center
   padding 0 20px
   cursor pointer
-  transition all 0.2s ease
+  transition all 0.2s e ase
 
 
 .select-root
@@ -28,6 +28,7 @@ field()
   padding 0
   margin 0
   user-select none
+  min-width 150px
 
   .title
     position absolute
@@ -71,6 +72,10 @@ field()
       width 30px
       transform rotate(90deg)
       transition transform 0.3s ease
+  &.solid
+    .selected-item:hover
+      backdrop-filter unset
+      background mix(blocksBgColor, white, 90%)
 
   &.unrolled
     .title
@@ -112,6 +117,7 @@ field()
       field()
       color textColor3
       height item-height
+      white-space nowrap
       &.selected
         color textColor1
         background mix(blocksBgColor, white, 92%)
@@ -200,11 +206,12 @@ export default {
     selectItem(idx, disableEmitting = false) {
       this.state = this.States.default;
       this.selectedIdx = idx;
-      if (!disableEmitting)
-        this.$emit('input', idx, this.list[idx]);
 
       this.$emit('update:modelValue', this.list[idx]);
       this.unrolled = false;
+
+      if (!disableEmitting)
+        this.$emit('input', idx, this.list[idx]);
     }
   },
 

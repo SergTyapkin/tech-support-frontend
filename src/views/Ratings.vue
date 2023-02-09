@@ -4,15 +4,17 @@
 @require '../styles/constants.styl'
 
 .top-3
-  margin-top 30px
   display flex
-  justify-content center
+  justify-content space-between
   height 250px
+  max-width 500px
+  margin 30px auto 0 auto
+  padding-right 10px
   .place-1
   .place-2
   .place-3
     text-align center
-    margin 0 40px
+    margin 0
     transition transform 0.2s ease
     &:hover
       transform scale(1.1)
@@ -73,6 +75,8 @@
       display flex
       font-medium()
       transition all 0.2s ease
+      @media ({mobile})
+        padding 10px 20px
       &:hover
         background blocksBgColorHover
       .counter
@@ -133,7 +137,7 @@
     <main class="users-list">
       <div class="list">
         <router-link v-for="(user, idx) in users.slice(3)" :to="{name: 'userProfile', params: {userId: user.id}}" class="user">
-          <div class="counter">{{ idx + 3 }}</div>
+          <div class="counter">{{ idx + 4 }}</div>
           <div class="rating">★{{ user.rating }}</div>
           <UserAvatar :image-id="user.avatarimageid" class="avatar"></UserAvatar>
           <div class="text">
