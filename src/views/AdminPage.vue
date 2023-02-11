@@ -266,7 +266,7 @@
           <router-link v-else v-for="achievement in achievements" :to="{name: 'achievement', params: {achievementId: achievement.id}}" class="user">
             <AchievementAvatar :image-id="achievement.imageid" class="avatar"></AchievementAvatar>
             <div class="text">
-              <div class="name">{{ achievement.name.slice(0, 30) + (achievement.description.length > 30 ? '...' : '') }}</div>
+              <div class="name">{{ achievement.name.slice(0, 30) + (achievement.name.length > 30 ? '...' : '') }}</div>
               <div class="title">{{ achievement.description.slice(0, 30) + (achievement.description.length > 30 ? '...' : '') }}</div>
             </div>
           </router-link>
