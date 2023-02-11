@@ -261,9 +261,9 @@
         <header class="header">Достижения</header>
 
         <CircleLoading v-if="achievementsLoading" class="loading"></CircleLoading>
-        <div v-else-if="achievements.length === 0" class="not-found-info">Достижений нет</div>
         <ul v-else class="container scrollable">
-          <router-link v-for="achievement in achievements" :to="{name: 'achievement', params: {achievementId: achievement.id}}" class="user">
+          <li v-if="achievements.length === 0" class="not-found-info">Достижений нет</li>
+          <router-link v-else v-for="achievement in achievements" :to="{name: 'achievement', params: {achievementId: achievement.id}}" class="user">
             <AchievementAvatar :image-id="achievement.imageid" class="avatar"></AchievementAvatar>
             <div class="text">
               <div class="name">{{ achievement.name.slice(0, 30) + (achievement.description.length > 30 ? '...' : '') }}</div>
