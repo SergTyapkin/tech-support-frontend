@@ -185,7 +185,7 @@ hr
             <div v-if="!yours" class="username">
               <div class="another-user-info">{{ user.name }}</div>
             </div>
-            <input v-if="$user.isAdmin" type="text" class="title" v-model="user.title" @change="saveAnotherUserTitle" @keydown.enter="(event) => event.target.blur()">
+            <input v-if="$user.isAdmin && !yours" type="text" class="title" v-model="user.title" @change="saveAnotherUserTitle" @keydown.enter="(event) => event.target.blur()">
             <div v-else class="title">{{ user.title }}</div>
           </div>
 
@@ -300,7 +300,7 @@ export default {
 
     addTitlesToArrowListings() {
       this.completedEvents = this.user.completedEvents.map((eventData) => ({
-        title: eventData.name,
+        title: `${eventData.name} | ★${eventData.score}`,
         id: eventData.id,
         arrow: true,
         noClose: true,
