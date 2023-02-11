@@ -49,6 +49,7 @@ thumb-size = 3px
     flex-direction column
     input-margin = 10px
     input-margin-bottom = 0
+    max-width slider-length + input-margin * 2
     .slider
       all unset
       margin input-margin
@@ -107,6 +108,19 @@ thumb-size = 3px
         &:first-child
         &:last-child
           display none
+
+  .delete-container
+    .delete-button
+      img
+        width 20px
+        height 20px
+      cursor pointer
+      transition all 0.2s ease
+      display flex
+      align-items center
+      justify-content center
+      &:hover
+        transform rotate(180deg) scale(1.1)
 </style>
 
 <template>
@@ -121,6 +135,11 @@ thumb-size = 3px
       </div>
       <div class="splitters-container">
         <div class="splitter" v-for="i in ((max-min) / step + 1)" :style="{'--num': i - 1, '--count': (max-min) / step}"></div>
+      </div>
+    </div>
+    <div class="delete-container">
+      <div class="delete-button" @click="setModelValue(null)">
+        <img src="../res/cross.svg" alt="clear">
       </div>
     </div>
   </div>
@@ -145,6 +164,7 @@ export default {
     },
     noValue: Boolean,
     readonly: Boolean,
+    withDelete: Boolean,
 
     modelValue: null,
     labels: Array,
