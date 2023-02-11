@@ -109,7 +109,7 @@ export default {
   data() {
     return {
       loading: false,
-      description: this.$props.description?.substring(0, 200),
+      description: this.$props.description?.slice(0, 200) + (this.$props.description?.length > 200 ? '...' : ''),
     }
   },
 };

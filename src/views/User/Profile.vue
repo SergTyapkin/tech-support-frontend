@@ -78,11 +78,10 @@ hr
   margin-top 40px
   width 30%
   min-width 300px
-  display block
   margin-bottom -60px
 
 
-.avatar
+.image
 .avatar-div
   width 80px
   height 80px
@@ -128,10 +127,8 @@ hr
     cursor pointer
   .avatar-div::after
     content 'Отпустите, чтобы загрузить'
-.avatar-container
   .avatar-div:hover::before
     opacity 1
-.avatar-container
   .image-loader.in-drag
     .avatar-div::after
       opacity 1

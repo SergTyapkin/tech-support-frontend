@@ -16,6 +16,7 @@ import AdminPage from "/src/views/AdminPage.vue";
 import Ratings from "/src/views/Ratings.vue";
 import DocsList from "/src/views/DocsList.vue";
 import Doc from "/src/views/Doc.vue";
+import Achievement from "./views/Achievement.vue";
 
 import table from "/src/components/UsersTable.vue";
 
@@ -41,6 +42,9 @@ export default function createVueRouter(Store, App) {
         {path: BASE_URL_PATH + '/docs', name: 'docs', component: DocsList, meta: {loginRequired: true}},
         {path: BASE_URL_PATH + '/doc/:docId', name: 'doc', component: Doc, meta: {loginRequired: true}},
         {path: BASE_URL_PATH + '/doc', name: 'createDoc', component: Doc, meta: {loginRequired: true}},
+
+        {path: BASE_URL_PATH + '/achievement', name: 'createAchievement', component: Achievement, meta: {loginRequired: true}},
+        {path: BASE_URL_PATH + '/achievement/:achievementId', name: 'achievement', component: Achievement, meta: {loginRequired: true}},
 
         {path: BASE_URL_PATH + '/ratings', name: 'ratings', component: Ratings, meta: {loginRequired: true}},
 

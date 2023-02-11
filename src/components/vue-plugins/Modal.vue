@@ -11,6 +11,7 @@
     width 100%
     height 100vh
     z-index 999
+    backdrop-filter blur(10px)
 
     .modal-background
       position fixed
@@ -28,6 +29,7 @@
       .confirm-button
         width 45%
         display inline-block
+        text-align center
         margin-left 2.5%
         margin-right 2.5%
 

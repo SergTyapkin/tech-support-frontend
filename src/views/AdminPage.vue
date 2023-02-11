@@ -33,6 +33,7 @@
   .searchUsersBoard
   .setupPlacesBoard
   .setupPositionsBoard
+  .achievementsBoard
     max-height 500px
     flex 1
     block-dark-bg()
@@ -105,9 +106,9 @@
         padding 6px
 
   //.participationsBoard
-
+  .achievementsBoard
   .searchUsersBoard
-    max-height 1000px
+    max-height 500px
     .header
       .search-input
         margin-top 5px
@@ -123,8 +124,8 @@
         border-radius 50%
         width 30px
         height 30px
-        border 1px solid empColor1_2
         margin-right 5px
+        border 1px solid empColor1_2
       .text
         .name
           font-middle()
@@ -134,6 +135,27 @@
         .title
           font-small-extra()
           color textColor3
+  .achievementsBoard
+    .user
+      .avatar
+        border-color empColor2_2
+    .add-button
+      margin 0 auto
+      padding 3px 15px 3px 10px
+      border 2px dashed borderColor
+      display flex
+      align-items center
+      border-radius 100px
+      width min-content
+      backdrop-filter blur(10px)
+      cursor pointer
+      transition all 0.2s ease
+      &:hover
+        background blocksBgColorHover
+      img
+        margin-right 5px
+        width 30px
+        height 30px
 
   .setupPositionsBoard
   .setupPlacesBoard
@@ -235,9 +257,24 @@
         </ul>
       </div>
 
-<!--      <div class="reservedBoard">-->
-<!--        <div class="not-found-info">Место зарезервировано для будущих обновлений</div>-->
-<!--      </div>-->
+      <div class="achievementsBoard">
+        <header class="header">Достижения</header>
+
+        <CircleLoading v-if="achievementsLoading" class="loading"></CircleLoading>
+        <div v-else-if="achievements.length === 0" class="not-found-info">Достижений нет</div>
+        <ul v-else class="container scrollable">
+          <router-link v-for="achievement in achievements" :to="{name: 'achievement', params: {achievementId: achievement.id}}" class="user">
+            <AchievementAvatar :image-id="achievement.imageid" class="avatar"></AchievementAvatar>
+            <div class="text">
+              <div class="name">{{ achievement.name.slice(0, 30) + (achievement.description.length > 30 ? '...' : '') }}</div>
+              <div class="title">{{ achievement.description.slice(0, 30) + (achievement.description.length > 30 ? '...' : '') }}</div>
+            </div>
+          </router-link>
+          <router-link class="add-button" :to="{name: 'createAchievement'}">
+            <img src="../res/plus.svg" alt="add"> Создать
+          </router-link>
+        </ul>
+      </div>
     </div>
     <CircleLoading v-if="overlayLoading" class="overlay-loading"></CircleLoading>
   </div>
@@ -249,24 +286,27 @@ import CircleLoading from "../components/loaders/CircleLoading.vue";
 import FloatingInput from "../components/FloatingInput.vue";
 import UsersTable from "../components/UsersTable.vue";
 import UserAvatar from "../components/UserAvatar.vue";
+import AchievementAvatar from "../components/AchievementAvatar.vue";
 import AddableList from "../components/AddableList/AddableList.vue";
 
 export default {
-  components: {AddableList, UserAvatar, CircleLoading, Form, FloatingInput, UsersTable},
+  components: {AchievementAvatar, AddableList, UserAvatar, CircleLoading, Form, FloatingInput, UsersTable},
 
   data () {
 	  return {
-      newUsers: [{id: 3, name: 'Some user', email:"someemail@mail.ru", telegram: "@imperatrica_sarkazma"}, {id: 1, name: 'Some user 2', email:"someemail@mail.ru", telegram: "@imperatrica_sarkazma"}],
+      newUsers: [],
       participations: [],
       searchUsers: [],
 
       places: [],
       positions: [],
+      achievements: [],
 
       searchText: "",
 
       loading: false,
       searchLoading: false,
+      achievementsLoading: false,
       overlayLoading: false,
     }
   },
@@ -277,6 +317,7 @@ export default {
     this.getUsersBySearch();
     this.getPlaces();
     this.getPositions();
+    this.getAchievements();
   },
 
   methods: {
@@ -360,6 +401,19 @@ export default {
       }
 
       this.positions = res.positions.map((position) => ({id: position.id, title: position.name}));
+    },
+
+    async getAchievements() {
+      this.achievementsLoading = true;
+      const res = await this.$api.getAchievements();
+      this.achievementsLoading = false;
+
+      if (!res.ok_) {
+        this.$popups.error('Ошибка', 'Не удалось получить список достижений');
+        return;
+      }
+
+      this.achievements = res.achievements;
     },
 
     async savePlaces(toCreate, toEdit, toDelete) {

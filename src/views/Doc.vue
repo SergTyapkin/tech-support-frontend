@@ -53,6 +53,7 @@
       margin-bottom 20px
       img
         width 26px
+        height 26px
         margin-right 10px
     .save-button
       button-submit()
@@ -78,11 +79,10 @@
       <div class="save-button" @click="createDoc"><img src="../res/save.svg" alt="">Создать документ</div>
     </div>
     <div class="buttons-container" v-else-if="$user.isAdmin">
-      <div class="save-button" @click="updateDoc"><img src="../res/save.svg" alt="">Сохранить изменения</div>
       <div class="delete-button" @click="deleteDoc"><img src="../res/trash.svg" alt="">Удалить</div>
     </div>
 
-    <FloatingButton v-if="isEdited" title="Сохранить" green @click="updateDoc">
+    <FloatingButton v-if="isEdited && this.docId !== undefined" title="Сохранить" green @click="updateDoc">
       <img src="../res/save.svg" alt="save">
     </FloatingButton>
   </div>

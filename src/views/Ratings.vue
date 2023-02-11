@@ -41,25 +41,25 @@
   .place-1
     align-self flex-start
     .position
-      color gold
+      color colorGold
     .avatar
       width 100px
-      outline-color gold
+      outline-color colorGold
   .place-2
     align-self flex-end
     margin-bottom 20px
     .position
-      color silver
+      color colorSilver
     .avatar
       width 80px
-      outline-color silver
+      outline-color colorSilver
   .place-3
     align-self flex-end
     .position
-      color #ff9f7b
+      color colorBronze
     .avatar
       width 70px
-      outline-color #ff9f7b
+      outline-color colorBronze
 
 .users-list
   width 100%

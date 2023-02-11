@@ -116,8 +116,6 @@
       </div>
 
       <div class="buttons">
-        <input v-if="$user.isAdmin" :disabled="!isEdited" type="submit" value="Сохранить" class="button-submit">
-
         <CircleLoading v-if="loading"></CircleLoading>
         <div v-else-if="!event.isyouparticipate && event.isnext" class="button-participate-group">
           <div class="button-participate" @click="participate">Пойду</div>
@@ -177,7 +175,7 @@ export default {
     this.loading = false;
 
     if (!response.ok_) {
-      this.$popups.error("Ошибка", "Не удалось получить список мест проведения мероприятий. " + response.info || "");
+      this.$popups.error("Ошибка", "Не удалось получить список мест проведения мероприятий. " + (response.info || ""));
       return;
     }
     this.allPlaces = response.places;
@@ -187,7 +185,7 @@ export default {
     this.loading = false;
 
     if (!response.ok_) {
-      this.$popups.error("Ошибка", "Не удалось получить список возможных направленностей работы. " + response.info || "");
+      this.$popups.error("Ошибка", "Не удалось получить список возможных направленностей работы. " + (response.info || ""));
       return;
     }
     this.allPositions = response.positions;
@@ -200,7 +198,7 @@ export default {
       let response = await this.$api.getEventById(this.eventId);
       this.loading = false;
       if (!response.ok_) {
-        this.$popups.error("Ошибка", "Не удалось получить список мероприятий. " + response.info || "");
+        this.$popups.error("Ошибка", "Не удалось получить список мероприятий. " + (response.info || ""));
         return;
       }
       this.event = response;

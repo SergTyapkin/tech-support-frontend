@@ -22,6 +22,8 @@ thumb-size = 3px
       position absolute
       top -30px
       right 40px
+    &.hidden
+      display none
     .value
       all unset
       box-sizing border-box
@@ -76,7 +78,7 @@ thumb-size = 3px
       display flex
       flex-direction row
       justify-content space-between
-      margin 0 5px 0 2px
+      margin 0 5px 0 5px
       > *
         padding 0 6px
         padding-top 3px
@@ -109,7 +111,7 @@ thumb-size = 3px
 
 <template>
   <div class="slider-container">
-    <div class="value-container">
+    <div class="value-container" :class="{hidden: noValue}">
       <input type="number" aria-controls="off" ref="value" class="value" v-model="modelValue" :step="step" @change="updateVModel" :readonly="readonly">
     </div>
     <div class="input-container" v-if="!readonly">
@@ -141,6 +143,7 @@ export default {
       type: Number,
       required: true,
     },
+    noValue: Boolean,
     readonly: Boolean,
 
     modelValue: null,

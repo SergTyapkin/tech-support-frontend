@@ -260,6 +260,8 @@ error-color = colorNo
            :required="required"
            :disabled="disabled"
            :pattern="pattern"
+           :max="max"
+           :min="min"
       :class="{
         left: textAlign === 'left',
         right: textAlign === 'right',
@@ -295,6 +297,8 @@ export default {
     textAlign: {
       default: "left"
     },
+    max: Number,
+    min: Number,
     disabled: Boolean,
     noInfo: Boolean,
     readonly: Boolean,
@@ -322,14 +326,24 @@ export default {
 
   methods: {
     updateVModel(event) {
+      let value = event.target.value;
+      if (this.type === 'number' && value !== '') {
+        const val = Number(value);
+        if (val < this.min)
+          value = event.target.value = this.min;
+        if (val > this.max)
+          value = event.target.value = this.max;
+      }
+
       this.state = this.States.default;
       this.error = '';
 
-      let value = event.target.value;
       if (this.type === 'checkbox')
         value = event.target.checked;
       this.$emit('update:modelValue', value);
       this.$emit('change');
+
+      this.prevValue = value;
     },
 
     focus() {

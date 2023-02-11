@@ -180,7 +180,7 @@ export default {
       this.loading = false;
 
       if (!response.ok_) {
-        this.$popups.error("Ошибка", "Не удалось получить список мест проведения мероприятий. " + response.info || "");
+        this.$popups.error("Ошибка", "Не удалось получить список мест проведения мероприятий. " + (response.info || ""));
         return;
       }
 
