@@ -664,6 +664,8 @@ export default {
         return;
       }
 
+      this.selectedAchievement.achievementid = this.selectedAchievement.id;
+      this.selectedAchievement.id = response.id;
       this.achievements.push(this.selectedAchievement);
       this.selectedAchievement = undefined;
       this.$popups.success('Сохранено', 'АААААЧИВКА!');
