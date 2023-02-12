@@ -191,12 +191,16 @@ hr
 
           <hr>
 
-          <div class="quest-statistics ">
+          <div class="quest-statistics">
             <ArrowListElement :title="`Завершено мероприятий: ${completedEvents.length}`"
                               closed
                               :elements="completedEvents"
                               @click-inside="(eventData) => $router.push({name: 'event', params: {eventId: eventData.id}})"
             ></ArrowListElement>
+          </div>
+
+          <div class="achievements">
+            <div></div>
           </div>
 
           <div v-if="yours">

@@ -76,7 +76,7 @@ minHeight = 300px
         <main class="main">
           <div class="description">{{ description }}</div>
           <div class="place"><img class="icon" src="../res/place.svg" alt="Place:"> {{ placeName }}</div>
-          <div class="time" v-if="eventTimeStart && eventTimeEnd"><img class="icon" src="../res/time_dashed.svg" alt="Time:"> {{eventTimeStart}} - {{eventTimeEnd}}</div>
+          <div class="time" v-if="eventTimeStart || eventTimeEnd"><img class="icon" src="../res/time_dashed.svg" alt="Time:"> {{eventTimeStart || '???'}} - {{eventTimeEnd || '???'}}</div>
           <div class="people"><img class="icon" src="../res/people.svg" alt="People:">{{ participationsCount }} / {{ needPeople }}</div>
         </main>
       </div>
@@ -112,5 +112,9 @@ export default {
       description: this.$props.description?.slice(0, 200) + (this.$props.description?.length > 200 ? '...' : ''),
     }
   },
+
+  mounted() {
+    console.log(this.eventTimeStart, this.eventTimeEnd)
+  }
 };
 </script>

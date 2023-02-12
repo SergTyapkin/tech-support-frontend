@@ -86,6 +86,9 @@ export function dateToStr(date) {
     return `${dateDay} ${months[Number(dateMonth)]}${year}`;
 }
 export function timeToStr(time) {
+    if (!time && time !== '')
+        return '';
+
     time = new Date('0001-01-01T'+time);
 
     const hours = time.getHours();
