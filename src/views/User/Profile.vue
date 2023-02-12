@@ -9,7 +9,7 @@ hr
   margin 0
 
 .profile-plate
-  margin-top 100px
+  margin-top 30px
   margin-bottom 100px
   padding 10px 30px 30px 30px
   border-radius 150px 150px 10px 10px / 100px 100px 10px 10px
@@ -168,18 +168,6 @@ hr
   font-large()
   margin-bottom -10px
 
-.now-playing
-  margin-top 5px
-
-.admin-button
-  button()
-  margin 0 auto
-  margin-top 40px
-  width 30%
-  min-width 300px
-  margin-bottom -60px
-
-
 .image
 .avatar-div
   width 80px
@@ -249,7 +237,6 @@ hr
 <template>
   <div>
     <div class="profile-page">
-      <router-link v-if="yours && user.isAdmin" :to="{name: 'admin'}" class="admin-button  button rounded outline">На админскую</router-link>
       <Form class="profile-plate">
         <div>
           <div class="info-container">

@@ -92,6 +92,12 @@ animation-time-rule = cubic-bezier(0.29, 0.82, 0.36, 0.99)
     animation-duration 1s
 
 
+.top-bar
+  @media ({mobile})
+    position fixed
+    bottom 0
+    backdrop-filter blur(10px)
+
 .wrapper
   width 100%
   min-height 'calc(100vh - %s)' % header-height
@@ -145,7 +151,7 @@ animation-time-rule = cubic-bezier(0.29, 0.82, 0.36, 0.99)
     <div></div>
   </div>
 
-  <TopBar v-if="$store.state.user.isLogined"></TopBar>
+  <TopBar v-if="$store.state.user.isLogined" class="top-bar"></TopBar>
   <div class="wrapper">
     <CircleLoading v-if="!$store.state.user.isGotten" class="loading"></CircleLoading>
     <router-view v-else v-slot="{ Component }">
