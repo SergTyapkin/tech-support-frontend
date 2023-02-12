@@ -96,3 +96,7 @@ export function timeToStr(time) {
 
     return `${("0" + hours).slice(-2)}:${("0" + minutes).slice(-2)}`;
 }
+
+export function cropText(text, maxLength) {
+    return (text?.slice(0, maxLength) || '') + (text?.length > maxLength ? '...' : '');
+}

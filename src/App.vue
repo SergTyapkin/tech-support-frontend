@@ -313,6 +313,7 @@ import Popups from "/src/components/vue-plugins/Popups.vue";
 import CircleLoading from "/src/components/loaders/CircleLoading.vue";
 import {API_URL, BASE_URL_PATH} from "./constants";
 import TopBar from "./components/TopBar.vue";
+import {cropText} from "./utils/utils";
 
 export default {
   components: {TopBar, CircleLoading, Modal, Popups},
@@ -348,6 +349,8 @@ export default {
 
     global.$user = this.$store.state.user;
     global.$base_url_path = BASE_URL_PATH;
+
+    global.$cropText = cropText;
   },
 
   methods: {

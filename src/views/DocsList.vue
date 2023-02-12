@@ -78,7 +78,7 @@
           <div><img src="../res/place.svg" alt="Place:">{{ doc.placename }}</div>
           <div><img src="../res/work.svg" alt="Work:">{{ doc.positionname }}</div>
         </div>
-        <div class="text">{{ doc.text?.slice(0, 100) + (doc.text?.length > 100 ? '...' : '') }}</div>
+        <div class="text">{{ $cropText(doc.text, 100) }}</div>
       </router-link>
     </li>
 

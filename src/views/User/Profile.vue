@@ -78,6 +78,9 @@ hr
         top -50px
         opacity 1
         pointer-events auto
+        @media ({mobile})
+          top 10px
+          pointer-events none
       .delete-achievement:hover
           transform translateX(-50%) scale(1.1)
     .info
@@ -298,7 +301,9 @@ hr
             <router-link v-else
                          v-for="achievement in achievements"
                          :to="{name: 'achievement', params: {achievementId: achievement.achievementid}}"
-                         class="achievement-container">
+                         class="achievement-container"
+                         @contextmenu="deleteAchievement(achievement.id)"
+            >
               <Achievement class="achievement"
                            :level="achievement.level"
                            :max-levels="achievement.levels"
@@ -312,8 +317,8 @@ hr
             <div v-for="achievement in allAchievements" @click="inSelectingAchievement = false; selectedAchievement = achievement; selectedAchievement.level = 1" class="achievement">
               <AchievementAvatar :image-id="achievement.imageid" class="avatar"></AchievementAvatar>
               <div class="text">
-                <div class="name">{{ achievement.name.slice(0, 30) + (achievement.name.length > 30 ? '...' : '') }}</div>
-                <div class="description">{{ achievement.description?.slice(0, 60) + (achievement.description?.length > 60 ? '...' : '') }}</div>
+                <div class="name">{{ $cropText(achievement.name, 30) }}</div>
+                <div class="description">{{ $cropText(achievement.description, 60) }}</div>
               </div>
             </div>
           </div>
