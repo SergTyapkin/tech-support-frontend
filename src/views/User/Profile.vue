@@ -319,7 +319,7 @@ hr
               <AchievementAvatar :image-id="achievement.imageid" class="avatar"></AchievementAvatar>
               <div class="text">
                 <div class="name">{{ $cropText(achievement.name, 30) }}</div>
-                <div class="description">{{ $cropText(achievement.description, 60) }}</div>
+                <div class="description">{{ $cropText(cleanupMarkdownPreview(achievement.description), 60) }}</div>
               </div>
             </div>
           </div>
@@ -383,6 +383,7 @@ import UserAvatar from "../../components/UserAvatar.vue";
 import Achievement from "../../components/Achievement.vue";
 import AchievementAvatar from "../../components/AchievementAvatar.vue";
 import Range from "../../components/Range.vue";
+import {cleanupMarkdownPreview} from "../../utils/utils";
 
 export default {
   components: {
@@ -693,7 +694,9 @@ export default {
 
       this.achievements.splice(this.achievements.findIndex((a) => a.id === id), 1);
       this.$popups.success('Достижение удалено', 'Вы убили деда');
-    }
+    },
+
+    cleanupMarkdownPreview: cleanupMarkdownPreview,
   },
 
   watch: {

@@ -100,3 +100,9 @@ export function timeToStr(time) {
 export function cropText(text, maxLength) {
     return (text?.slice(0, maxLength) || '') + (text?.length > maxLength ? '...' : '');
 }
+
+export function cleanupMarkdownPreview(text) {
+    return text
+      .replaceAll(/[-#_~*>`]/g, '') // remove symbols
+      .replaceAll(/!?\[.+\]\(.+\)/g, '') // remove links and images
+}

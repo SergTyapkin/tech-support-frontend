@@ -96,7 +96,7 @@ import SelectList from "../components/SelectList.vue";
 import CircleLoading from "../components/loaders/CircleLoading.vue";
 import {BASE_URL_PATH} from "../constants";
 import {nextTick} from "vue";
-import {dateToStr, timeToStr} from "../utils/utils";
+import {cleanupMarkdownPreview, dateToStr, timeToStr} from "../utils/utils";
 
 
 export default {
@@ -211,6 +211,7 @@ export default {
           event.eventtimeend = timeToStr(event.eventtimeend);
           event.timestart = timeToStr(event.timestart);
           event.timeend = timeToStr(event.timeend);
+          event.description = cleanupMarkdownPreview(event.description);
         })
       }
     }

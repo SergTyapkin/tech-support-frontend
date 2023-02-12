@@ -256,7 +256,7 @@
             <AchievementAvatar :image-id="achievement.imageid" class="avatar"></AchievementAvatar>
             <div class="text">
               <div class="name">{{ $cropText(achievement.name, 30) }}</div>
-              <div class="title">{{ $cropText(achievement.description, 30) }}</div>
+              <div class="title">{{ $cropText(cleanupMarkdownPreview(achievement.description), 30) }}</div>
             </div>
           </router-link>
           <router-link class="add-button" :to="{name: 'createAchievement'}">
@@ -277,6 +277,7 @@ import UsersTable from "../components/UsersTable.vue";
 import UserAvatar from "../components/UserAvatar.vue";
 import AchievementAvatar from "../components/AchievementAvatar.vue";
 import AddableList from "../components/AddableList/AddableList.vue";
+import {cleanupMarkdownPreview} from "../utils/utils";
 
 export default {
   components: {AchievementAvatar, AddableList, UserAvatar, CircleLoading, Form, FloatingInput, UsersTable},
@@ -509,7 +510,9 @@ export default {
       }
       this.$popups.success('Аккаунт удален', 'Туда его');
       this.newUsers.splice(listIdx, 1);
-    }
+    },
+
+    cleanupMarkdownPreview: cleanupMarkdownPreview,
   }
 }
 </script>
