@@ -178,7 +178,7 @@ export default {
 
   methods: {
     updateVModel(event) {
-      let value = event.target.value;
+      let value = Number(event.target.value);
       this.$emit('update:modelValue', value);
       this.$emit('change');
     },

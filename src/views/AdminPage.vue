@@ -141,7 +141,6 @@
         border-color empColor2_2
     .add-button
       button-dashed()
-      padding 3px 15px 3px 10px
       img
         margin-right 5px
         width 30px

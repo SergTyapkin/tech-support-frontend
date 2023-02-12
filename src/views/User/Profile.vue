@@ -102,6 +102,7 @@ hr
   .add-achievement
     button-dashed()
     margin-top 5px
+    padding-right 60px
   .select-achievement
     overflow-y scroll
     block-dark-bg()
@@ -288,7 +289,7 @@ hr
           <hr>
 
           <div class="quest-statistics">
-            <ArrowListElement :title="`Завершено мероприятий: ${completedEvents.length}`"
+            <ArrowListElement :title="`Мероприятий: ${completedEvents.length}`"
                               closed
                               :elements="completedEvents"
                               @click-inside="(eventData) => $router.push({name: 'event', params: {eventId: eventData.id}})"
@@ -302,7 +303,7 @@ hr
                          v-for="achievement in achievements"
                          :to="{name: 'achievement', params: {achievementId: achievement.achievementid}}"
                          class="achievement-container"
-                         @contextmenu="deleteAchievement(achievement.id)"
+                         @contextmenu.prevent="deleteAchievement(achievement.id)"
             >
               <Achievement class="achievement"
                            :level="achievement.level"

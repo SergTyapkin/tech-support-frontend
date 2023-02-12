@@ -69,11 +69,11 @@
         .avatar-div::after
           opacity 1
 
-      .textarea
+      .markdown-container
         flex 1
-        textarea()
-        resize none
-        min-height 200px
+        .info
+          font-small()
+          color textColor4
 
     .row-levels
       @media ({mobile})
@@ -137,7 +137,11 @@
           <div class="image-overlay" v-if="$user.isAdmin">Изображение можно будет изменить после создания</div>
         </div>
 
-        <textarea class="textarea scrollable" :readonly="!$user.isAdmin" v-model="achievement.description" placeholder="Описание"></textarea>
+        <div class="markdown-container">
+          <MarkdownRedactor v-if="$user.isAdmin" class="redactor" @input="onChange" @change="$refs.renderer?.update" ref="text" v-model="achievement.description" placeholder="Описание"></MarkdownRedactor>
+          <div class="info" v-if="$user.isAdmin">Превью</div>
+          <MarkdownRenderer class="renderer" ref="renderer"></MarkdownRenderer>
+        </div>
       </div>
 
       <div class="row-levels">
@@ -183,10 +187,14 @@ import Range from "../components/Range.vue";
 import DragNDropLoader from "../components/DragNDropLoader.vue";
 import {IMAGE_MAX_RES, IMAGE_ACHIEVEMENT_MAX_RES} from "../constants";
 import ImageUploader from "../utils/imageUploader";
+import MarkdownRedactor from "../components/MarkdownRedactor.vue";
+import MarkdownRenderer from "../components/MarkdownRenderer.vue";
 
 
 export default {
   components: {
+    MarkdownRenderer,
+    MarkdownRedactor,
     Achievement,
     DragNDropLoader,
     Range, AchievementAvatar, FloatingButton, CircleLoading, Form, FloatingInput},
@@ -226,6 +234,7 @@ export default {
         return;
       }
       this.achievement = response;
+      this.$refs.renderer.update(this.achievement.description);
     },
 
     async updateAchievementData() {

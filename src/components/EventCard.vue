@@ -109,7 +109,7 @@ export default {
   data() {
     return {
       loading: false,
-      description: $cropText(this.$props.description, 200),
+      description: this.$cropText(this.$props.description, 200),
     }
   },
 

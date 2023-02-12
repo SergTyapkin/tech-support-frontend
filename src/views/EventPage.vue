@@ -50,10 +50,9 @@
         margin-bottom 20px
         .input:not(:last-of-type)
           margin-bottom 20px
-      .textarea
-        textarea()
-        margin-top 10px
-        resize none
+      .info
+        font-small()
+        color textColor4
 
     .buttons
       display flex
@@ -109,7 +108,9 @@
 
         <div class="right-description">
           <div class="input-info">А что мы будем делать?</div>
-          <textarea class="textarea scrollable" :readonly="!$user.isAdmin" v-model="event.description"></textarea>
+          <MarkdownRedactor v-if="$user.isAdmin" class="redactor" @input="onChange" @change="$refs.renderer?.update" ref="text" v-model="event.description" placeholder="Описание"></MarkdownRedactor>
+          <div class="info" v-if="$user.isAdmin">Превью</div>
+          <MarkdownRenderer class="renderer" ref="renderer"></MarkdownRenderer>
 
           <UsersTable class="users-table" :users-lists="[{participations: event.participations}]" @change.stop="" @input.stop=""></UsersTable>
         </div>
@@ -140,10 +141,14 @@ import FloatingInput from "../components/FloatingInput.vue";
 import FloatingButton from "../components/FloatingButton.vue";
 import SelectList from "../components/SelectList.vue";
 import UsersTable from "../components/UsersTable.vue";
+import MarkdownRedactor from "../components/MarkdownRedactor.vue";
+import MarkdownRenderer from "../components/MarkdownRenderer.vue";
 
 
 export default {
-  components: {SelectList, FloatingButton, CircleLoading, Form, FloatingInput, UsersTable},
+  components: {
+    MarkdownRenderer,
+    MarkdownRedactor, SelectList, FloatingButton, CircleLoading, Form, FloatingInput, UsersTable},
 
   data() {
     return {
@@ -202,6 +207,7 @@ export default {
         return;
       }
       this.event = response;
+      this.$refs.renderer.update(this.event.description);
     },
 
     async participate() {

@@ -74,6 +74,7 @@
     .user
       padding 10px 50px
       display flex
+      align-items center
       font-medium()
       transition all 0.2s ease
       @media ({mobile})
@@ -85,7 +86,7 @@
         min-width 25px
       .rating
         color textColor2
-        min-width 50px
+        min-width 60px
       .avatar
         border-radius 50%
         width 30px

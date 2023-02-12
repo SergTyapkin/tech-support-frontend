@@ -17,17 +17,36 @@ user-padding-left-mobile = 5px
   display flex
   @media ({mobile})
     padding-left user-padding-left-mobile
-  .userIcon
+  .user-icon-container
     align-self flex-end
     border-radius 50%
     outline 1px solid empColor1_1
     outline-offset 2px
+    margin 2px
+    overflow hidden
+  .user-icon-container
+  .user-icon
     width (avatar-size - 4px)
     height (avatar-size - 4px)
-    margin 2px
+    min-width (avatar-size - 4px)
+    min-height (avatar-size - 4px)
     @media ({mobile})
       width (avatar-size-mobile - 4px)
       height (avatar-size-mobile - 4px)
+      min-width (avatar-size-mobile - 4px)
+      min-height (avatar-size-mobile - 4px)
+
+  .info.isAdmin
+    .userName
+      @media ({mobile})
+        margin-left (- avatar-size-mobile)
+    .userTitle
+      @media ({mobile})
+        margin-left (- avatar-size-mobile)
+  .info:not(.isAdmin)
+    .range
+      position absolute
+      right 20px
   .info
     padding 0 7px
     width 100%
@@ -35,14 +54,10 @@ user-padding-left-mobile = 5px
       font-medium()
       line-height 0.8em
       white-space nowrap
-      @media ({mobile})
-        margin-left (- avatar-size-mobile)
     .userTitle
       color textColor3
       font-small-extra()
       white-space nowrap
-      @media ({mobile})
-        margin-left (- avatar-size-mobile)
 
     .range-input-container
       display flex
@@ -94,12 +109,14 @@ user-padding-left-mobile = 5px
 
 <template>
   <div class="user">
-    <UserAvatar :image-id="userImageId" class="userIcon"></UserAvatar>
-    <div class="info">
+    <router-link :to="{name: profile, params: {userId: id}}" class="user-icon-container">
+      <UserAvatar :image-id="userImageId" class="user-icon"></UserAvatar>
+    </router-link>
+    <div class="info" :class="{isAdmin: $user.isAdmin}">
       <div class="userName">{{ $cropText(userName, 30) }}</div>
       <div class="userTitle">{{ $cropText(userTitle, 50) }}</div>
       <div class="range-input-container" :class="{'in-row': !$user.isAdmin}">
-        <Range class="range" :min="0.25" :max="2" :step="0.25" v-model="score" @change="saveRating" :readonly="!$user.isAdmin" with-delete></Range>
+        <Range class="range" :min="0.25" :max="2" :step="0.25" v-model="score" @change="saveRating" :readonly="!$user.isAdmin" :with-delete="$user.isAdmin"></Range>
         <input class="comm" ref="comment" placeholder="Комментарий" v-model="comment" @change="saveComment" @keydown.enter="$refs.comment.blur()" :readonly="!$user.isAdmin">
       </div>
     </div>
