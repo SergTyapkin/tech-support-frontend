@@ -24,6 +24,9 @@
       width 100%
 
     .row-description
+      @media ({mobile})
+        flex-direction column
+        gap 10px
       .image-loader
         position relative
         border-radius 50%
@@ -70,8 +73,11 @@
         flex 1
         textarea()
         resize none
+        min-height 200px
 
     .row-levels
+      @media ({mobile})
+        flex-direction column
       .levels-container
       .avatar-examples
         .info
@@ -92,78 +98,6 @@
           display flex
           gap 40px
           padding 5px
-          .image-div
-            position relative
-            width 60px
-            height 60px
-            overflow visible
-            .image
-              border-radius 50%
-              outline 2px solid empColor2_1
-              outline-offset 2px
-              width 60px
-              height 60px
-            &::before
-              content ""
-              position absolute
-              bottom -5px
-              left 50%
-              transform translateX(-50%)
-              font-medium()
-              font-family monospace
-              z-index 2
-            &::after
-              z-index 1
-
-            &:nth-child(1)
-              &::before
-                content "I"
-                color colorSilver
-              .image
-                outline-color colorSilver
-            &:nth-child(2)
-              &::before
-                content "II"
-                color colorBronze
-              .image
-                outline-color colorBronze
-            &:nth-child(3)
-              &::before
-                content "III"
-                color colorGold
-              .image
-                outline-color colorGold
-            &:nth-child(4)
-              &::before
-                content "IV"
-            &:nth-child(5)
-              &::before
-                content "V"
-            &:nth-last-child(1)
-              &::after
-                content ""
-                background url("../res/hearthstone_legendary_card.png") no-repeat
-                background-size contain
-                position absolute
-                inset -15px
-                right -30px
-              &::before
-                bottom -9px
-                color colorGold
-            &:nth-last-child(2)
-              &::after
-                content ""
-                background url("../res/hearthstone_silver_legendary_card.png") no-repeat
-                background-size contain
-                position absolute
-                top -10px
-                left -18px
-                right -27px
-                bottom -10px
-              &::before
-                bottom -6px
-                font-weight bold
-                color mix(colorBronze, black, 30%)
 
     .button-delete
       button-danger()
@@ -188,7 +122,7 @@
       <FloatingInput v-model="achievement.name" title="Название" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
 
       <div class="row-description">
-        <DragNDropLoader v-if="achievementId !== undefined"
+        <DragNDropLoader v-if="$user.isAdmin && achievementId !== undefined"
                          class="image-loader"
                          @load="updateAvatar"
                          :crop-size="cropSize"
@@ -200,23 +134,21 @@
         </DragNDropLoader>
         <div v-else class="image-loader">
           <AchievementAvatar :image-id="achievement.imageid"></AchievementAvatar>
-          <div class="image-overlay">Изображение можно будет изменить после создания</div>
+          <div class="image-overlay" v-if="$user.isAdmin">Изображение можно будет изменить после создания</div>
         </div>
 
         <textarea class="textarea scrollable" :readonly="!$user.isAdmin" v-model="achievement.description" placeholder="Описание"></textarea>
       </div>
 
       <div class="row-levels">
-        <div class="levels-container">
+        <div class="levels-container" v-if="$user.isAdmin">
           <div class="info">Количество уровней</div>
           <Range no-value :min="1" :max="5" :step="1" v-model="achievement.levels" class="range" @change="onChange"></Range>
         </div>
         <div class="avatar-examples scrollable">
           <div class="info">Изображения по уровням</div>
           <div class="images-container">
-            <div class="image-div" v-if="achievement.levels" v-for="i in Number(achievement.levels)">
-              <AchievementAvatar :alt="`image-${i}`" :image-id="achievement.imageid"></AchievementAvatar>
-            </div>
+            <Achievement v-if="achievement.levels" v-for="i in Number(achievement.levels)" :image-id="achievement.imageid" :level="i" :max-levels="Number(achievement.levels)"></Achievement>
           </div>
         </div>
       </div>
@@ -246,6 +178,7 @@ import CircleLoading from "../components/loaders/CircleLoading.vue";
 import FloatingInput from "../components/FloatingInput.vue";
 import FloatingButton from "../components/FloatingButton.vue";
 import AchievementAvatar from "../components/AchievementAvatar.vue";
+import Achievement from "../components/Achievement.vue";
 import Range from "../components/Range.vue";
 import DragNDropLoader from "../components/DragNDropLoader.vue";
 import {IMAGE_MAX_RES, IMAGE_ACHIEVEMENT_MAX_RES} from "../constants";
@@ -254,6 +187,7 @@ import ImageUploader from "../utils/imageUploader";
 
 export default {
   components: {
+    Achievement,
     DragNDropLoader,
     Range, AchievementAvatar, FloatingButton, CircleLoading, Form, FloatingInput},
 
@@ -341,6 +275,7 @@ export default {
         return;
 
       this.loading = true;
+      await this.deleteAvatar();
       const res = await this.$api.deleteAchievement(this.achievementId);
       this.loading = false;
 

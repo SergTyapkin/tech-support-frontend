@@ -140,18 +140,8 @@
       .avatar
         border-color empColor2_2
     .add-button
-      margin 0 auto
+      button-dashed()
       padding 3px 15px 3px 10px
-      border 2px dashed borderColor
-      display flex
-      align-items center
-      border-radius 100px
-      width min-content
-      backdrop-filter blur(10px)
-      cursor pointer
-      transition all 0.2s ease
-      &:hover
-        background blocksBgColorHover
       img
         margin-right 5px
         width 30px
@@ -250,8 +240,8 @@
           <router-link v-for="user in searchUsers" :to="{name: 'userProfile', params: {userId: user.id}}" class="user">
             <UserAvatar :image-id="user.avatarimageid" class="avatar"></UserAvatar>
             <div class="text">
-              <div class="name">{{ user.name }}</div>
-              <div class="title">{{ user.title }}</div>
+              <div class="name">{{ user.name.slice(0, 30) + (user.name.length > 30 ? '...' : '') }}</div>
+              <div class="title">{{ user.title?.slice(0, 30) + (user.title?.length > 30 ? '...' : '') }}</div>
             </div>
           </router-link>
         </ul>
@@ -267,7 +257,7 @@
             <AchievementAvatar :image-id="achievement.imageid" class="avatar"></AchievementAvatar>
             <div class="text">
               <div class="name">{{ achievement.name.slice(0, 30) + (achievement.name.length > 30 ? '...' : '') }}</div>
-              <div class="title">{{ achievement.description.slice(0, 30) + (achievement.description.length > 30 ? '...' : '') }}</div>
+              <div class="title">{{ achievement.description?.slice(0, 30) + (achievement.description?.length > 30 ? '...' : '') }}</div>
             </div>
           </router-link>
           <router-link class="add-button" :to="{name: 'createAchievement'}">

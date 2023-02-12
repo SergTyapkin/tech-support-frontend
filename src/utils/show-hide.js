@@ -1,6 +1,6 @@
 const hidingTimeouts = [];
-export function show(element, _classname = 'show') {
-    element.classList.remove('hide', 'hidden');
+export function show(element, _classname = '__show') {
+    element.classList.remove('__hide', '__hidden');
     element.classList.add(_classname);
     hidingTimeouts.forEach((timeout, idx) => {
         if (timeout.element === element) {
@@ -10,19 +10,19 @@ export function show(element, _classname = 'show') {
     });
 }
 export function showfast(element) {
-    show(element, 'showed');
+    show(element, '__showed');
 }
 
-export function hide(element, _classname = 'hide') {
-    element.classList.remove('show', 'showed');
+export function __hide(element, _classname = '__hide') {
+    element.classList.remove('__show', '__showed');
     element.classList.add(_classname);
     hidingTimeouts.push({
         element: element,
-        timeout: setTimeout(() => { element.classList.add('hidden'); }, 300)
+        timeout: setTimeout(() => { element.classList.add('__hidden'); }, 300)
     });
 }
-export function hidefast(element) {
-    hide(element, 'hidden');
+export function __hidefast(element) {
+    __hide(element, '__hidden');
 }
 
 
@@ -60,7 +60,7 @@ export function fastRoll(element) {
 
 export async function closeRollList(element) {
     const fromHeight = element.style.height;
-    element.classList.add("no-animations");
+    element.classList.add("__no-animations");
     element.style.removeProperty("height");
 
     setTimeout(() => {
@@ -68,7 +68,7 @@ export async function closeRollList(element) {
         element.style.height = fromHeight;
 
         setTimeout(() => {
-            element.classList.remove("no-animations");
+            element.classList.remove("__no-animations");
             element.style.height = toHeight;
         }, 20);
     }, 1);

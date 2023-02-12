@@ -49,7 +49,7 @@ thumb-size = 3px
     flex-direction column
     input-margin = 10px
     input-margin-bottom = 0
-    max-width slider-length + input-margin * 2
+    width slider-length + input-margin * 2
     .slider
       all unset
       margin input-margin

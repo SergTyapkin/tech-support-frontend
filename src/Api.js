@@ -68,7 +68,7 @@ export class Api extends ApiRequest {
     deleteAchievement = (id) => this.delete(`/achievements`, {id});
 
     getUserAchievements = (userId) => this.get(`/achievements/user`, {userId});
-    createUserAchievement = (userId, achievementId, level) => this.post(`/achievements/user`, {userId, achievementId, level});
+    addUserAchievement = (userId, achievementId, level) => this.post(`/achievements/user`, {userId, achievementId, level});
     editUserAchievement = (id, userId, achievementId, level) => this.put(`/achievements/user`, {id, userId, achievementId, level});
     deleteUserAchievement = (id) => this.delete(`/achievements/user`, {id});
 

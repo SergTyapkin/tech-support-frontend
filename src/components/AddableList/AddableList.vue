@@ -20,22 +20,7 @@
   justify-content center
   padding 20px
   .add-button
-    margin 0 auto
-    padding 2px 20px
-    border 2px dashed borderColor
-    display flex
-    align-items center
-    border-radius 100px
-    width min-content
-    backdrop-filter blur(10px)
-    cursor pointer
-    transition all 0.2s ease
-    &:hover
-      background blocksBgColorHover
-    img
-      margin-right 10px
-      width 40px
-      height 40px
+    button-dashed()
   .save-button
     position absolute
     right 20px

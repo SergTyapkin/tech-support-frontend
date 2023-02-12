@@ -51,6 +51,98 @@ hr
       height 30px
       line-height 30px
 
+  .achievements
+    block()
+    padding 20px
+    display flex
+    flex-wrap wrap
+    justify-content space-evenly
+    gap 30px
+    .achievement-container
+      position relative
+      .delete-achievement
+        position absolute
+        left 50%
+        top 0
+        opacity 0
+        pointer-events none
+        transform translateX(-50%)
+        transition all 0.2s ease
+        z-index 999
+        padding-bottom 10px
+        img
+          width 40px
+          height 40px
+      .delete-achievement:hover
+      .achievement:hover + .delete-achievement
+        top -50px
+        opacity 1
+        pointer-events auto
+      .delete-achievement:hover
+          transform translateX(-50%) scale(1.1)
+    .info
+      font-small()
+      color textColor5
+
+  .add-achievement
+  .select-achievement
+  .select-achievement-level
+    max-height 400px
+    transition all 0.5s ease
+    overflow hidden
+    &.hidden
+      max-height 0
+      transition all 0.5s cubic-bezier(0, 1, 0, 1)
+      opacity 0
+      pointer-events none
+
+  .add-achievement
+    button-dashed()
+    margin-top 5px
+  .select-achievement
+    block-dark-bg()
+    padding 0
+    .achievement
+      padding 10px 10px
+      display flex
+      font-medium()
+      transition all 0.2s ease
+      cursor pointer
+      &:hover
+        background blocksBgColorHover
+      .avatar
+        border-radius 50%
+        width 60px
+        height 60px
+        margin-right 5px
+        border 1px solid empColor2_2
+      .text
+        padding 10px
+        .name
+          font-middle()
+          color textColor1
+          line-height 0.8
+          white-space nowrap
+        .description
+          font-small-extra()
+          color textColor3
+  .select-achievement-level
+    display flex
+    align-items center
+    flex-direction column
+    .avatar
+      margin-top 10px
+      margin-bottom 10px
+    .range
+      margin-bottom 20px
+    .button-select-achievement
+      button-submit()
+      width min-content
+      img
+        width 20px
+        height 20px
+        margin-right 10px
+
   .confirm-email-input
     margin-bottom 20px
     color empColor2_1
@@ -199,9 +291,37 @@ hr
             ></ArrowListElement>
           </div>
 
+          <!-- ACHIEVEMENTS -->
           <div class="achievements">
-            <div></div>
+            <div v-if="achievements.length === 0" class="info">Достижений пока что нет</div>
+            <router-link v-else
+                         v-for="achievement in achievements"
+                         :to="{name: 'achievement', params: {achievementId: achievement.achievementid}}"
+                         class="achievement-container">
+              <Achievement class="achievement"
+                           :level="achievement.level"
+                           :max-levels="achievement.levels"
+                           :image-id="achievement.imageid"
+              ></Achievement>
+              <div v-if="$user.isAdmin" class="delete-achievement" @click.stop.prevent="deleteAchievement(achievement.id)"><img src="../../res/trash.svg" alt="delete"></div>
+            </router-link>
           </div>
+          <div class="add-achievement" @click="getAllAchievements(); inSelectingAchievement = true" :class="{hidden: !$user.isAdmin || inSelectingAchievement || selectedAchievement}"><img src="../../res/plus.svg" alt="add achievement">Добавить достижение</div>
+          <div class="select-achievement" :class="{hidden: !inSelectingAchievement}">
+            <div v-for="achievement in allAchievements" @click="inSelectingAchievement = false; selectedAchievement = achievement; selectedAchievement.level = 1" class="achievement">
+              <AchievementAvatar :image-id="achievement.imageid" class="avatar"></AchievementAvatar>
+              <div class="text">
+                <div class="name">{{ achievement.name.slice(0, 30) + (achievement.name.length > 30 ? '...' : '') }}</div>
+                <div class="description">{{ achievement.description?.slice(0, 60) + (achievement.description?.length > 60 ? '...' : '') }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="select-achievement-level" :class="{hidden: !selectedAchievement}">
+            <Achievement :max-levels="selectedAchievement?.levels" :level="selectedAchievement?.level" :image-id="selectedAchievement?.imageid" class="avatar"></Achievement>
+            <Range v-if="selectedAchievement" class="range" :min="1" :max="selectedAchievement.levels" :step="1" no-value v-model="selectedAchievement.level"></Range>
+            <div class="button-select-achievement" @click="addAchievement()"><img src="../../res/save.svg" alt="save">Добавить</div>
+          </div>
+          <!-- ACHIEVEMENTS (END) -->
 
           <div v-if="yours">
             <FormExtended ref="form" no-bg
@@ -253,9 +373,16 @@ import DragNDropLoader from "../../components/DragNDropLoader.vue";
 import ArrowListElement from "../../components/ArrowListElement.vue";
 import TopBar from "../../components/TopBar.vue";
 import UserAvatar from "../../components/UserAvatar.vue";
+import Achievement from "../../components/Achievement.vue";
+import AchievementAvatar from "../../components/AchievementAvatar.vue";
+import Range from "../../components/Range.vue";
 
 export default {
-  components: {UserAvatar, TopBar, ArrowListElement, DragNDropLoader, CircleLoading, FloatingInput, FormExtended, Form},
+  components: {
+    Range,
+    AchievementAvatar,
+    Achievement,
+    UserAvatar, TopBar, ArrowListElement, DragNDropLoader, CircleLoading, FloatingInput, FormExtended, Form},
 
   data() {
     return {
@@ -269,13 +396,19 @@ export default {
 
       user: {},
       completedEvents: [],
+      achievements: [],
+      allAchievements: [],
       loading: false,
       loadingConfirmEmail: false,
+      allAchievementsLoading: false,
 
       buttons: [],
 
       base_url_path: this.$base_url_path,
       api_url: this.$api.apiUrl,
+
+      inSelectingAchievement: false,
+      selectedAchievement: undefined,
     }
   },
 
@@ -288,18 +421,12 @@ export default {
       if (this.yours) {
         this.$refs.form.values = this.$user;
         this.user = this.$user;
-
-        this.buttons = [
-          {name: 'В игру', to: this.base_url_path + '/play'},
-          {name: 'Мои квесты', to: this.base_url_path + '/quests/my'},
-          {name: 'Рейтинги', to: this.base_url_path + '/ratings'},
-        ];
-        this.addTitlesToArrowListings();
-        return;
+      } else {
+        await this.getAnotherUser();
       }
 
-      await this.getAnotherUser();
       this.addTitlesToArrowListings();
+      this.getAchievements();
     },
 
     addTitlesToArrowListings() {
@@ -426,6 +553,28 @@ export default {
       };
     },
 
+    async getAchievements() {
+      this.loading = true;
+      const achievements = await this.$api.getUserAchievements(this.user.id);
+      this.loading = false;
+
+      if (!achievements.ok_) {
+        this.$popups.error("Ошибка", "Не удалось получить список достижений");
+        return;
+      }
+      this.achievements = achievements.achievements;
+    },
+    async getAllAchievements() {
+      this.allAchievementsLoading = true;
+      const achievements = await this.$api.getAchievements();
+      this.allAchievementsLoading = false;
+
+      if (!achievements.ok_) {
+        this.$popups.error("Ошибка", "Не удалось получить список всех достижений");
+        return;
+      }
+      this.allAchievements = achievements.achievements;
+    },
 
     async updateAvatar(dataURL) {
       // this.loading = true;
@@ -503,6 +652,38 @@ export default {
         return;
       }
       this.$popups.success('Сохранено', 'Титул есть - можно поесть');
+    },
+
+    async addAchievement() {
+      this.loading = true;
+      const response = await this.$api.addUserAchievement(this.user.id, this.selectedAchievement.id, this.selectedAchievement.level);
+      this.loading = false;
+
+      if (!response.ok_) {
+        this.$popups.error('Ошибка', 'Не удалось добавить достижение');
+        return;
+      }
+
+      this.achievements.push(this.selectedAchievement);
+      this.selectedAchievement = undefined;
+      this.$popups.success('Сохранено', 'АААААЧИВКА!');
+    },
+
+    async deleteAchievement(id) {
+      if (!await this.$modal.confirm("Удаление достижения", "Вы уверены, что хотитие удалить это достижение?"))
+        return;
+
+      this.loading = true;
+      const response = await this.$api.deleteUserAchievement(id);
+      this.loading = false;
+
+      if (!response.ok_) {
+        this.$popups.error('Ошибка', 'Не удалось удалить достижение');
+        return;
+      }
+
+      this.achievements.splice(this.achievements.findIndex((a) => a.id === id), 1);
+      this.$popups.success('Достижение удалено', 'Вы убили деда');
     }
   },
 
