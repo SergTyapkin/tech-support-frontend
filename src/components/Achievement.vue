@@ -13,6 +13,8 @@
     outline-offset 2px
     width 60px
     height 60px
+    min-width 60px
+    min-height 60px
   &::before
     content ""
     position absolute
