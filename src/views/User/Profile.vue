@@ -100,6 +100,7 @@ hr
     button-dashed()
     margin-top 5px
   .select-achievement
+    overflow-y scroll
     block-dark-bg()
     padding 0
     .achievement
@@ -307,7 +308,7 @@ hr
             </router-link>
           </div>
           <div class="add-achievement" @click="getAllAchievements(); inSelectingAchievement = true" :class="{hidden: !$user.isAdmin || inSelectingAchievement || selectedAchievement}"><img src="../../res/plus.svg" alt="add achievement">Добавить достижение</div>
-          <div class="select-achievement" :class="{hidden: !inSelectingAchievement}">
+          <div class="select-achievement scrollable" :class="{hidden: !inSelectingAchievement}">
             <div v-for="achievement in allAchievements" @click="inSelectingAchievement = false; selectedAchievement = achievement; selectedAchievement.level = 1" class="achievement">
               <AchievementAvatar :image-id="achievement.imageid" class="avatar"></AchievementAvatar>
               <div class="text">
