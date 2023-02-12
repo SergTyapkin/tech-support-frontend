@@ -137,7 +137,7 @@ thumb-size = 3px
         <div class="splitter" v-for="i in ((max-min) / step + 1)" :style="{'--num': i - 1, '--count': (max-min) / step}"></div>
       </div>
     </div>
-    <div class="delete-container">
+    <div class="delete-container" v-if="withDelete">
       <div class="delete-button" @click="setModelValue(null)">
         <img src="../res/cross.svg" alt="clear">
       </div>

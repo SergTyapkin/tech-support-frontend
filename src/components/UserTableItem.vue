@@ -99,7 +99,7 @@ user-padding-left-mobile = 5px
       <div class="userName">{{userName?.slice(0, 30) + (userName?.length > 30 ? '...' : '')}}</div>
       <div class="userTitle">{{userTitle?.slice(0, 50) + (userTitle?.length > 50 ? '...' : '')}}</div>
       <div class="range-input-container" :class="{'in-row': !$user.isAdmin}">
-        <Range class="range" :min="0.25" :max="2" :step="0.25" v-model="score" @change="saveRating" :readonly="!$user.isAdmin"></Range>
+        <Range class="range" :min="0.25" :max="2" :step="0.25" v-model="score" @change="saveRating" :readonly="!$user.isAdmin" with-delete></Range>
         <input class="comm" ref="comment" placeholder="Комментарий" v-model="comment" @change="saveComment" @keydown.enter="$refs.comment.blur()" :readonly="!$user.isAdmin">
       </div>
     </div>
