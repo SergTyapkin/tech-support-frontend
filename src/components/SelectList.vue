@@ -12,6 +12,10 @@ error-color = colorNo
 height = 50px
 item-height = 40px
 max-list-height = 200px
+bg-color = bgColorLight
+bg-color-hover = mix(bg-color, white, 90%)
+bg-color-selected = mix(bg-color, white, 85%)
+bg-color-selected-hover = mix(bg-color, white, 80%)
 
 field()
   font-medium()
@@ -19,16 +23,19 @@ field()
   align-items center
   padding 0 20px
   cursor pointer
-  transition all 0.2s e ase
+  transition background-color 0.1s ease
 
 
 .select-root
+  z-index 1
   position relative
   height height
   padding 0
   margin 0
   user-select none
   min-width 150px
+  transform translateY(var(--overflow-y-length))
+  transition transform 0.2s ease
 
   .title
     position absolute
@@ -67,22 +74,18 @@ field()
     border-radius 5px
     color textColor1
     &:hover
-      backdrop-filter brightness(3)
+      background bg-color-selected-hover
     img
       width 30px
       transform rotate(90deg)
       transition transform 0.3s ease
-  &.solid
-    .selected-item:hover
-      backdrop-filter unset
-      background mix(blocksBgColor, white, 90%)
 
   &.unrolled
     .title
       top -16px
     .selected-item
       border-color empColor1_1
-      background mix(blocksBgColor, white, 90%)
+      background bg-color-selected
       border-radius 5px 5px 0 0
     img
       transform rotate(-90deg)
@@ -92,16 +95,11 @@ field()
       max-height 0
       opacity 0
 
-  &.solid
-    .list
-      background bgColorLight
-
   .list
     position absolute
     top height
     width 100%
     z-index 9999
-    backdrop-filter blur(10px)
     max-height max-list-height
     overflow-y auto
 
@@ -118,21 +116,24 @@ field()
       color textColor3
       height item-height
       white-space nowrap
+      background bg-color
       &.selected
         color textColor1
-        background mix(blocksBgColor, white, 92%)
         letter-spacing 1px
+        background bg-color-selected
       &:hover
-        background mix(blocksBgColor, white, 90%)
         color textColor1
+        background bg-color-hover
+      &.selected:hover
+        background bg-color-selected-hover
       &:not(:first-child)
         border-top 1px solid borderColor
 </style>
 
 <template>
-  <div class="select-root" :class="{unrolled, solid}" :readonly="readonly">
+  <div class="select-root" ref="root" :class="{unrolled}" :readonly="readonly" :style="{'--overflow-y-length': overflowYLength + 'px'}">
     <span class="error-text">{{ error }}</span>
-    <div class="selected-item" @click="unrolled = !unrolled">
+    <div class="selected-item" @click="toggleOpen">
       {{ list[selectedIdx]?.name }}
       <img src="../res/arrow_corner_right.svg" alt="arrow">
     </div>
@@ -145,6 +146,11 @@ field()
 
 <script>
 import FloatingInput from "./FloatingInput.vue";
+import {HEADER_HEIGHT, MOBILE_HEADER_HEIGHT} from "../constants";
+
+const INITIAL_HEIGHT = 50;
+const ITEM_HEIGHT = 40;
+const BOTTOM_MARGIN = 10;
 
 export default {
   components: {FloatingInput},
@@ -161,7 +167,6 @@ export default {
       type: Number,
       default: undefined,
     },
-    solid: Boolean,
     disabled: Boolean,
     readonly: Boolean,
     opened: Boolean,
@@ -183,6 +188,7 @@ export default {
 
       selectedIdx: undefined,
       unrolled: this.$props.opened,
+      overflowYLength: 0,
     }
   },
 
@@ -208,10 +214,24 @@ export default {
       this.selectedIdx = idx;
 
       this.$emit('update:modelValue', this.list[idx]);
-      this.unrolled = false;
+      this.toggleOpen();
 
       if (!disableEmitting)
         this.$emit('input', idx, this.list[idx]);
+    },
+
+    toggleOpen() {
+      if (!this.unrolled) { // opening list
+        const bottomY = this.$refs.root.offsetTop + ITEM_HEIGHT * this.list.length + INITIAL_HEIGHT;
+        const maxHeight = /*HEADER_HEIGHT()*/ + document.querySelector('.main').scrollHeight;
+        console.log(this.$refs.root.offsetTop, bottomY, maxHeight);
+        this.overflowYLength = Math.min(maxHeight - bottomY - MOBILE_HEADER_HEIGHT() - BOTTOM_MARGIN, 0);
+        console.log(this.overflowYLength)
+      } else { // closeList
+        this.overflowYLength = 0;
+      }
+
+      this.unrolled = !this.unrolled
     }
   },
 
