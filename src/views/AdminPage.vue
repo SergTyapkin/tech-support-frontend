@@ -22,6 +22,8 @@
   gap 20px
   width 100%
   padding 20px
+  @media ({mobile})
+    padding-bottom (header-height-mobile + 20px)
   .column
     display flex
     flex-direction column
@@ -141,6 +143,7 @@
         border-color empColor2_2
     .add-button
       button-dashed()
+      margin-bottom 10px
       img
         margin-right 5px
         width 30px

@@ -3,9 +3,10 @@
 @require '../styles/fonts.styl'
 
 bg = blocksBgColor
+bg-mobile = mix(bgColorLight, transparent, 80%)
 margin-bottom = 0
 height = (header-height - margin-bottom)
-height-mobile = (header-height - 10px)
+height-mobile = header-height-mobile
 
 .root
   z-index 1000
@@ -21,6 +22,7 @@ height-mobile = (header-height - 10px)
   height height
   @media ({mobile})
     height height-mobile
+    background bg-mobile
   > *
     width 100%
     padding 20px
@@ -42,6 +44,9 @@ height-mobile = (header-height - 10px)
 
     opacity 0.8
     border-bottom transparent 2px solid
+    @media ({mobile})
+      border-bottom none
+      border-top transparent 2px solid
     border-right mix(borderColor, transparent) 1px solid
   > *:hover
   > *.active
@@ -51,6 +56,9 @@ height-mobile = (header-height - 10px)
     transition all 0.3s ease
     opacity 1
     border-bottom empColor1_1 2px solid
+    @media ({mobile})
+      border-bottom none
+      border-top empColor1_1 2px solid
   > *:hover
     background blocksBgColor
 

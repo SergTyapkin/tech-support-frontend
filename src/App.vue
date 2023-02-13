@@ -101,10 +101,13 @@ animation-time-rule = cubic-bezier(0.29, 0.82, 0.36, 0.99)
 .wrapper
   width 100%
   min-height 'calc(100vh - %s)' % header-height
-
+  overflow-y hidden
   > *
     position absolute
     width 100%
+    @media ({mobile})
+      padding-bottom header-height-mobile
+      overflow-y hidden
   > *[css-fullheight]
     min-height 'calc(100vh - %s)' % header-height
   > *[css-fullheight-only]
