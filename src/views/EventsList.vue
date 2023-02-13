@@ -53,6 +53,11 @@
     </Filters>
 
     <ul class="events-list">
+      <router-link :to="{name: 'createEvent'}" class="card create-event" v-if="$user.isAdmin">
+        <img src="../res/plus.svg" alt="plus">
+        <div class="text">Создать</div>
+      </router-link>
+
       <li v-if="loading" class="loading">
         <CircleLoading></CircleLoading>
       </li>
@@ -76,11 +81,6 @@
                    :author-id="event.authorid"
         ></EventCard>
       </li>
-
-      <router-link :to="{name: 'createEvent'}" class="card create-event" v-if="$user.isAdmin">
-        <img src="../res/plus.svg" alt="plus">
-        <div class="text">Создать</div>
-      </router-link>
     </ul>
   </div>
 </template>
