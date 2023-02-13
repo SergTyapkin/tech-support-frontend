@@ -169,7 +169,7 @@
       </div>
     </Form>
 
-    <FloatingButton v-if="isEdited" title="Сохранить" green @click="updateAchievementData">
+    <FloatingButton v-if="isEdited && achievementId !== undefined" title="Сохранить" green @click="updateAchievementData">
       <img src="../res/save.svg" alt="save">
     </FloatingButton>
   </div>
