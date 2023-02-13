@@ -33,6 +33,7 @@
           &:hover
             transition all 0.2s ease
             filter brightness(2)
+
       .right-description
         flex 1
         padding-left 30px

@@ -78,7 +78,7 @@
       </li>
     </ul>
 
-    <router-link :to="{name: 'createEvent'}"><FloatingButton title="Создать"><img src="../res/plus.svg" alt="plus"></FloatingButton></router-link>
+    <router-link :to="{name: 'createEvent'}"><FloatingButton title="Создать"><img src="../res/plus_bold.svg" alt="plus"></FloatingButton></router-link>
   </div>
 </template>
 

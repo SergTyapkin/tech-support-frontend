@@ -30,13 +30,15 @@
         font-small()
         color textColor4
       .timeNewEvent
-        margin-top 10px
+        margin-top 20px
         display flex
         justify-content space-between
         > *
           flex 0.3
 
     .right-column
+      .right-input
+        margin-bottom 20px
       .submit-input
         all unset
         margin-top 40px
@@ -58,6 +60,7 @@
           <FloatingInput v-model="timeEventEnd" type="time" title="Конец в" class="inputDT"></FloatingInput>
         </div>
       </div>
+
       <div class="right-column">
         <FloatingInput v-model="timeStart" title="Приходить с" type="time" class="right-input"></FloatingInput>
         <FloatingInput v-model="timeEnd" title="Оставаться до" type="time" class="right-input"></FloatingInput>
