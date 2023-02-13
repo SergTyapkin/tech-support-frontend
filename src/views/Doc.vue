@@ -83,7 +83,7 @@
     <MarkdownRenderer class="renderer" ref="renderer"></MarkdownRenderer>
 
     <FloatingInput v-model="authorname" title="Автор мероприятия" readonly no-info class="input"></FloatingInput>
-    <a :href="`https://t.me/${authortelegram}`" target="_blank" class="user-link">
+    <a v-if="authortelegram" :href="`https://t.me/${authortelegram}`" target="_blank" class="user-link">
       <FloatingInput :model-value="`@${authortelegram}`" title="Связь с автором" readonly no-info class="input"></FloatingInput>
     </a>
 

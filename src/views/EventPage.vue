@@ -111,7 +111,7 @@
           </div>
 
           <FloatingInput v-model="event.authorname" title="Автор мероприятия" readonly no-info class="input"></FloatingInput>
-          <a :href="`https://t.me/${event.authortelegram}`" target="_blank" class="user-link">
+          <a v-if="event.authortelegram" :href="`https://t.me/${event.authortelegram}`" target="_blank" class="user-link">
             <FloatingInput :model-value="`@${event.authortelegram}`" title="Связь с автором" readonly no-info class="input"></FloatingInput>
           </a>
         </div>

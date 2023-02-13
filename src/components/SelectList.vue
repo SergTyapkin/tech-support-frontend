@@ -150,6 +150,7 @@ import {HEADER_HEIGHT, MOBILE_HEADER_HEIGHT} from "../constants";
 
 const INITIAL_HEIGHT = 50;
 const ITEM_HEIGHT = 40;
+const MAX_LIST_HEIGHT = 200;
 const BOTTOM_MARGIN = 10;
 
 export default {
@@ -229,7 +230,7 @@ export default {
     },
 
     setOpen() {
-      const bottomY = this.$refs.root.offsetTop + ITEM_HEIGHT * this.list.length + INITIAL_HEIGHT;
+      const bottomY = this.$refs.root.offsetTop + Math.min(ITEM_HEIGHT * this.list.length + INITIAL_HEIGHT, MAX_LIST_HEIGHT);
       const maxHeight = /*HEADER_HEIGHT()*/ + document.querySelector('.main').scrollHeight;
       this.overflowYLength = Math.min(maxHeight - bottomY - MOBILE_HEADER_HEIGHT() - BOTTOM_MARGIN, 0);
       this.unrolled = true;
