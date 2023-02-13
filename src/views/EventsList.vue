@@ -53,11 +53,6 @@
     </Filters>
 
     <ul class="events-list">
-      <router-link :to="{name: 'createEvent'}" class="card create-event" v-if="$user.isAdmin">
-        <img src="../res/plus.svg" alt="plus">
-        <div class="text">Создать</div>
-      </router-link>
-
       <li v-if="loading" class="loading">
         <CircleLoading></CircleLoading>
       </li>
@@ -82,6 +77,8 @@
         ></EventCard>
       </li>
     </ul>
+
+    <router-link :to="{name: 'createEvent'}"><FloatingButton title="Создать"><img src="../res/plus.svg" alt="plus"></FloatingButton></router-link>
   </div>
 </template>
 
@@ -97,10 +94,11 @@ import CircleLoading from "../components/loaders/CircleLoading.vue";
 import {BASE_URL_PATH} from "../constants";
 import {nextTick} from "vue";
 import {cleanupMarkdownPreview, dateToStr, timeToStr} from "../utils/utils";
+import FloatingButton from "../components/FloatingButton.vue";
 
 
 export default {
-  components: {CircleLoading, SelectList, FloatingInput, Filters, EventCard, FormExtended, Form},
+  components: {FloatingButton, CircleLoading, SelectList, FloatingInput, Filters, EventCard, FormExtended, Form},
 
   data() {
     return {

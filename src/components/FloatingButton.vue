@@ -20,7 +20,7 @@ padding = 5px
   border-radius((float-button-height / 2))
   padding padding
   padding-right ((float-button-height - image-width) / 2)
-  background empColor1_1
+  background empColor2_2
   box-shadow 3px 3px 5px colorShadow
 
   .fields
