@@ -12,7 +12,7 @@ hr
   margin-top 30px
   margin-bottom 100px
   padding 10px 30px 30px 30px
-  border-radius(150px 150px 10px 10px / 100px 100px 10px 10px)
+  border-radius(unquote("150px 150px 10px 10px / 100px 100px 10px 10px"))
 
   .info-container
     .top-container
@@ -325,11 +325,10 @@ hr
                     { title: 'ТВОЙ E-mail', jsonName: 'email', type: 'email', info: user.isConfirmedEmail ? `<span class='__text-success'>Email подтвержден</span>` : `<b class='__text-error'>E-MAIL НЕ ПОДТВЕРЖДЕН. ВОССТАНОВИТЬ ПАРОЛЬ НЕ УДАСТСЯ</b>`},
                   ]"
                   :no-submit="true"
+                  @input="onChange"
             ></FormExtended>
             <input v-if="!user.isConfirmedEmail && !loadingConfirmEmail" type="submit" value="Подтвердить E-mail" class="confirm-email-input" @click="confirmEmailSendMessage">
             <CircleLoading v-if="loadingConfirmEmail"></CircleLoading>
-
-            <input v-if="!$refs?.form?.loading" type="submit" value="Изменить данные" @click="changeData">
           </div>
         </div>
 
@@ -351,6 +350,8 @@ hr
         <button v-if="yours" class="button-logout" @click="logOut">Выйти</button>
       </Form>
     </div>
+
+    <FloatingButton v-if="isEdited" title="Сохранить" green @click="changeData"><img src="../../res/save.svg" alt="save"></FloatingButton>
   </div>
 </template>
 
@@ -372,9 +373,11 @@ import Achievement from "../../components/Achievement.vue";
 import AchievementAvatar from "../../components/AchievementAvatar.vue";
 import Range from "../../components/Range.vue";
 import {cleanupMarkdownPreview} from "../../utils/utils";
+import FloatingButton from "../../components/FloatingButton.vue";
 
 export default {
   components: {
+    FloatingButton,
     Range,
     AchievementAvatar,
     Achievement,
@@ -405,6 +408,8 @@ export default {
 
       inSelectingAchievement: false,
       selectedAchievement: undefined,
+
+      isEdited: false,
     }
   },
 
@@ -464,6 +469,8 @@ export default {
         await this.$store.dispatch('GET_USER');
         this.$popups.success('Данные обновлены');
         this.$refs.form.errors = {};
+        window.onbeforeunload = null;
+        this.isEdited = false;
         return;
       }
 
@@ -684,6 +691,10 @@ export default {
       this.$popups.success('Достижение удалено', 'Вы убили деда');
     },
 
+    onChange() {
+      window.onbeforeunload = () => true;
+      this.isEdited = true;
+    },
     cleanupMarkdownPreview: cleanupMarkdownPreview,
   },
 

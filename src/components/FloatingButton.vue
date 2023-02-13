@@ -12,6 +12,9 @@ padding = 5px
   position fixed
   bottom 30px
   right 30px
+  @media ({mobile})
+    right 20px
+    bottom (10px + header-height-mobile)
   height float-button-height
   min-width float-button-height
   border-radius((float-button-height / 2))

@@ -9,6 +9,7 @@
   display flex
   flex-direction column
   @media ({mobile})
+    padding-bottom (header-height-mobile + 20px)
     padding-left 10px
     padding-right 10px
   .title
@@ -82,9 +83,7 @@
       <div class="delete-button" @click="deleteDoc"><img src="../res/trash.svg" alt="">Удалить</div>
     </div>
 
-    <FloatingButton v-if="isEdited && this.docId !== undefined" title="Сохранить" green @click="updateDoc">
-      <img src="../res/save.svg" alt="save">
-    </FloatingButton>
+    <FloatingButton v-if="isEdited && this.docId !== undefined" title="Сохранить" green @click="updateDoc"><img src="../res/save.svg" alt="save"></FloatingButton>
   </div>
 </template>
 
