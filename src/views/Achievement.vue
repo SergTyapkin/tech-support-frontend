@@ -101,11 +101,11 @@
 
     .row-contacts
       .user-link
-      cursor pointer
-      pointer-events all
-      &:hover
-        transition all 0.2s ease
-        filter brightness(2)
+        cursor pointer
+        pointer-events all
+        &:hover
+          transition all 0.2s ease
+          filter brightness(2)
 
     .row-buttons
       .button-delete
