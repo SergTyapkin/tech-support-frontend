@@ -99,21 +99,30 @@
           gap 40px
           padding 5px
 
-    .button-delete
-      button-danger()
-      display flex
-      align-items center
-      justify-content center
-      width min-content
-      padding 10px 20px
-      img
-        width 30px
-    .button-create
-      button-submit()
-      margin-left 20px
-      img
-        width 26px
-        margin-right 10px
+    .row-contacts
+      .user-link
+      cursor pointer
+      pointer-events all
+      &:hover
+        transition all 0.2s ease
+        filter brightness(2)
+
+    .row-buttons
+      .button-delete
+        button-danger()
+        display flex
+        align-items center
+        justify-content center
+        width min-content
+        padding 10px 20px
+        img
+          width 30px
+      .button-create
+        button-submit()
+        margin-left 20px
+        img
+          width 26px
+          margin-right 10px
 </style>
 
 <template>
@@ -159,7 +168,9 @@
 
       <div v-if="achievementId !== undefined" class="row-contacts">
         <FloatingInput v-model="achievement.authorname" title="Автор достижения" readonly no-info class="input"></FloatingInput>
-        <FloatingInput v-model="achievement.authoremail" title="Связь с автором" readonly no-info class="input"></FloatingInput>
+        <a v-if="achievement.authortelegram" :href="`https://t.me/${achievement.authortelegram}`" target="_blank" class="user-link">
+          <FloatingInput :model-value="`@${achievement.authortelegram}`" title="Связь с автором" readonly no-info class="input"></FloatingInput>
+        </a>
       </div>
 
       <CircleLoading v-if="loading"></CircleLoading>
