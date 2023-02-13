@@ -147,6 +147,7 @@
       img
         margin-right 5px
         width 30px
+        min-width 30px
         height 30px
 
   .setupPositionsBoard

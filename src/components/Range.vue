@@ -113,6 +113,7 @@ thumb-size = 3px
     .delete-button
       img
         width 20px
+        min-width 20px
         height 20px
       cursor pointer
       transition all 0.2s ease

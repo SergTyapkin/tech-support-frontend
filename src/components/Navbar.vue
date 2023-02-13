@@ -50,6 +50,7 @@ side-item-gradient = "linear-gradient(%s, rgba(184, 134, 11, 0.3) 30%, rgba(218,
       padding 0 5px
     img
       width side-items-font-size
+      min-width side-items-font-size
       height side-items-font-size
   .side-item.left
     background side-item-gradient % 90deg

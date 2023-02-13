@@ -102,7 +102,6 @@ hr
   .add-achievement
     button-dashed()
     margin-top 5px
-    padding-right 60px
   .select-achievement
     overflow-y scroll
     block-dark-bg()

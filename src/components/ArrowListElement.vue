@@ -23,6 +23,7 @@ li
     align-items center
     img
       width 25px
+      min-width 25px
       display inline-block
       margin-right 10px
     .main-info

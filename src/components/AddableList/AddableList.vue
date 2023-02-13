@@ -30,6 +30,7 @@
     width min-content
     img
       width 30px
+      min-width 30px
       height 30px
 
 .addable-list-root
@@ -58,6 +59,7 @@
         opacity 1
       img
         width 30px
+        min-width 30px
         height 30px
         margin-right 10px
 </style>

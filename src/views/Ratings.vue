@@ -86,7 +86,7 @@
         min-width 25px
       .rating
         color textColor2
-        min-width 60px
+        min-width 50px
       .avatar
         border-radius 50%
         width 30px
