@@ -94,6 +94,7 @@
         align-items center
         img
           width 30px
+          min-width 30px
           height 30px
 
       .button-accept
@@ -102,10 +103,15 @@
         padding 6px 6px 6px 10px
         margin-right 10px
         @media ({mobile})
+          flex-direction column-reverse
           font-small-extra()
+          padding-top 0
+          padding-bottom 10px
       .button-delete
         button-danger()
         padding 6px
+        @media ({mobile})
+          padding 6px 0
 
   //.participationsBoard
   .achievementsBoard
