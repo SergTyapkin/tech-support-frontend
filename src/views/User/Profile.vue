@@ -322,6 +322,7 @@ hr
             <FormExtended ref="form" no-bg
                   :fields="[
                     { title: 'ТВОЁ ИМЯ', jsonName: 'name' },
+                    { title: 'ТВОЙ Telegram', jsonName: 'telegram', type: 'telegram', info: 'всё что после @'},
                     { title: 'ТВОЙ E-mail', jsonName: 'email', type: 'email', info: user.isConfirmedEmail ? `<span class='__text-success'>Email подтвержден</span>` : `<b class='__text-error'>E-MAIL НЕ ПОДТВЕРЖДЕН. ВОССТАНОВИТЬ ПАРОЛЬ НЕ УДАСТСЯ</b>`},
                   ]"
                   :no-submit="true"
@@ -439,7 +440,7 @@ export default {
       }));
     },
 
-    validate(name, email) {
+    validate(name, email, telegram) {
       let ok = true;
       if (name.length === 0) {
         this.$refs.form.errors.name = 'Имя не может быть пустым';
@@ -447,6 +448,10 @@ export default {
       }
       if (email.length === 0) {
         this.$refs.form.errors.email = 'Email не может быть пустым';
+        ok = false;
+      }
+      if (telegram.length === 0) {
+        this.$refs.form.errors.telegram = 'Telegram не может быть пустым';
         ok = false;
       }
       return ok;
@@ -458,11 +463,12 @@ export default {
 
       const name = this.$refs.form.values.name;
       const email = this.$refs.form.values.email;
-      if (!this.validate(name, email))
+      const telegram = this.$refs.form.values.telegram;
+      if (!this.validate(name, email, telegram))
         return;
 
       this.$refs.form.loading = true;
-      const response = await this.$api.updateUser(this.user.id, email, name);
+      const response = await this.$api.updateUser(this.user.id, email, name, telegram);
       this.$refs.form.loading = false;
 
       if (response.ok_) {

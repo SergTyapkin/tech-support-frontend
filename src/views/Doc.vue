@@ -61,6 +61,13 @@
       width min-content
       margin 0 auto
       padding 10px 20px
+
+  .user-link
+    cursor pointer
+    pointer-events all
+    &:hover
+      transition all 0.2s ease
+      filter brightness(2)
 </style>
 
 <template>
@@ -74,6 +81,11 @@
     <MarkdownRedactor v-if="$user.isAdmin" class="redactor" :class="{error: errorText.length}" @input="errorText = ''; onChange()" @change="$refs.renderer?.update" ref="text" v-model="text" placeholder="Текст"></MarkdownRedactor>
     <div class="info" v-if="$user.isAdmin">Превью</div>
     <MarkdownRenderer class="renderer" ref="renderer"></MarkdownRenderer>
+
+    <FloatingInput v-model="authorname" title="Автор мероприятия" readonly no-info class="input"></FloatingInput>
+    <a :href="`https://t.me/${authortelegram}`" target="_blank" class="user-link">
+      <FloatingInput :model-value="`@${authortelegram}`" title="Связь с автором" readonly no-info class="input"></FloatingInput>
+    </a>
 
     <CircleLoading v-if="loading"></CircleLoading>
     <div class="buttons-container" v-else-if="$user.isAdmin && this.docId === undefined">
@@ -111,6 +123,8 @@ export default {
       place: undefined,
       positionId: undefined,
       position: undefined,
+      authorname: undefined,
+      authortelegram: undefined,
       allPlaces: [],
       allPositions: [],
 
@@ -142,6 +156,8 @@ export default {
       this.text = response.text;
       this.placeId = response.placeid;
       this.positionId = response.positionid;
+      this.authorname = response.authorname;
+      this.authortelegram = response.authortelegram;
 
       this.$refs.renderer.update(this.text);
     }

@@ -70,8 +70,8 @@ error-color = colorNo
       display block
       width 100%
       padding 10px
-    .info
-      margin 5px 0
+  .info
+    margin 5px 0
 
 .floating-input-fields input:not([type=checkbox])[readonly]
   background transparent

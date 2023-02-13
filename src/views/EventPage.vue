@@ -27,6 +27,12 @@
           border-bottom 2px solid borderColorDark
           padding-right 0
           padding-bottom 10px
+        .user-link
+          cursor pointer
+          pointer-events all
+          &:hover
+            transition all 0.2s ease
+            filter brightness(2)
       .right-description
         flex 1
         padding-left 30px
@@ -104,7 +110,9 @@
           </div>
 
           <FloatingInput v-model="event.authorname" title="Автор мероприятия" readonly no-info class="input"></FloatingInput>
-          <FloatingInput v-model="event.authoremail" title="Связь с автором" readonly no-info class="input"></FloatingInput>
+          <a :href="`https://t.me/${event.authortelegram}`" target="_blank" class="user-link">
+            <FloatingInput :model-value="`@${event.authortelegram}`" title="Связь с автором" readonly no-info class="input"></FloatingInput>
+          </a>
         </div>
 
         <div class="right-description">

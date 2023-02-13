@@ -20,6 +20,7 @@ const Store = new Vuex.Store({
         state.commit('SET_USER', {
           avatarImageId: u.avatarimageid,
           email: u.email,
+          telegram: u.telegram,
           id: u.id,
           isAdmin: u.isadmin,
           isConfirmedEmail: u.isconfirmedemail,
