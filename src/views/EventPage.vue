@@ -122,7 +122,7 @@
           <div class="info" v-if="$user.isAdmin">Превью</div>
           <MarkdownRenderer class="renderer" ref="renderer"></MarkdownRenderer>
 
-          <UsersTable class="users-table" :users-lists="[{participations: event.participations}]" @change.stop="" @input.stop=""></UsersTable>
+          <UsersTable class="users-table" :users-lists="[{participations: event.participations}]" @change.stop="" @input.stop="" can-delete></UsersTable>
         </div>
       </div>
 

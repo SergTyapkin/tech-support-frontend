@@ -18,23 +18,50 @@ user-padding-left-mobile = 5px
   @media ({mobile})
     padding-left user-padding-left-mobile
   .user-icon-container
-    align-self flex-end
-    border-radius(50%)
-    outline 1px solid empColor1_1
-    outline-offset 2px
-    margin 2px
-    overflow hidden
-  .user-icon-container
   .user-icon
     width (avatar-size - 4px)
     height (avatar-size - 4px)
     min-width (avatar-size - 4px)
     min-height (avatar-size - 4px)
+    border-radius(50%)
     @media ({mobile})
       width (avatar-size-mobile - 4px)
       height (avatar-size-mobile - 4px)
       min-width (avatar-size-mobile - 4px)
       min-height (avatar-size-mobile - 4px)
+  .user-icon
+    overflow hidden
+
+  .user-icon-container
+    position relative
+    align-self flex-end
+    border-radius(50%)
+    outline 1px solid empColor1_1
+    outline-offset 2px
+    margin 2px
+    .delete-user
+      position absolute
+      left 50%
+      top 0
+      opacity 0
+      pointer-events none
+      transform translateX(-50%)
+      transition all 0.2s ease
+      z-index 999
+      padding-bottom 10px
+      img
+        width 40px
+        height 40px
+    .delete-user:hover
+    .user-icon:hover + .delete-user
+      top -50px
+      opacity 1
+      pointer-events auto
+      @media ({mobile})
+        top 10px
+        pointer-events none
+    .delete-user:hover
+      transform translateX(-50%) scale(1.1)
 
   .info.isAdmin
     .userName
@@ -54,6 +81,10 @@ user-padding-left-mobile = 5px
       font-medium()
       line-height 0.8em
       white-space nowrap
+      .position
+        font-small()
+        color textColor4
+        margin-left 5px
     .userTitle
       color textColor3
       font-small-extra()
@@ -109,11 +140,12 @@ user-padding-left-mobile = 5px
 
 <template>
   <div class="user">
-    <router-link :to="{name: profile, params: {userId: id}}" class="user-icon-container">
+    <router-link :to="{name: 'profile', params: {userId: userId}}" class="user-icon-container" @contextmenu.prevent="deleteParticipation">
       <UserAvatar :image-id="userImageId" class="user-icon"></UserAvatar>
+      <div v-if="$user.isAdmin && canDelete" class="delete-user" @click.stop.prevent="deleteParticipation"><img src="../res/trash.svg" alt="delete"></div>
     </router-link>
     <div class="info" :class="{isAdmin: $user.isAdmin}">
-      <div class="userName">{{ $cropText(userName, 30) }}</div>
+      <div class="userName">{{ $cropText(userName, 30) }} <span class="position">{{ positionName }}</span></div>
       <div class="userTitle">{{ $cropText(userTitle, 50) }}</div>
       <div class="range-input-container" :class="{'in-row': !$user.isAdmin}">
         <Range class="range" :min="0.25" :max="2" :step="0.25" v-model="score" @change="saveRating" :readonly="!$user.isAdmin" :with-delete="$user.isAdmin"></Range>
@@ -138,8 +170,12 @@ import {setTimedClass} from "../utils/utils";
 export default {
   components: {CircleLoading, Range, UserAvatar},
 
+  emits: ['delete'],
+
   props: {
     id: Number,
+    eventId: Number,
+    userId: Number,
     userName: String,
     userTitle: String,
     userImageId: Number,
@@ -147,6 +183,8 @@ export default {
     positionName: String,
     comment: String,
     score: Number,
+
+    canDelete: Boolean
   },
 
   data() {
@@ -174,7 +212,6 @@ export default {
       this.state = this.States.saved;
     },
     async saveComment() {
-      console.log("ASDASD")
       this.state = this.States.edited;
       const res = await this.$api.updateParticipationComment(this.id, this.comment);
 
@@ -187,6 +224,26 @@ export default {
 
       this.state = this.States.saved;
       setTimedClass([this.$refs.comment], 'success');
+    },
+
+    async deleteParticipation() {
+      if (!this.canDelete)
+        return;
+
+      if (!await this.$modal.confirm("Удаление участника", "Вы уверены, что хотитие отменить участие этого человека в событии?"))
+        return;
+
+      this.loading = true;
+      const response = await this.$api.notParticipateInEvent(this.eventId, this.userId);
+      this.loading = false;
+
+      if (!response.ok_) {
+        this.$popups.error('Ошибка', 'Не удалось удалить участника');
+        return;
+      }
+
+      this.$emit('delete', this.id);
+      this.$popups.success('Участие удалено', 'Ещё можно сжечь его на костре...');
     }
   }
 };
