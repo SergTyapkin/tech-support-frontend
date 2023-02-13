@@ -214,7 +214,7 @@ export default {
       this.selectedIdx = idx;
 
       this.$emit('update:modelValue', this.list[idx]);
-      this.toggleOpen();
+      this.setClose();
 
       if (!disableEmitting)
         this.$emit('input', idx, this.list[idx]);
@@ -222,17 +222,22 @@ export default {
 
     toggleOpen() {
       if (!this.unrolled) { // opening list
-        const bottomY = this.$refs.root.offsetTop + ITEM_HEIGHT * this.list.length + INITIAL_HEIGHT;
-        const maxHeight = /*HEADER_HEIGHT()*/ + document.querySelector('.main').scrollHeight;
-        console.log(this.$refs.root.offsetTop, bottomY, maxHeight);
-        this.overflowYLength = Math.min(maxHeight - bottomY - MOBILE_HEADER_HEIGHT() - BOTTOM_MARGIN, 0);
-        console.log(this.overflowYLength)
+        this.setOpen();
       } else { // closeList
-        this.overflowYLength = 0;
+        this.setClose();
       }
+    },
 
-      this.unrolled = !this.unrolled
-    }
+    setOpen() {
+      const bottomY = this.$refs.root.offsetTop + ITEM_HEIGHT * this.list.length + INITIAL_HEIGHT;
+      const maxHeight = /*HEADER_HEIGHT()*/ + document.querySelector('.main').scrollHeight;
+      this.overflowYLength = Math.min(maxHeight - bottomY - MOBILE_HEADER_HEIGHT() - BOTTOM_MARGIN, 0);
+      this.unrolled = true;
+    },
+    setClose() {
+      this.overflowYLength = 0;
+      this.unrolled = false;
+    },
   },
 
   watch: {
