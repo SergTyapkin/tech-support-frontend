@@ -1,6 +1,7 @@
 <style lang="stylus" scoped>
 @require '../styles/constants.styl'
 @require '../styles/forms.styl'
+@require '../styles/utils.styl'
 
 
 extra-small = 3px
@@ -47,7 +48,7 @@ markdown-button-svg-photo-fill = transparent
   overflow hidden
   box-shadow markdown-panel-shadow-offset markdown-panel-shadow-blur markdown-panel-shadow-color
   margin markdown-panel-margin
-  border-radius markdown-panel-border-radius
+  border-radius(markdown-panel-border-radius)
   font-family Arial
   font-size markdown-panel-font-size
   height markdown-panel-height

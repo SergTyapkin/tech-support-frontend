@@ -1,6 +1,7 @@
 <style lang="stylus" scoped>
 @require '../styles/constants.styl'
 @require '../styles/fonts.styl'
+@require '../styles/utils.styl'
 
 
 slider-width = 7px
@@ -31,7 +32,7 @@ thumb-size = 3px
       padding 1px 8px
       border 1px solid empColor2_2
       background empColor2_4
-      border-radius 3px
+      border-radius(3px)
       text-align center
       width 100%
       color empColor2_1
@@ -59,14 +60,14 @@ thumb-size = 3px
       width calc(100% - 10px)
       background linear-gradient(170deg, empColor1_2, empColor2_2)
       outline none
-      border-radius thumb-size
+      border-radius(thumb-size)
       overflow hidden
       cursor pointer
     .slider::-webkit-slider-thumb
       -webkit-appearance none
       width thumb-size
       height thumb-size
-      border-radius 50%
+      border-radius(50%)
       background empColor2_1
       cursor pointer
       border 4px solid #333

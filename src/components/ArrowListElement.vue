@@ -86,9 +86,6 @@ li.bg
 <template>
   <li class="" :class="{inside, bg, selected: !closed}">
     <div class="all-info" @click.prevent="onClick">
-      <img v-if="!ispublished" src="../res/invisible.svg" alt="unpublished">
-      <img v-if="islinkactive" src="../res/link.svg" alt="link active">
-
       <div class="main-info">
         <div class="title-container">
           <span class="number " v-if="number">{{ number }}</span>
@@ -109,7 +106,7 @@ li.bg
 
 <script>
 import Arrow from "./Arrow.vue";
-import {closeRoll, openRoll, openRollList} from "../utils/show-hide";
+import {closeRoll, openRoll} from "../utils/show-hide";
 import {nextTick} from "vue";
 
 export default {
@@ -154,14 +151,6 @@ export default {
       default: false
     },
 
-    islinkactive: {
-      type: Boolean,
-      default: false
-    },
-    ispublished: {
-      type: Boolean,
-      default: true
-    },
     openOnSetElements: {
       type: Boolean,
       default: false

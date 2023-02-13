@@ -105,11 +105,7 @@ height-mobile = header-height-mobile
 </template>
 
 <script>
-import Arrow from "./Arrow.vue";
-
 export default {
-  components: {Arrow},
-
   emits: ['click'],
 
   props: {

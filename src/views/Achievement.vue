@@ -29,7 +29,7 @@
         gap 10px
       .image-loader
         position relative
-        border-radius 50%
+        border-radius(50%)
         overflow hidden
         outline 2px solid empColor2_4
         width 128px

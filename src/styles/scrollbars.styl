@@ -1,4 +1,5 @@
 @require 'constants.styl'
+@require 'utils.styl'
 
 scroll-bg-color = bgColor2
 scroll-thumb-color = empColor1_3
@@ -21,10 +22,10 @@ scrollbar-border = 2px
     height scrollbar-width
   &::-webkit-scrollbar-track
     background scroll-bg-color
-    border-radius (scrollbar-width / 2)
+    border-radius((scrollbar-width / 2))
   &::-webkit-scrollbar-thumb
     background-color scroll-thumb-color
-    border-radius (scrollbar-width / 2)
+    border-radius((scrollbar-width / 2))
     border scrollbar-border solid scroll-bg-color
 
   &::-webkit-scrollbar-corner
@@ -46,10 +47,10 @@ scrollbar-border = 2px
       height scrollbar-width
     &::-webkit-scrollbar-track
       background scroll-bg-color
-      border-radius (scrollbar-width / 2)
+      border-radius((scrollbar-width / 2))
     &::-webkit-scrollbar-thumb
       background-color scroll-thumb-color
-      border-radius (scrollbar-width / 2)
+      border-radius((scrollbar-width / 2))
       border scrollbar-border solid scroll-bg-color
 
     &::-webkit-scrollbar-corner

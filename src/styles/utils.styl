@@ -10,7 +10,7 @@ centered()
 block()
     font-medium()
     background blocksBgColor
-    border-radius 7px
+    border-radius(7px)
     //backdrop-filter blur(10px) brightness(3)
     transition all 0.3s ease
     padding 30px
@@ -37,3 +37,8 @@ block-undercolor-container()
         left 20px
         background "repeating-linear-gradient(-45deg, %s 0px, %s 40px, transparent 40px, transparent 100px)" % (empColor1_1 empColor1_1)
         z-index -1
+
+border-radius(value)
+    border-radius value
+    -moz-border-radius value
+    -webkit-border-radius value

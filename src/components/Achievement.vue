@@ -1,6 +1,7 @@
 <style lang="stylus" scoped>
 @require '../styles/constants.styl'
 @require '../styles/fonts.styl'
+@require '../styles/utils.styl'
 
 .image-div
   position relative
@@ -8,7 +9,7 @@
   height 60px
   overflow visible
   .image
-    border-radius 50%
+    border-radius(50%)
     outline 2px solid empColor2_1
     outline-offset 2px
     width 60px

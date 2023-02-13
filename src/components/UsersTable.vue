@@ -12,13 +12,13 @@ user-padding-left = 20px
   min-height 200px
   height 100%
   background borderColorDark
-  border-radius 5px
+  border-radius(5px)
   overflow-y auto
   @media ({mobile})
     height 100%
 
   .eventUsersList
-    border-radius 5px
+    border-radius(5px)
 
     .eventName
       font-large()

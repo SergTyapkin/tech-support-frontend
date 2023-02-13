@@ -1,5 +1,6 @@
 <style lang="stylus">
 @require '../styles/constants.styl'
+@require '../styles/utils.styl'
 
 ._markdown_renderer
   display block
@@ -25,7 +26,7 @@ img-decoration-margin = 0
 code
   font-family monospace
   background code-decoration-background
-  border-radius code-decoration-border-radius
+  border-radius(code-decoration-border-radius)
 blockquote
   border-left blockquote-decoration-width blockquote-decoration-color solid
   margin blockquote-decoration-margin

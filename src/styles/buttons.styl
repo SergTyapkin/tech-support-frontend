@@ -1,12 +1,13 @@
 @require 'constants.styl'
 @require 'fonts.styl'
+@require 'utils.styl'
 
 button()
     color textColor2
     width 100%
     font-medium()
     padding 10px
-    border-radius 3px
+    border-radius(3px)
     border empColor2_2 solid 1px
     text-shadow none
     transition all 0.2s ease
@@ -37,7 +38,7 @@ button-submit()
     padding 10px 20px
     background blocksBgColor
     background #444444
-    border-radius 1000px
+    border-radius(1000px)
     border-color empColor1_3
     &:hover
         border-color empColor1_2
@@ -64,7 +65,7 @@ button-dashed()
     border 2px dashed borderColor
     display flex
     align-items center
-    border-radius 100px
+    border-radius(100px)
     width min-content
     backdrop-filter blur(10px)
     cursor pointer

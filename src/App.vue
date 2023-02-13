@@ -2,6 +2,7 @@
 @require './styles/constants.styl'
 @require './styles/fonts.styl'
 @require './styles/buttons.styl'
+@require './styles/utils.styl'
 
 backgroundBorderColor = borderColor
 animation-time-rule = cubic-bezier(0.29, 0.82, 0.36, 0.99)
@@ -18,7 +19,7 @@ animation-time-rule = cubic-bezier(0.29, 0.82, 0.36, 0.99)
     position absolute
     border solid 1px borderColor
     background black
-    border-radius 20px
+    border-radius(20px)
     animation bg-move-top animation-time-rule
     @keyframes bg-move-top
       0%

@@ -128,7 +128,7 @@
       &:hover
         background blocksBgColorHover
       .avatar
-        border-radius 50%
+        border-radius(50%)
         width 30px
         height 30px
         margin-right 5px

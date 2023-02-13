@@ -12,7 +12,7 @@ hr
   margin-top 30px
   margin-bottom 100px
   padding 10px 30px 30px 30px
-  border-radius 150px 150px 10px 10px / 100px 100px 10px 10px
+  border-radius(150px 150px 10px 10px / 100px 100px 10px 10px)
 
   .info-container
     .top-container
@@ -115,7 +115,7 @@ hr
       &:hover
         background blocksBgColorHover
       .avatar
-        border-radius 50%
+        border-radius(50%)
         min-width 60px
         min-height 60px
         width 60px
@@ -172,7 +172,7 @@ hr
   width 80px
   height 80px
   border mix(textColor2, transparent) 1px solid
-  border-radius 50%
+  border-radius(50%)
   position relative
   overflow hidden
 

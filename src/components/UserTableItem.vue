@@ -19,7 +19,7 @@ user-padding-left-mobile = 5px
     padding-left user-padding-left-mobile
   .user-icon-container
     align-self flex-end
-    border-radius 50%
+    border-radius(50%)
     outline 1px solid empColor1_1
     outline-offset 2px
     margin 2px

@@ -19,7 +19,7 @@
     &:hover
       transform scale(1.1)
     .avatar
-      border-radius 50%
+      border-radius(50%)
       outline-width 2px
       outline-style solid
       outline-offset 2px
@@ -88,7 +88,7 @@
         color textColor2
         min-width 50px
       .avatar
-        border-radius 50%
+        border-radius(50%)
         width 30px
         height 30px
         border 1px solid empColor1_2

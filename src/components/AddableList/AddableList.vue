@@ -26,7 +26,7 @@
     right 20px
     bottom 18px
     button-success()
-    border-radius 50%
+    border-radius(50%)
     width min-content
     img
       width 30px
@@ -50,7 +50,7 @@
       display flex
       align-items center
       border 1px dashed textColor3
-      border-radius 1000px
+      border-radius(1000px)
       padding 5px 10px
       opacity 0.7
       transition all 0.2s ease

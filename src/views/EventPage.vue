@@ -2,6 +2,7 @@
 @require '../styles/constants.styl'
 @require '../styles/buttons.styl'
 @require '../styles/fonts.styl'
+@require '../styles/utils.styl'
 
 
 .root
@@ -44,7 +45,7 @@
       .main-info
         padding-top 12px
 
-        border-radius 7px
+        border-radius(7px)
         background colorShadowLight-x
         border colorShadowLight 1px solid
         margin-bottom 20px

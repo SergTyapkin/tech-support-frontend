@@ -71,7 +71,7 @@ field()
     height height
     width 100%
     border 1px solid borderColor
-    border-radius 5px
+    border-radius(5px)
     color textColor1
     &:hover
       background bg-color-selected-hover
@@ -86,7 +86,7 @@ field()
     .selected-item
       border-color empColor1_1
       background bg-color-selected
-      border-radius 5px 5px 0 0
+      border-radius(5px 5px 0 0)
     img
       transform rotate(-90deg)
 
@@ -106,7 +106,7 @@ field()
     list-style none
     padding 0
     margin 0
-    border-radius 0 0 5px 5px
+    border-radius(0 0 5px 5px)
     border solid 1px empColor1_1
     border-top none
     transition all 0.2s ease

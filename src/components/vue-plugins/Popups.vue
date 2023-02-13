@@ -1,5 +1,6 @@
 <style lang="stylus">
   @require '../../styles/constants.styl'
+  @require '../../styles/utils.styl'
 
   indent = 15px
   innerPadding = 10px
@@ -28,7 +29,7 @@
       overflow hidden
       margin-bottom indent
       padding innerPadding
-      border-radius borderRadius
+      border-radius(borderRadius)
       color textColor1
       opacity 1
       .title
