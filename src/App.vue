@@ -2,6 +2,7 @@
 @require './styles/constants.styl'
 @require './styles/fonts.styl'
 @require './styles/buttons.styl'
+@require './styles/utils.styl'
 
 backgroundBorderColor = borderColor
 animation-time-rule = cubic-bezier(0.29, 0.82, 0.36, 0.99)
@@ -18,7 +19,7 @@ animation-time-rule = cubic-bezier(0.29, 0.82, 0.36, 0.99)
     position absolute
     border solid 1px borderColor
     background black
-    border-radius 20px
+    border-radius(20px)
     animation bg-move-top animation-time-rule
     @keyframes bg-move-top
       0%
@@ -92,13 +93,22 @@ animation-time-rule = cubic-bezier(0.29, 0.82, 0.36, 0.99)
     animation-duration 1s
 
 
+.top-bar
+  @media ({mobile})
+    position fixed
+    bottom 0
+    backdrop-filter blur(10px)
+
 .wrapper
   width 100%
   min-height 'calc(100vh - %s)' % header-height
-
+  overflow-y hidden
   > *
     position absolute
     width 100%
+    @media ({mobile})
+      padding-bottom header-height-mobile
+      overflow-y hidden
   > *[css-fullheight]
     min-height 'calc(100vh - %s)' % header-height
   > *[css-fullheight-only]
@@ -145,7 +155,7 @@ animation-time-rule = cubic-bezier(0.29, 0.82, 0.36, 0.99)
     <div></div>
   </div>
 
-  <TopBar v-if="$store.state.user.isLogined"></TopBar>
+  <TopBar v-if="$store.state.user.isLogined" class="top-bar"></TopBar>
   <div class="wrapper">
     <CircleLoading v-if="!$store.state.user.isGotten" class="loading"></CircleLoading>
     <router-view v-else v-slot="{ Component }">
@@ -313,6 +323,7 @@ import Popups from "/src/components/vue-plugins/Popups.vue";
 import CircleLoading from "/src/components/loaders/CircleLoading.vue";
 import {API_URL, BASE_URL_PATH} from "./constants";
 import TopBar from "./components/TopBar.vue";
+import {cropText} from "./utils/utils";
 
 export default {
   components: {TopBar, CircleLoading, Modal, Popups},
@@ -348,6 +359,8 @@ export default {
 
     global.$user = this.$store.state.user;
     global.$base_url_path = BASE_URL_PATH;
+
+    global.$cropText = cropText;
   },
 
   methods: {

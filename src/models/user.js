@@ -10,6 +10,7 @@ export default class User extends Model {
     isConfirmedEmail: false,
     joinedDate: '',
     email: "",
+    telegram: "",
     name: "",
     password: "",
     avatarImageId: null,

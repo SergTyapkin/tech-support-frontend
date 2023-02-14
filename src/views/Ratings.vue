@@ -19,7 +19,7 @@
     &:hover
       transform scale(1.1)
     .avatar
-      border-radius 50%
+      border-radius(50%)
       outline-width 2px
       outline-style solid
       outline-offset 2px
@@ -41,29 +41,30 @@
   .place-1
     align-self flex-start
     .position
-      color gold
+      color colorGold
     .avatar
       width 100px
-      outline-color gold
+      outline-color colorGold
   .place-2
     align-self flex-end
     margin-bottom 20px
     .position
-      color silver
+      color colorSilver
     .avatar
       width 80px
-      outline-color silver
+      outline-color colorSilver
   .place-3
     align-self flex-end
     .position
-      color #ff9f7b
+      color colorBronze
     .avatar
       width 70px
-      outline-color #ff9f7b
+      outline-color colorBronze
 
 .users-list
   width 100%
   margin-top 40px
+  margin-bottom 40px
   .list
     margin 0 auto
     list-style none
@@ -73,6 +74,7 @@
     .user
       padding 10px 50px
       display flex
+      align-items center
       font-medium()
       transition all 0.2s ease
       @media ({mobile})
@@ -86,7 +88,7 @@
         color textColor2
         min-width 50px
       .avatar
-        border-radius 50%
+        border-radius(50%)
         width 30px
         height 30px
         border 1px solid empColor1_2
@@ -107,7 +109,7 @@
     <header class="top-3">
       <router-link :to="{name: 'userProfile', params: {userId: users[1].id}}" class="place-2" v-if="users[1] !== undefined">
         <div class="position">#2</div>
-        <UserAvatar class="avatar" :image-id="users[1].imageId"></UserAvatar>
+        <UserAvatar class="avatar" :image-id="users[1].avatarimageid"></UserAvatar>
         <div class="name">{{ users[1].name }}</div>
         <div class="title">
           {{ users[1].title }}

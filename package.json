@@ -14,8 +14,6 @@
     "@jitbit/htmlsanitizer": "^1.0.0",
     "@korolion/get-image-as-dataurl": "^0.3.0",
     "marked": "^4.0.12",
-    "qr-scanner": "^1.4.1",
-    "qrcode-generator-es6": "^1.1.4",
     "vue": "^3.2.31",
     "vue-router": "^4.0.14",
     "vue3-autocounter": "^1.0.6",

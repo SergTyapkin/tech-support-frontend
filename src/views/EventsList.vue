@@ -76,12 +76,9 @@
                    :author-id="event.authorid"
         ></EventCard>
       </li>
-
-      <router-link :to="{name: 'createEvent'}" class="card create-event" v-if="$user.isAdmin">
-        <img src="../res/plus.svg" alt="plus">
-        <div class="text">Создать</div>
-      </router-link>
     </ul>
+
+    <router-link :to="{name: 'createEvent'}"><FloatingButton title="Создать"><img src="../res/plus_bold.svg" alt="plus"></FloatingButton></router-link>
   </div>
 </template>
 
@@ -96,11 +93,12 @@ import SelectList from "../components/SelectList.vue";
 import CircleLoading from "../components/loaders/CircleLoading.vue";
 import {BASE_URL_PATH} from "../constants";
 import {nextTick} from "vue";
-import {dateToStr, timeToStr} from "../utils/utils";
+import {cleanupMarkdownPreview, dateToStr, timeToStr} from "../utils/utils";
+import FloatingButton from "../components/FloatingButton.vue";
 
 
 export default {
-  components: {CircleLoading, SelectList, FloatingInput, Filters, EventCard, FormExtended, Form},
+  components: {FloatingButton, CircleLoading, SelectList, FloatingInput, Filters, EventCard, FormExtended, Form},
 
   data() {
     return {
@@ -180,7 +178,7 @@ export default {
       this.loading = false;
 
       if (!response.ok_) {
-        this.$popups.error("Ошибка", "Не удалось получить список мест проведения мероприятий. " + response.info || "");
+        this.$popups.error("Ошибка", "Не удалось получить список мест проведения мероприятий. " + (response.info || ""));
         return;
       }
 
@@ -211,6 +209,7 @@ export default {
           event.eventtimeend = timeToStr(event.eventtimeend);
           event.timestart = timeToStr(event.timestart);
           event.timeend = timeToStr(event.timeend);
+          event.description = cleanupMarkdownPreview(event.description);
         })
       }
     }

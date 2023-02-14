@@ -1,5 +1,6 @@
 <style lang="stylus" scoped>
 @require '../styles/constants.styl'
+@require '../styles/utils.styl'
 
 float-button-height = 50px
 image-width = 30px
@@ -11,12 +12,15 @@ padding = 5px
   position fixed
   bottom 30px
   right 30px
+  @media ({mobile})
+    right 20px
+    bottom (10px + header-height-mobile)
   height float-button-height
   min-width float-button-height
-  border-radius (float-button-height / 2)
+  border-radius((float-button-height / 2))
   padding padding
   padding-right ((float-button-height - image-width) / 2)
-  background empColor1_1
+  background empColor2_2
   box-shadow 3px 3px 5px colorShadow
 
   .fields

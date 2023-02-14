@@ -1,20 +1,20 @@
 @require 'constants.styl'
 
-.show
-    animation show 0.3s linear forwards
-.showed
+.__show
+    animation __show 0.3s linear forwards
+.__showed
     animation none
-.hide
-    animation hide 0.3s linear forwards
-.hidden
+.__hide
+    animation __hide 0.3s linear forwards
+.__hidden
     display none !important
 
-@keyframes hide
+@keyframes __hide
     0%
         opacity 1
     100%
         opacity 0
-@keyframes show
+@keyframes __show
     0%
         opacity 0
     100%
@@ -34,7 +34,7 @@
 .simple-roll.closed
     max-height 0
 
-.no-animations
+.__no-animations
     transition none
 
 @media ({mobile})

@@ -9,6 +9,7 @@
   display flex
   flex-direction column
   @media ({mobile})
+    padding-bottom (header-height-mobile + 20px)
     padding-left 10px
     padding-right 10px
   .title
@@ -17,15 +18,12 @@
     padding-bottom 10px
     margin-bottom 20px
     letter-spacing 2px
-  .text
-    textarea()
-    font-medium()
-    margin-top 10px
-    color textColor2
-    transition none
-    resize none
-    flex 1
-    margin-bottom 20px
+  .redactor
+    margin-top 15px
+    margin-bottom 15px
+  .info
+    font-small()
+    color textColor4
   .error-text
     color colorNo
     margin-top 10px
@@ -53,6 +51,7 @@
       margin-bottom 20px
       img
         width 26px
+        height 26px
         margin-right 10px
     .save-button
       button-submit()
@@ -61,6 +60,14 @@
       button-danger()
       width min-content
       margin 0 auto
+      padding 10px 20px
+
+  .user-link
+    cursor pointer
+    pointer-events all
+    &:hover
+      transition all 0.2s ease
+      filter brightness(2)
 </style>
 
 <template>
@@ -71,20 +78,24 @@
       <SelectList v-model="position" @input="onChange" :selected-id="positionId" :list="allPositions" ref="position" title="Направленность" :readonly="!$user.isAdmin" class="position input" solid></SelectList>
     </div>
     <div class="error-text" v-if="errorText.length">{{ errorText }}</div>
-    <textarea class="text scrollable" :class="{error: errorText.length}" @input="errorText = ''" ref="text" :readonly="!$user.isAdmin" v-model="text"></textarea>
+    <MarkdownRedactor v-if="$user.isAdmin" class="redactor" :class="{error: errorText.length}" @input="errorText = ''; onChange()" @change="$refs.renderer?.update" ref="text" v-model="text" placeholder="Текст"></MarkdownRedactor>
+    <div class="info" v-if="$user.isAdmin">Превью</div>
+    <MarkdownRenderer class="renderer" ref="renderer"></MarkdownRenderer>
+
+    <FloatingInput v-model="authorname" title="Автор мероприятия" readonly no-info class="input"></FloatingInput>
+    <a v-if="authortelegram" :href="`https://t.me/${authortelegram}`" target="_blank" class="user-link">
+      <FloatingInput :model-value="`@${authortelegram}`" title="Связь с автором" readonly no-info class="input"></FloatingInput>
+    </a>
 
     <CircleLoading v-if="loading"></CircleLoading>
     <div class="buttons-container" v-else-if="$user.isAdmin && this.docId === undefined">
       <div class="save-button" @click="createDoc"><img src="../res/save.svg" alt="">Создать документ</div>
     </div>
     <div class="buttons-container" v-else-if="$user.isAdmin">
-      <div class="save-button" @click="updateDoc"><img src="../res/save.svg" alt="">Сохранить изменения</div>
       <div class="delete-button" @click="deleteDoc"><img src="../res/trash.svg" alt="">Удалить</div>
     </div>
 
-    <FloatingButton v-if="isEdited" title="Сохранить" green @click="updateDoc">
-      <img src="../res/save.svg" alt="save">
-    </FloatingButton>
+    <FloatingButton v-if="isEdited && this.docId !== undefined" title="Сохранить" green @click="updateDoc"><img src="../res/save.svg" alt="save"></FloatingButton>
   </div>
 </template>
 
@@ -95,9 +106,12 @@ import CircleLoading from "../components/loaders/CircleLoading.vue";
 import FloatingInput from "../components/FloatingInput.vue";
 import SelectList from "../components/SelectList.vue";
 import FloatingButton from "../components/FloatingButton.vue";
+import MarkdownRedactor from "../components/MarkdownRedactor.vue";
+import MarkdownRenderer from "../components/MarkdownRenderer.vue";
 
 export default {
-  components: {FloatingButton, SelectList, FloatingInput, CircleLoading, FormExtended},
+  components: {
+    MarkdownRenderer, MarkdownRedactor, FloatingButton, SelectList, FloatingInput, CircleLoading, FormExtended},
 
   data() {
     return {
@@ -109,6 +123,8 @@ export default {
       place: undefined,
       positionId: undefined,
       position: undefined,
+      authorname: undefined,
+      authortelegram: undefined,
       allPlaces: [],
       allPositions: [],
 
@@ -140,6 +156,10 @@ export default {
       this.text = response.text;
       this.placeId = response.placeid;
       this.positionId = response.positionid;
+      this.authorname = response.authorname;
+      this.authortelegram = response.authortelegram;
+
+      this.$refs.renderer.update(this.text);
     }
 
     this.loading = true;

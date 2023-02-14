@@ -12,13 +12,13 @@ user-padding-left = 20px
   min-height 200px
   height 100%
   background borderColorDark
-  border-radius 5px
+  border-radius(5px)
   overflow-y auto
   @media ({mobile})
     height 100%
 
   .eventUsersList
-    border-radius 5px
+    border-radius(5px)
 
     .eventName
       font-large()
@@ -47,6 +47,8 @@ user-padding-left = 20px
       </div>
       <hr class="nameHr" v-if="usersList.eventName">
       <User v-for="participation in usersList.participations"
+            :event-id="participation.eventid"
+            :user-id="participation.userid"
             :user-image-id="participation.userimageid"
             :user-name="participation.username"
             :user-title="participation.usertitle"
@@ -55,6 +57,8 @@ user-padding-left = 20px
             :id="participation.id"
             :comment="participation.admincomment"
             :score="participation.score"
+            :can-delete="canDelete"
+            @delete="(id) => deleteUserFromList(0, id)"
       ></User>
     </div>
 
@@ -72,32 +76,20 @@ export default {
   components: {User, CircleLoading, Range, UserAvatar},
 
   props: {
-    usersLists: {
-      type: Array,
-      default: [
-        {
-          eventName: "Event",
-          eventId: 1,
-          eventDate: new Date(),
-          participations: [
-            {
-              id: 1,
-              username: "Сергей Тяпкин",
-              usertitle: "Дроидекъ",
-              userimageid: null,
-              admincomment: "",
-              positionid: 1,
-              positionname: "свет",
-              score: null,
-            },
-          ],
-        },
-      ],
-    },
+    usersLists: [],
+
+    canDelete: Boolean,
   },
 
   methods: {
     dateToStr: dateToStr,
+
+    deleteUserFromList(listIdx, id) {
+      const index = this.usersLists[listIdx]?.participations?.findIndex(u => u.id === id);
+      console.log(index, this.usersLists[listIdx])
+      this.usersLists[listIdx]?.participations?.splice(index, 1);
+      console.log(this.usersLists[listIdx])
+    }
   }
 };
 </script>

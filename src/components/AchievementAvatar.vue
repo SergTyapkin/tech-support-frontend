@@ -8,7 +8,7 @@
 
 <script>
 import ServerImage from "./ServerImage.vue";
-import defaultAvatarImage from '../res/default_avatar.png';
+import defaultAvatarImage from '../res/default_achievement.png';
 
 
 export default {

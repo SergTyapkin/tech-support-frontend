@@ -2,6 +2,7 @@
 @require '../styles/constants.styl'
 @require '../styles/buttons.styl'
 @require '../styles/fonts.styl'
+@require '../styles/utils.styl'
 
 
 .root
@@ -26,6 +27,13 @@
           border-bottom 2px solid borderColorDark
           padding-right 0
           padding-bottom 10px
+        .user-link
+          cursor pointer
+          pointer-events all
+          &:hover
+            transition all 0.2s ease
+            filter brightness(2)
+
       .right-description
         flex 1
         padding-left 30px
@@ -44,16 +52,15 @@
       .main-info
         padding-top 12px
 
-        border-radius 7px
+        border-radius(7px)
         background colorShadowLight-x
         border colorShadowLight 1px solid
         margin-bottom 20px
         .input:not(:last-of-type)
           margin-bottom 20px
-      .textarea
-        textarea()
-        margin-top 10px
-        resize none
+      .info
+        font-small()
+        color textColor4
 
     .buttons
       display flex
@@ -104,20 +111,22 @@
           </div>
 
           <FloatingInput v-model="event.authorname" title="Автор мероприятия" readonly no-info class="input"></FloatingInput>
-          <FloatingInput v-model="event.authoremail" title="Связь с автором" readonly no-info class="input"></FloatingInput>
+          <a v-if="event.authortelegram" :href="`https://t.me/${event.authortelegram}`" target="_blank" class="user-link">
+            <FloatingInput :model-value="`@${event.authortelegram}`" title="Связь с автором" readonly no-info class="input"></FloatingInput>
+          </a>
         </div>
 
         <div class="right-description">
           <div class="input-info">А что мы будем делать?</div>
-          <textarea class="textarea scrollable" :readonly="!$user.isAdmin" v-model="event.description"></textarea>
+          <MarkdownRedactor v-if="$user.isAdmin" class="redactor" @input="onChange" @change="$refs.renderer?.update" ref="text" v-model="event.description" placeholder="Описание"></MarkdownRedactor>
+          <div class="info" v-if="$user.isAdmin">Превью</div>
+          <MarkdownRenderer class="renderer" ref="renderer"></MarkdownRenderer>
 
-          <UsersTable class="users-table" :users-lists="[{participations: event.participations}]" @change.stop="" @input.stop=""></UsersTable>
+          <UsersTable class="users-table" :users-lists="[{participations: event.participations}]" @change.stop="" @input.stop="" can-delete></UsersTable>
         </div>
       </div>
 
       <div class="buttons">
-        <input v-if="$user.isAdmin" :disabled="!isEdited" type="submit" value="Сохранить" class="button-submit">
-
         <CircleLoading v-if="loading"></CircleLoading>
         <div v-else-if="!event.isyouparticipate && event.isnext" class="button-participate-group">
           <div class="button-participate" @click="participate">Пойду</div>
@@ -142,10 +151,14 @@ import FloatingInput from "../components/FloatingInput.vue";
 import FloatingButton from "../components/FloatingButton.vue";
 import SelectList from "../components/SelectList.vue";
 import UsersTable from "../components/UsersTable.vue";
+import MarkdownRedactor from "../components/MarkdownRedactor.vue";
+import MarkdownRenderer from "../components/MarkdownRenderer.vue";
 
 
 export default {
-  components: {SelectList, FloatingButton, CircleLoading, Form, FloatingInput, UsersTable},
+  components: {
+    MarkdownRenderer,
+    MarkdownRedactor, SelectList, FloatingButton, CircleLoading, Form, FloatingInput, UsersTable},
 
   data() {
     return {
@@ -177,7 +190,7 @@ export default {
     this.loading = false;
 
     if (!response.ok_) {
-      this.$popups.error("Ошибка", "Не удалось получить список мест проведения мероприятий. " + response.info || "");
+      this.$popups.error("Ошибка", "Не удалось получить список мест проведения мероприятий. " + (response.info || ""));
       return;
     }
     this.allPlaces = response.places;
@@ -187,7 +200,7 @@ export default {
     this.loading = false;
 
     if (!response.ok_) {
-      this.$popups.error("Ошибка", "Не удалось получить список возможных направленностей работы. " + response.info || "");
+      this.$popups.error("Ошибка", "Не удалось получить список возможных направленностей работы. " + (response.info || ""));
       return;
     }
     this.allPositions = response.positions;
@@ -200,10 +213,11 @@ export default {
       let response = await this.$api.getEventById(this.eventId);
       this.loading = false;
       if (!response.ok_) {
-        this.$popups.error("Ошибка", "Не удалось получить список мероприятий. " + response.info || "");
+        this.$popups.error("Ошибка", "Не удалось получить список мероприятий. " + (response.info || ""));
         return;
       }
       this.event = response;
+      this.$refs.renderer.update(this.event.description);
     },
 
     async participate() {

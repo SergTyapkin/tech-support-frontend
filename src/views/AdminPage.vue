@@ -22,10 +22,11 @@
   gap 20px
   width 100%
   padding 20px
+  @media ({mobile})
+    padding-bottom (header-height-mobile + 20px)
   .column
     display flex
     flex-direction column
-    justify-content space-between
     gap 20px
     flex 1
   .newUsersBoard
@@ -33,6 +34,7 @@
   .searchUsersBoard
   .setupPlacesBoard
   .setupPositionsBoard
+  .achievementsBoard
     max-height 500px
     flex 1
     block-dark-bg()
@@ -91,6 +93,7 @@
         align-items center
         img
           width 30px
+          min-width 30px
           height 30px
 
       .button-accept
@@ -99,15 +102,20 @@
         padding 6px 6px 6px 10px
         margin-right 10px
         @media ({mobile})
+          flex-direction column-reverse
           font-small-extra()
+          padding-top 0
+          padding-bottom 10px
       .button-delete
         button-danger()
         padding 6px
+        @media ({mobile})
+          padding 6px 0
 
   //.participationsBoard
-
+  .achievementsBoard
   .searchUsersBoard
-    max-height 1000px
+    max-height 500px
     .header
       .search-input
         margin-top 5px
@@ -120,11 +128,11 @@
       &:hover
         background blocksBgColorHover
       .avatar
-        border-radius 50%
+        border-radius(50%)
         width 30px
         height 30px
-        border 1px solid empColor1_2
         margin-right 5px
+        border 1px solid empColor1_2
       .text
         .name
           font-middle()
@@ -134,6 +142,18 @@
         .title
           font-small-extra()
           color textColor3
+  .achievementsBoard
+    .user
+      .avatar
+        border-color empColor2_2
+    .add-button
+      button-dashed()
+      margin-bottom 10px
+      img
+        margin-right 5px
+        width 30px
+        min-width 30px
+        height 30px
 
   .setupPositionsBoard
   .setupPlacesBoard
@@ -228,16 +248,31 @@
           <router-link v-for="user in searchUsers" :to="{name: 'userProfile', params: {userId: user.id}}" class="user">
             <UserAvatar :image-id="user.avatarimageid" class="avatar"></UserAvatar>
             <div class="text">
-              <div class="name">{{ user.name }}</div>
-              <div class="title">{{ user.title }}</div>
+              <div class="name">{{ $cropText(user.name, 30) }}</div>
+              <div class="title">{{ $cropText(user.title, 30) }}</div>
             </div>
           </router-link>
         </ul>
       </div>
 
-<!--      <div class="reservedBoard">-->
-<!--        <div class="not-found-info">Место зарезервировано для будущих обновлений</div>-->
-<!--      </div>-->
+      <div class="achievementsBoard">
+        <header class="header">Достижения</header>
+
+        <CircleLoading v-if="achievementsLoading" class="loading"></CircleLoading>
+        <ul v-else class="container scrollable">
+          <li v-if="achievements.length === 0" class="not-found-info">Достижений нет</li>
+          <router-link v-else v-for="achievement in achievements" :to="{name: 'achievement', params: {achievementId: achievement.id}}" class="user">
+            <AchievementAvatar :image-id="achievement.imageid" class="avatar"></AchievementAvatar>
+            <div class="text">
+              <div class="name">{{ $cropText(achievement.name, 30) }}</div>
+              <div class="title">{{ $cropText(cleanupMarkdownPreview(achievement.description), 30) }}</div>
+            </div>
+          </router-link>
+          <router-link class="add-button" :to="{name: 'createAchievement'}">
+            <img src="../res/plus.svg" alt="add"> Создать
+          </router-link>
+        </ul>
+      </div>
     </div>
     <CircleLoading v-if="overlayLoading" class="overlay-loading"></CircleLoading>
   </div>
@@ -249,24 +284,28 @@ import CircleLoading from "../components/loaders/CircleLoading.vue";
 import FloatingInput from "../components/FloatingInput.vue";
 import UsersTable from "../components/UsersTable.vue";
 import UserAvatar from "../components/UserAvatar.vue";
+import AchievementAvatar from "../components/AchievementAvatar.vue";
 import AddableList from "../components/AddableList/AddableList.vue";
+import {cleanupMarkdownPreview} from "../utils/utils";
 
 export default {
-  components: {AddableList, UserAvatar, CircleLoading, Form, FloatingInput, UsersTable},
+  components: {AchievementAvatar, AddableList, UserAvatar, CircleLoading, Form, FloatingInput, UsersTable},
 
   data () {
 	  return {
-      newUsers: [{id: 3, name: 'Some user', email:"someemail@mail.ru", telegram: "@imperatrica_sarkazma"}, {id: 1, name: 'Some user 2', email:"someemail@mail.ru", telegram: "@imperatrica_sarkazma"}],
+      newUsers: [],
       participations: [],
       searchUsers: [],
 
       places: [],
       positions: [],
+      achievements: [],
 
       searchText: "",
 
       loading: false,
       searchLoading: false,
+      achievementsLoading: false,
       overlayLoading: false,
     }
   },
@@ -277,6 +316,7 @@ export default {
     this.getUsersBySearch();
     this.getPlaces();
     this.getPositions();
+    this.getAchievements();
   },
 
   methods: {
@@ -360,6 +400,19 @@ export default {
       }
 
       this.positions = res.positions.map((position) => ({id: position.id, title: position.name}));
+    },
+
+    async getAchievements() {
+      this.achievementsLoading = true;
+      const res = await this.$api.getAchievements();
+      this.achievementsLoading = false;
+
+      if (!res.ok_) {
+        this.$popups.error('Ошибка', 'Не удалось получить список достижений');
+        return;
+      }
+
+      this.achievements = res.achievements;
     },
 
     async savePlaces(toCreate, toEdit, toDelete) {
@@ -466,7 +519,9 @@ export default {
       }
       this.$popups.success('Аккаунт удален', 'Туда его');
       this.newUsers.splice(listIdx, 1);
-    }
+    },
+
+    cleanupMarkdownPreview: cleanupMarkdownPreview,
   }
 }
 </script>

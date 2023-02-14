@@ -1,5 +1,7 @@
 <style lang="stylus" scoped>
 @require '../styles/constants.styl'
+@require '../styles/forms.styl'
+@require '../styles/utils.styl'
 
 
 extra-small = 3px
@@ -12,16 +14,16 @@ svg-stroke-width = 1px
 markdown-panel-shadow-margin = 5px
 markdown-panel-shadow-offset = 3px 3px
 markdown-panel-shadow-blur = 5px
-markdown-panel-shadow-color = black
-markdown-panel-margin = 0px
-markdown-panel-border-radius = extra-small 0 extra-small 0
-markdown-panel-font-size = small-font-size
+markdown-panel-shadow-color = colorShadow
+markdown-panel-margin = 2px
+markdown-panel-border-radius = 3px 0 3px 0
+markdown-panel-font-size = 14px
 markdown-panel-height = 20px
-markdown-panel-bg-color = bgColor2
+markdown-panel-bg-color = bgColor
 
 markdown-button-width = 30px
 markdown-button-padding = 2px 0 0 0
-markdown-button-divider-color = bgColor1
+markdown-button-divider-color = bgColorLight
 markdown-button-bg-color = transparent
 markdown-button-bg-color-hover = empColor1_1
 
@@ -31,8 +33,12 @@ markdown-button-svg-photo-fill = transparent
 
 .markdown
   position relative
+  background markdown-bg-color
   textarea
+    textarea()
     padding-top markdown-panel-height + markdown-panel-shadow-margin
+    width 100%
+    resize vertical
 
 .markdown-panel
   position absolute
@@ -42,7 +48,7 @@ markdown-button-svg-photo-fill = transparent
   overflow hidden
   box-shadow markdown-panel-shadow-offset markdown-panel-shadow-blur markdown-panel-shadow-color
   margin markdown-panel-margin
-  border-radius markdown-panel-border-radius
+  border-radius(markdown-panel-border-radius)
   font-family Arial
   font-size markdown-panel-font-size
   height markdown-panel-height
@@ -99,6 +105,7 @@ markdown-button-svg-photo-fill = transparent
   opacity 0
   transition opacity 0.2s ease
   pointer-events none
+  z-index 999
 .image-loader.in-drag::before
   opacity 1
 
@@ -109,7 +116,7 @@ markdown-button-svg-photo-fill = transparent
     <DragNDropLoader class="image-loader" @load="attachPhoto"
                      :crop-size="cropSize"
                      :compress-size="compressSize">
-      <textarea class="markdowned scrollable link" ref="textarea" :rows="rows" v-model="modelValue" @input="updateVModel()"></textarea>
+      <textarea class="markdowned scrollable link" ref="textarea" :rows="rows" v-model="modelValue" @input="updateVModel()" :placeholder="placeholder"></textarea>
       <div class="markdown-panel">
         <div class="_bold" @click="encaseInputText('**', '**')">B</div>
         <div class="_italic" @click="encaseInputText(' _', '_ ')">I</div>
@@ -144,7 +151,8 @@ export default {
     rows: {
       type: Number,
       default: 5
-    }
+    },
+    placeholder: String,
   },
 
   data() {
@@ -249,7 +257,7 @@ export default {
 
       const imageId = await this.ImageUploader.upload(dataURL);
 
-      text = text.substring(0, end) + '![image](' + this.$fullApiUrl + '/image/' + imageId + ')' + element.value.substring(end);
+      text = text.substring(0, end) + '![image](' + /*this.$api.apiUrl + */ '/image/' + imageId + ')' + element.value.substring(end);
 
       this.updateVModel(text)
       this.onInput();

@@ -29,7 +29,13 @@ module.exports = {
     ],
     devServer: {
         port: 8000,
-        https: true,
+        server: 'https',
+
+        static: {
+            directory: path.resolve(__dirname, '../tech-support-backend/images'),
+            publicPath: '/image',
+            watch: false,
+        },
         historyApiFallback: {
             rewrites: [
                 {

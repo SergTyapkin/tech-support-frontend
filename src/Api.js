@@ -16,7 +16,7 @@ export class Api extends ApiRequest {
     getUsersBySearch = (search) => this.get(`/user/all`, {search});
     getAnotherUser = (id) => this.get(`/user`, {id})
     signUp = (password, email, name) => this.post(`/user`, {password, email, name});
-    updateUser = (userId, email, name) => this.put(`/user`, {userId, email, name});
+    updateUser = (userId, email, name, telegram) => this.put(`/user`, {userId, email, name, telegram});
     updateUserTitle = (userId, title) => this.put(`/user`, {userId, title});
     updateUserAvatarImageId = (userId, avatarImageId) => this.put(`/user`, {userId, avatarImageId});
     updatePassword = (oldPassword, newPassword) => this.put(`/user/password`, {oldPassword, newPassword});
@@ -59,6 +59,18 @@ export class Api extends ApiRequest {
     editDoc = (id, title, text, placeId, positionId) => this.put(`/docs`, {id, title, text, placeId, positionId});
     createDoc = (title, text, placeId, positionId) => this.post(`/docs`, {title, text, placeId, positionId});
     deleteDoc = (id) => this.delete(`/docs`, {id});
+
+    getAchievements = () => this.get(`/achievements`);
+    getAchievementById = (id) => this.get(`/achievements`, {id});
+    createAchievement = (name, description, levels) => this.post(`/achievements`, {name, description, levels});
+    editAchievement = (id, name, description, levels) => this.put(`/achievements`, {id, name, description, levels});
+    updateAchievementImage = (id, imageId) => this.put(`/achievements`, {id, imageId});
+    deleteAchievement = (id) => this.delete(`/achievements`, {id});
+
+    getUserAchievements = (userId) => this.get(`/achievements/user`, {userId});
+    addUserAchievement = (userId, achievementId, level) => this.post(`/achievements/user`, {userId, achievementId, level});
+    editUserAchievement = (id, userId, achievementId, level) => this.put(`/achievements/user`, {id, userId, achievementId, level});
+    deleteUserAchievement = (id) => this.delete(`/achievements/user`, {id});
 
     uploadImage = (dataUrl) => this.post(`/image`, {dataUrl});
     deleteImage = (imageId) => this.delete(`/image`, {imageId});

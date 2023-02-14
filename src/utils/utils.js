@@ -86,10 +86,23 @@ export function dateToStr(date) {
     return `${dateDay} ${months[Number(dateMonth)]}${year}`;
 }
 export function timeToStr(time) {
+    if (!time && time !== '')
+        return '';
+
     time = new Date('0001-01-01T'+time);
 
     const hours = time.getHours();
     const minutes = time.getMinutes();
 
     return `${("0" + hours).slice(-2)}:${("0" + minutes).slice(-2)}`;
+}
+
+export function cropText(text, maxLength) {
+    return (text?.slice(0, maxLength) || '') + (text?.length > maxLength ? '...' : '');
+}
+
+export function cleanupMarkdownPreview(text) {
+    return text
+      .replaceAll(/[-#_~*>`]/g, '') // remove symbols
+      .replaceAll(/!?\[.+\]\(.+\)/g, '') // remove links and images
 }

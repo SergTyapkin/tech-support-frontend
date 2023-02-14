@@ -1,6 +1,7 @@
 <style lang="stylus" scoped>
 @require '../styles/constants.styl'
 @require '../styles/fonts.styl'
+@require '../styles/utils.styl'
 
 
 slider-width = 7px
@@ -22,6 +23,8 @@ thumb-size = 3px
       position absolute
       top -30px
       right 40px
+    &.hidden
+      display none
     .value
       all unset
       box-sizing border-box
@@ -29,7 +32,7 @@ thumb-size = 3px
       padding 1px 8px
       border 1px solid empColor2_2
       background empColor2_4
-      border-radius 3px
+      border-radius(3px)
       text-align center
       width 100%
       color empColor2_1
@@ -47,6 +50,7 @@ thumb-size = 3px
     flex-direction column
     input-margin = 10px
     input-margin-bottom = 0
+    width slider-length + input-margin * 2
     .slider
       all unset
       margin input-margin
@@ -56,14 +60,14 @@ thumb-size = 3px
       width calc(100% - 10px)
       background linear-gradient(170deg, empColor1_2, empColor2_2)
       outline none
-      border-radius thumb-size
+      border-radius(thumb-size)
       overflow hidden
       cursor pointer
     .slider::-webkit-slider-thumb
       -webkit-appearance none
       width thumb-size
       height thumb-size
-      border-radius 50%
+      border-radius(50%)
       background empColor2_1
       cursor pointer
       border 4px solid #333
@@ -76,7 +80,7 @@ thumb-size = 3px
       display flex
       flex-direction row
       justify-content space-between
-      margin 0 5px 0 2px
+      margin 0 5px 0 5px
       > *
         padding 0 6px
         padding-top 3px
@@ -105,11 +109,25 @@ thumb-size = 3px
         &:first-child
         &:last-child
           display none
+
+  .delete-container
+    .delete-button
+      img
+        width 20px
+        min-width 20px
+        height 20px
+      cursor pointer
+      transition all 0.2s ease
+      display flex
+      align-items center
+      justify-content center
+      &:hover
+        transform rotate(180deg) scale(1.1)
 </style>
 
 <template>
   <div class="slider-container">
-    <div class="value-container">
+    <div class="value-container" :class="{hidden: noValue}">
       <input type="number" aria-controls="off" ref="value" class="value" v-model="modelValue" :step="step" @change="updateVModel" :readonly="readonly">
     </div>
     <div class="input-container" v-if="!readonly">
@@ -119,6 +137,11 @@ thumb-size = 3px
       </div>
       <div class="splitters-container">
         <div class="splitter" v-for="i in ((max-min) / step + 1)" :style="{'--num': i - 1, '--count': (max-min) / step}"></div>
+      </div>
+    </div>
+    <div class="delete-container" v-if="withDelete">
+      <div class="delete-button" @click="setModelValue(null)">
+        <img src="../res/cross.svg" alt="clear">
       </div>
     </div>
   </div>
@@ -141,7 +164,9 @@ export default {
       type: Number,
       required: true,
     },
+    noValue: Boolean,
     readonly: Boolean,
+    withDelete: Boolean,
 
     modelValue: null,
     labels: Array,
@@ -155,7 +180,7 @@ export default {
 
   methods: {
     updateVModel(event) {
-      let value = event.target.value;
+      let value = Number(event.target.value);
       this.$emit('update:modelValue', value);
       this.$emit('change');
     },
