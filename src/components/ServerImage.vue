@@ -3,7 +3,7 @@
 </style>
 
 <template>
-  <img v-if="imageId" class="image" :src="api_url + '/image/' + imageId" :alt="alt">
+  <img v-if="imageId" class="image" :src="/*api_url + */ '/image/' + imageId" :alt="alt">
   <img v-else class="image" :src="defaultImageSrc" :alt="alt">
 </template>
 

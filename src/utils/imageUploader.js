@@ -25,14 +25,15 @@ export default class ImageUploader {
     }
 
     async upload(dataURL) {
-        if (dataURL === undefined)
+        if (dataURL === undefined) {
             try {
                 dataURL = await this.getUserImage();
             } catch {
                 return;
             }
-
+        }
         const response = await this.apiUpload(dataURL);
+
         if (!response.ok_) {
             this.popups.error(`Ошибка ${response.status_}!`, `Не удалось загрузить картинку на сервер: ${response.info}`);
             return;

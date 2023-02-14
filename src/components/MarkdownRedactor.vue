@@ -257,7 +257,7 @@ export default {
 
       const imageId = await this.ImageUploader.upload(dataURL);
 
-      text = text.substring(0, end) + '![image](' + this.$api.apiUrl + '/image/' + imageId + ')' + element.value.substring(end);
+      text = text.substring(0, end) + '![image](' + /*this.$api.apiUrl + */ '/image/' + imageId + ')' + element.value.substring(end);
 
       this.updateVModel(text)
       this.onInput();
