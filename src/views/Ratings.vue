@@ -109,7 +109,7 @@
     <header class="top-3">
       <router-link :to="{name: 'userProfile', params: {userId: users[1].id}}" class="place-2" v-if="users[1] !== undefined">
         <div class="position">#2</div>
-        <UserAvatar class="avatar" :image-id="users[1].imageId"></UserAvatar>
+        <UserAvatar class="avatar" :image-id="users[1].avatarimageid"></UserAvatar>
         <div class="name">{{ users[1].name }}</div>
         <div class="title">
           {{ users[1].title }}
