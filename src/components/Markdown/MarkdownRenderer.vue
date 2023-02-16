@@ -1,6 +1,6 @@
 <style lang="stylus">
-@require '../styles/constants.styl'
-@require '../styles/utils.styl'
+@require '../../styles/constants.styl'
+@require '../../styles/utils.styl'
 
 ._markdown_renderer
   display block

@@ -95,9 +95,7 @@
         margin-bottom 20px
         .input:not(:last-of-type)
           margin-bottom 20px
-      .info
-        font-small()
-        color textColor4
+
 
     .buttons
       display flex
@@ -154,10 +152,7 @@
         </div>
 
         <div class="right-description">
-          <div class="input-info">А что мы будем делать?</div>
-          <MarkdownRedactor v-if="$user.isAdmin" class="redactor" @input="onChange" @change="$refs.renderer?.update" ref="text" v-model="event.description" placeholder="Описание" :rows="10"></MarkdownRedactor>
-          <div class="info" v-if="$user.isAdmin">Превью</div>
-          <MarkdownRenderer class="renderer" ref="renderer"></MarkdownRenderer>
+          <RedactorAndRenderer info="А что мы будем делать?" placeholder="Описание" v-model="event.description" @input="onChange()"></RedactorAndRenderer>
 
           <UsersTable class="users-table" :users-lists="[{participations: event.participations}]" @change.stop="" @input.stop="" can-delete>
             <div class="add-participation-button" :class="{hidden: !$user.isAdmin || inSelectingUser || selectedUser}" @click="getAllUsers(); inSelectingUser = true">
@@ -202,16 +197,12 @@ import FloatingInput from "../components/FloatingInput.vue";
 import FloatingButton from "../components/FloatingButton.vue";
 import SelectList from "../components/SelectList.vue";
 import UsersTable from "../components/UsersTable.vue";
-import MarkdownRedactor from "../components/MarkdownRedactor.vue";
-import MarkdownRenderer from "../components/MarkdownRenderer.vue";
 import UserLine from "../components/UserLine.vue";
+import RedactorAndRenderer from "../components/Markdown/RedactorAndRenderer.vue";
 
 
 export default {
-  components: {
-    UserLine,
-    MarkdownRenderer,
-    MarkdownRedactor, SelectList, FloatingButton, CircleLoading, Form, FloatingInput, UsersTable},
+  components: {RedactorAndRenderer, UserLine, SelectList, FloatingButton, CircleLoading, Form, FloatingInput, UsersTable},
 
   data() {
     return {
@@ -274,7 +265,6 @@ export default {
         return;
       }
       this.event = response;
-      this.$refs.renderer.update(this.event.description);
     },
 
     async addUserParticipation(userId, positionId) {

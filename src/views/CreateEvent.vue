@@ -76,8 +76,8 @@
 import Form from "../components/Form.vue";
 import FloatingInput from "../components/FloatingInput.vue";
 import SelectList from "../components/SelectList.vue";
-import MarkdownRedactor from "../components/MarkdownRedactor.vue";
-import MarkdownRenderer from "../components/MarkdownRenderer.vue";
+import MarkdownRedactor from "../components/Markdown/MarkdownRedactor.vue";
+import MarkdownRenderer from "../components/Markdown/MarkdownRenderer.vue";
 
 
 export default {

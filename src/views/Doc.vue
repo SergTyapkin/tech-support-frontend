@@ -18,12 +18,6 @@
     padding-bottom 10px
     margin-bottom 20px
     letter-spacing 2px
-  .redactor
-    margin-top 15px
-    margin-bottom 15px
-  .info
-    font-small()
-    color textColor4
   .error-text
     color colorNo
     margin-top 10px
@@ -79,9 +73,7 @@
       <SelectList v-model="position" @input="onChange" :selected-id="positionId" :list="allPositions" ref="position" title="Направленность" :readonly="!$user.isAdmin" class="position input" solid></SelectList>
     </div>
     <div class="error-text" v-if="errorText.length">{{ errorText }}</div>
-    <MarkdownRedactor v-if="$user.isAdmin" class="redactor" :class="{error: errorText.length}" @input="errorText = ''; onChange()" @change="$refs.renderer?.update" ref="text" v-model="text" placeholder="Текст"></MarkdownRedactor>
-    <div class="info" v-if="$user.isAdmin">Превью</div>
-    <MarkdownRenderer class="renderer" ref="renderer"></MarkdownRenderer>
+    <RedactorAndRenderer info="Редактор" v-model="text" @input="errorText = ''; onChange()" :class="{error: errorText.length}" placeholder="Текст"></RedactorAndRenderer>
 
     <FloatingInput v-model="authorname" title="Автор" readonly no-info class="input"></FloatingInput>
     <a v-if="authortelegram" :href="`https://t.me/${authortelegram}`" target="_blank" class="user-link">
@@ -107,12 +99,11 @@ import CircleLoading from "../components/loaders/CircleLoading.vue";
 import FloatingInput from "../components/FloatingInput.vue";
 import SelectList from "../components/SelectList.vue";
 import FloatingButton from "../components/FloatingButton.vue";
-import MarkdownRedactor from "../components/MarkdownRedactor.vue";
-import MarkdownRenderer from "../components/MarkdownRenderer.vue";
+import RedactorAndRenderer from "../components/Markdown/RedactorAndRenderer.vue";
+
 
 export default {
-  components: {
-    MarkdownRenderer, MarkdownRedactor, FloatingButton, SelectList, FloatingInput, CircleLoading, FormExtended},
+  components: {RedactorAndRenderer, FloatingButton, SelectList, FloatingInput, CircleLoading, FormExtended},
 
   data() {
     return {

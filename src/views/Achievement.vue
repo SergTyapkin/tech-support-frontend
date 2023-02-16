@@ -148,9 +148,7 @@
         </div>
 
         <div class="markdown-container">
-          <MarkdownRedactor v-if="$user.isAdmin" class="redactor" @input="onChange" @change="$refs.renderer?.update" ref="text" v-model="achievement.description" placeholder="Описание"></MarkdownRedactor>
-          <div class="info" v-if="$user.isAdmin">Превью</div>
-          <MarkdownRenderer class="renderer" ref="renderer"></MarkdownRenderer>
+          <RedactorAndRenderer info="Описание" @input="onChange" v-model="achievement.description" placeholder="Описание"></RedactorAndRenderer>
         </div>
       </div>
 
@@ -199,14 +197,12 @@ import Range from "../components/Range.vue";
 import DragNDropLoader from "../components/DragNDropLoader.vue";
 import {IMAGE_MAX_RES, IMAGE_ACHIEVEMENT_MAX_RES} from "../constants";
 import ImageUploader from "../utils/imageUploader";
-import MarkdownRedactor from "../components/MarkdownRedactor.vue";
-import MarkdownRenderer from "../components/MarkdownRenderer.vue";
+import RedactorAndRenderer from "../components/Markdown/RedactorAndRenderer.vue";
 
 
 export default {
   components: {
-    MarkdownRenderer,
-    MarkdownRedactor,
+    RedactorAndRenderer,
     Achievement,
     DragNDropLoader,
     Range, AchievementAvatar, FloatingButton, CircleLoading, Form, FloatingInput},
