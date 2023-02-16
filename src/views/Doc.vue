@@ -11,7 +11,7 @@
   @media ({mobile})
     padding-bottom (header-height-mobile + 20px)
     padding-left 10px
-    padding-right 10
+    padding-right 10px
 
   .info-inputs
     margin-bottom 20px
