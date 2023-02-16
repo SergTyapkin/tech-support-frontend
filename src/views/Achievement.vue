@@ -242,7 +242,6 @@ export default {
         return;
       }
       this.achievement = response;
-      this.$refs.renderer.update(this.achievement.description);
     },
 
     async updateAchievementData() {
