@@ -28,6 +28,7 @@
           padding-right 0
           padding-bottom 10px
         .user-link
+          text-decoration underline
           cursor pointer
           pointer-events all
           &:hover
@@ -48,6 +49,42 @@
         .users-table
           width 100%
           margin 20px auto
+          .add-participation-button
+          .select-user-list
+          .select-position
+            max-height 400px
+            transition all 0.5s ease
+            overflow hidden
+            &.hidden
+              max-height 0
+              transition all 0.5s cubic-bezier(0, 1, 0, 1)
+              opacity 0
+              pointer-events none
+          .add-participation-button
+            button-dashed()
+            margin-bottom 10px
+          .select-user-list
+            list-style none
+            padding 0
+            margin 0
+            max-height 300px
+            overflow-y scroll
+          .select-position
+            display flex
+            flex-direction column
+            align-items center
+            gap 10px
+            padding-bottom 150px
+            .select-list
+              min-width 300px
+            .button-select-user
+              button-submit()
+              width min-content
+              padding 10px 30px
+              img
+                width 30px
+                height 30px
+                margin-right 5px
 
       .main-info
         padding-top 12px
@@ -118,11 +155,25 @@
 
         <div class="right-description">
           <div class="input-info">А что мы будем делать?</div>
-          <MarkdownRedactor v-if="$user.isAdmin" class="redactor" @input="onChange" @change="$refs.renderer?.update" ref="text" v-model="event.description" placeholder="Описание"></MarkdownRedactor>
+          <MarkdownRedactor v-if="$user.isAdmin" class="redactor" @input="onChange" @change="$refs.renderer?.update" ref="text" v-model="event.description" placeholder="Описание" :rows="10"></MarkdownRedactor>
           <div class="info" v-if="$user.isAdmin">Превью</div>
           <MarkdownRenderer class="renderer" ref="renderer"></MarkdownRenderer>
 
-          <UsersTable class="users-table" :users-lists="[{participations: event.participations}]" @change.stop="" @input.stop="" can-delete></UsersTable>
+          <UsersTable class="users-table" :users-lists="[{participations: event.participations}]" @change.stop="" @input.stop="" can-delete>
+            <div class="add-participation-button" :class="{hidden: !$user.isAdmin || inSelectingUser || selectedUser}" @click="getAllUsers(); inSelectingUser = true">
+              <img src="../res/plus.svg" alt="plus"><div class="text">Записать</div>
+            </div>
+            <ul class="select-user-list scrollable" :class="{hidden: !inSelectingUser}">
+              <li v-for="user in allUsers" class="user" @click="inSelectingUser = false; selectedUser = user">
+                <UserLine v-bind="user" clickable></UserLine>
+              </li>
+            </ul>
+            <div class="select-position" :class="{hidden: !selectedUser}" v-if="selectedUser">
+              <UserLine v-bind="selectedUser"></UserLine>
+              <SelectList v-if="selectedUser" v-model="selectedUser.position" :list="allPositions" class="select-list"></SelectList>
+              <div class="button-select-user" @click="participateOtherUser(selectedUser.id, selectedUser.position.id); selectedUser = undefined;"><img src="../res/save.svg" alt="save">Добавить</div>
+            </div>
+          </UsersTable>
         </div>
       </div>
 
@@ -153,10 +204,12 @@ import SelectList from "../components/SelectList.vue";
 import UsersTable from "../components/UsersTable.vue";
 import MarkdownRedactor from "../components/MarkdownRedactor.vue";
 import MarkdownRenderer from "../components/MarkdownRenderer.vue";
+import UserLine from "../components/UserLine.vue";
 
 
 export default {
   components: {
+    UserLine,
     MarkdownRenderer,
     MarkdownRedactor, SelectList, FloatingButton, CircleLoading, Form, FloatingInput, UsersTable},
 
@@ -173,6 +226,10 @@ export default {
 
       loading: true,
       isEdited: false,
+
+      allUsers: undefined,
+      inSelectingUser: false,
+      selectedUser: undefined,
     }
   },
 
@@ -220,23 +277,32 @@ export default {
       this.$refs.renderer.update(this.event.description);
     },
 
-    async participate() {
-      if (!this.position) {
+    async addUserParticipation(userId, positionId) {
+      if (!positionId) {
         this.$modal.alert("Не выбрана направленность работы", "Выбери, чем будешь заниматься");
-        return;
+        return false;
       }
 
       this.loading = true;
-      const res = await this.$api.participateInEvent(this.eventId, this.$user.id, this.position.id);
+      const res = await this.$api.participateInEvent(this.eventId, userId, positionId);
       this.loading = false;
 
       if (!res.ok_) {
         this.$popups.error("Ошибка", "Не удалось записаться на мероприятие. " + (res.info || ""));
-        return;
+        return false;
       }
-      this.event.isyouparticipate = true;
 
       await this.getEventData();
+      return true;
+    },
+
+    async participate() {
+      if (await this.addUserParticipation(this.$user.id, this.position?.id))
+        this.event.isyouparticipate = true;
+    },
+    async participateOtherUser(userId, positionId) {
+      if (await this.addUserParticipation(userId, positionId))
+        this.selectedUser = undefined;
     },
 
     async notParticipate() {
@@ -286,6 +352,19 @@ export default {
       }
       this.$popups.success("Удалено", "Мероприятия будто никогда и не сущестовало");
       this.$router.push({name: "events"});
+    },
+
+    async getAllUsers() {
+      this.loading = true;
+      const res = await this.$api.getUsersBySearch('');
+      this.loading = false;
+
+      if (!res.ok_) {
+        this.$popups.error('Ошибка', 'Не удалось получить список всех пользователей');
+        return;
+      }
+
+      this.allUsers = res.users;
     }
   },
 }

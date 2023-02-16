@@ -62,6 +62,7 @@ user-padding-left = 20px
       ></User>
     </div>
 
+    <slot></slot>
   </div>
 </template>
 

@@ -1,6 +1,7 @@
 <style lang="stylus" scoped>
 @require '../styles/fonts.styl'
 @require '../styles/utils.styl'
+@require '../styles/buttons.styl'
 @require '../styles/constants.styl'
 
 .list
@@ -51,18 +52,10 @@
         color textColor3
 
   .create-doc
+    button-dashed()
     margin-top 30px
-    block-clickable()
-    background none
-    border 2px dashed borderColor
-    display flex
-    align-items center
-    justify-content center
     padding 10px
     width 50%
-    img
-      margin-right 10px
-      width 40px
 </style>
 
 <template>

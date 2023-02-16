@@ -101,6 +101,7 @@
 
     .row-contacts
       .user-link
+        text-decoration underline
         cursor pointer
         pointer-events all
         &:hover

@@ -22,20 +22,6 @@
   .card
     margin 20px
 
-  .create-event
-    block-clickable()
-    block-dark-bg()
-    background none
-    border 2px dashed borderColor
-    display flex
-    align-items center
-    justify-content center
-    width 300px
-    min-height 300px
-    img
-      margin-right 10px
-      width 40px
-
 @media ({mobile})
   .filters
     > *

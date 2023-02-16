@@ -63,6 +63,7 @@
       padding 10px 20px
 
   .user-link
+    text-decoration underline
     cursor pointer
     pointer-events all
     &:hover
@@ -82,7 +83,7 @@
     <div class="info" v-if="$user.isAdmin">Превью</div>
     <MarkdownRenderer class="renderer" ref="renderer"></MarkdownRenderer>
 
-    <FloatingInput v-model="authorname" title="Автор мероприятия" readonly no-info class="input"></FloatingInput>
+    <FloatingInput v-model="authorname" title="Автор" readonly no-info class="input"></FloatingInput>
     <a v-if="authortelegram" :href="`https://t.me/${authortelegram}`" target="_blank" class="user-link">
       <FloatingInput :model-value="`@${authortelegram}`" title="Связь с автором" readonly no-info class="input"></FloatingInput>
     </a>

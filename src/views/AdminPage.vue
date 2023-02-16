@@ -245,13 +245,7 @@
         <CircleLoading v-if="searchLoading" class="loading"></CircleLoading>
         <div v-else-if="searchUsers.length === 0" class="not-found-info">Пользователей не найдено</div>
         <ul v-else class="container scrollable">
-          <router-link v-for="user in searchUsers" :to="{name: 'userProfile', params: {userId: user.id}}" class="user">
-            <UserAvatar :image-id="user.avatarimageid" class="avatar"></UserAvatar>
-            <div class="text">
-              <div class="name">{{ $cropText(user.name, 30) }}</div>
-              <div class="title">{{ $cropText(user.title, 30) }}</div>
-            </div>
-          </router-link>
+          <UserLine v-for="user in searchUsers" v-bind="user" clickable link></UserLine>
         </ul>
       </div>
 
@@ -283,13 +277,13 @@ import Form from "/src/components/Form.vue";
 import CircleLoading from "../components/loaders/CircleLoading.vue";
 import FloatingInput from "../components/FloatingInput.vue";
 import UsersTable from "../components/UsersTable.vue";
-import UserAvatar from "../components/UserAvatar.vue";
 import AchievementAvatar from "../components/AchievementAvatar.vue";
 import AddableList from "../components/AddableList/AddableList.vue";
 import {cleanupMarkdownPreview} from "../utils/utils";
+import UserLine from "../components/UserLine.vue";
 
 export default {
-  components: {AchievementAvatar, AddableList, UserAvatar, CircleLoading, Form, FloatingInput, UsersTable},
+  components: {UserLine, AchievementAvatar, AddableList, CircleLoading, Form, FloatingInput, UsersTable},
 
   data () {
 	  return {

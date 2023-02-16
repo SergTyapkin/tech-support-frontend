@@ -397,7 +397,7 @@ export default {
       user: {},
       completedEvents: [],
       achievements: [],
-      allAchievements: [],
+      allAchievements: undefined,
       loading: false,
       loadingConfirmEmail: false,
       allAchievementsLoading: false,
@@ -573,7 +573,10 @@ export default {
       }
       this.achievements = achievements.achievements;
     },
-    async getAllAchievements() {
+    async getAllAchievements(force=false) {
+      if (this.allAchievements && !force)
+        return;
+
       this.allAchievementsLoading = true;
       const achievements = await this.$api.getAchievements();
       this.allAchievementsLoading = false;
