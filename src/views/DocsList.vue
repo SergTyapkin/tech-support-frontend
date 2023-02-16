@@ -4,6 +4,12 @@
 @require '../styles/buttons.styl'
 @require '../styles/constants.styl'
 
+
+.root-docs-list
+  .loading
+    margin 0 auto
+
+
 .list
   display flex
   flex-wrap wrap
@@ -62,26 +68,27 @@
 </style>
 
 <template>
-  <ul class="list">
-    <CircleLoading v-if="loading" class="info"></CircleLoading>
+  <div class="root-docs-list">
+    <CircleLoading v-if="loading" class="loading"></CircleLoading>
+    <ul v-else class="list">
+      <li v-if="!docs.length" class="info">Документации пока нет</li>
 
-    <li v-else-if="!docs.length" class="info">Документации пока нет</li>
+      <li v-for="doc in docs" class="doc">
+        <router-link :to="{name: 'doc', params: {docId: doc.id}}" class="link-container">
+          <div class="header">{{ doc.title }}</div>
+          <div class="info-characters">
+            <div><img src="../res/place.svg" alt="Place:">{{ doc.placename }}</div>
+            <div><img src="../res/work.svg" alt="Work:">{{ doc.positionname }}</div>
+          </div>
+          <div class="text">{{ $cropText(cleanupMarkdownPreview(doc.text), 100) }}</div>
+        </router-link>
+      </li>
 
-    <li v-for="doc in docs" class="doc">
-      <router-link :to="{name: 'doc', params: {docId: doc.id}}" class="link-container">
-        <div class="header">{{ doc.title }}</div>
-        <div class="info-characters">
-          <div><img src="../res/place.svg" alt="Place:">{{ doc.placename }}</div>
-          <div><img src="../res/work.svg" alt="Work:">{{ doc.positionname }}</div>
-        </div>
-        <div class="text">{{ $cropText(cleanupMarkdownPreview(doc.text), 100) }}</div>
+      <router-link :to="{name: 'createDoc'}" v-if="$user.isAdmin" class="create-doc">
+        <img src="../res/plus.svg" alt="plus"><div class="text">Создать</div>
       </router-link>
-    </li>
-
-    <router-link :to="{name: 'createDoc'}" v-if="$user.isAdmin" class="create-doc">
-      <img src="../res/plus.svg" alt="plus"><div class="text">Создать</div>
-    </router-link>
-  </ul>
+    </ul>
+  </div>
 </template>
 
 <script>

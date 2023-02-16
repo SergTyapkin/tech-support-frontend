@@ -36,7 +36,7 @@
       <div class="info" v-if="modeRedactor">{{ info }}</div>
       <div class="info" v-if="!modeRedactor">Превью</div>
       <div v-if="modeRedactor" class="switch-button" @click="modeRedactor = !modeRedactor">Посмотреть превью</div>
-      <div v-else class="switch-button" @click="modeRedactor = !modeRedactor">Вернуться в редактор</div>
+      <div v-else class="switch-button" @click="modeRedactor = !modeRedactor">В редактор</div>
     </div>
     <MarkdownRedactor :class="{hidden: !modeRedactor}" v-if="$user.isAdmin" class="redactor" @input="(text) => {$emit('input', text); updateVModel(text);}" @change="$refs.renderer?.update" ref="text" v-model="modelValue" :placeholder="placeholder" :rows="10"></MarkdownRedactor>
     <MarkdownRenderer :class="{hidden: modeRedactor}" class="renderer scrollable" ref="renderer"></MarkdownRenderer>
@@ -56,11 +56,12 @@ export default {
     modelValue: String,
     info: String,
     placeholder: String,
+    showInitialPreview: Boolean,
   },
 
   data() {
     return {
-      modeRedactor: true,
+      modeRedactor: !this.$props.showInitialPreview,
     }
   },
 

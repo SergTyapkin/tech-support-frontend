@@ -51,9 +51,7 @@
       <div class="left-column">
         <div v-if="errorText" class="error-text">{{ errorText }}</div>
         <FloatingInput v-model="name" title="Название" class="nameNewEvent"></FloatingInput>
-        <MarkdownRedactor class="redactor" @change="$refs.renderer?.update" ref="text" v-model="description" placeholder="Описание - что нужно будет делать"></MarkdownRedactor>
-        <div class="info">Превью</div>
-        <MarkdownRenderer class="renderer" ref="renderer"></MarkdownRenderer>
+        <RedactorAndRenderer v-model="description" placeholder="Описание - что нужно будет делать" info="Превью"></RedactorAndRenderer>
         <div class="timeNewEvent">
           <FloatingInput v-model="date" type="date" title="Дата" class="inputDT"></FloatingInput>
           <FloatingInput v-model="timeEventStart" type="time" title="Начало в" class="inputDT"></FloatingInput>
@@ -77,11 +75,11 @@ import Form from "../components/Form.vue";
 import FloatingInput from "../components/FloatingInput.vue";
 import SelectList from "../components/SelectList.vue";
 import MarkdownRedactor from "../components/Markdown/MarkdownRedactor.vue";
-import MarkdownRenderer from "../components/Markdown/MarkdownRenderer.vue";
+import RedactorAndRenderer from "../components/Markdown/RedactorAndRenderer.vue";
 
 
 export default {
-  components: {MarkdownRenderer, MarkdownRedactor, SelectList, FloatingInput, Form},
+  components: {RedactorAndRenderer, MarkdownRedactor, SelectList, FloatingInput, Form},
 
   data() {
     return {

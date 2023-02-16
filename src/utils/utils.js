@@ -102,6 +102,9 @@ export function cropText(text, maxLength) {
 }
 
 export function cleanupMarkdownPreview(text) {
+    if (!text)
+        return "";
+
     return text
       .replaceAll(/[-#_~*>`]/g, '') // remove symbols
       .replaceAll(/!?\[.+\]\(.+\)/g, '') // remove links and images

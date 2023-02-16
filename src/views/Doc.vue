@@ -11,7 +11,11 @@
   @media ({mobile})
     padding-bottom (header-height-mobile + 20px)
     padding-left 10px
-    padding-right 10px
+    padding-right 10
+
+  .info-inputs
+    margin-bottom 20px
+
   .title
     font-large()
     border-bottom 1px solid borderColor
@@ -73,7 +77,7 @@
       <SelectList v-model="position" @input="onChange" :selected-id="positionId" :list="allPositions" ref="position" title="Направленность" :readonly="!$user.isAdmin" class="position input" solid></SelectList>
     </div>
     <div class="error-text" v-if="errorText.length">{{ errorText }}</div>
-    <RedactorAndRenderer info="Редактор" v-model="text" @input="errorText = ''; onChange()" :class="{error: errorText.length}" placeholder="Текст"></RedactorAndRenderer>
+    <RedactorAndRenderer info="Редактор" v-model="text" @input="errorText = ''; onChange()" :class="{error: errorText.length}" placeholder="Текст" :show-initial-preview="docId !== undefined"></RedactorAndRenderer>
 
     <FloatingInput v-model="authorname" title="Автор" readonly no-info class="input"></FloatingInput>
     <a v-if="authortelegram" :href="`https://t.me/${authortelegram}`" target="_blank" class="user-link">
@@ -150,8 +154,6 @@ export default {
       this.positionId = response.positionid;
       this.authorname = response.authorname;
       this.authortelegram = response.authortelegram;
-
-      this.$refs.renderer.update(this.text);
     }
 
     this.loading = true;
