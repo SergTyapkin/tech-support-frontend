@@ -303,7 +303,7 @@ hr
           </div>
           <div class="add-achievement" @click="getAllAchievements(); inSelectingAchievement = true" :class="{hidden: !$user.isAdmin || inSelectingAchievement || selectedAchievement}"><img src="../../res/plus.svg" alt="add achievement">Добавить достижение</div>
           <div class="select-achievement scrollable" :class="{hidden: !inSelectingAchievement}">
-            <div v-for="achievement in allAchievements" @click="inSelectingAchievement = false; selectedAchievement = achievement; selectedAchievement.level = 1" class="achievement">
+            <div v-for="achievement in allAchievements" @click="inSelectingAchievement = false; selectedAchievement = deepClone(achievement); selectedAchievement.level = 1" class="achievement">
               <AchievementAvatar :image-id="achievement.imageid" class="avatar"></AchievementAvatar>
               <div class="text">
                 <div class="name">{{ $cropText(achievement.name, 30) }}</div>
@@ -373,7 +373,7 @@ import UserAvatar from "../../components/UserAvatar.vue";
 import Achievement from "../../components/Achievement.vue";
 import AchievementAvatar from "../../components/AchievementAvatar.vue";
 import Range from "../../components/Range.vue";
-import {cleanupMarkdownPreview} from "../../utils/utils";
+import {cleanupMarkdownPreview, deepClone} from "../../utils/utils";
 import FloatingButton from "../../components/FloatingButton.vue";
 
 export default {
@@ -667,6 +667,8 @@ export default {
     },
 
     async addAchievement() {
+      console.log(this.selectedAchievement)
+
       this.loading = true;
       const response = await this.$api.addUserAchievement(this.user.id, this.selectedAchievement.id, this.selectedAchievement.level);
       this.loading = false;
@@ -681,6 +683,9 @@ export default {
       this.achievements.push(this.selectedAchievement);
       this.selectedAchievement = undefined;
       this.$popups.success('Сохранено', 'АААААЧИВКА!');
+
+      console.log(this.achievements)
+      console.log(this.selectedAchievement)
     },
 
     async deleteAchievement(id) {
@@ -704,7 +709,9 @@ export default {
       window.onbeforeunload = () => true;
       this.isEdited = true;
     },
+
     cleanupMarkdownPreview: cleanupMarkdownPreview,
+    deepClone: deepClone,
   },
 
   watch: {
