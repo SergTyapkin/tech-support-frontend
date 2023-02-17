@@ -11,7 +11,7 @@
 export default {
   props: {
     imageId: {
-      type: Number,
+      type: String,
       required: true,
     },
     defaultImageSrc: {

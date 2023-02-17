@@ -31,7 +31,7 @@
 
 <template>
   <router-link v-if="link" :to="{name: 'userProfile', params: {userId: id}}" class="user" :class="{clickable}">
-    <UserAvatar :image-id="avatarImageId" class="avatar"></UserAvatar>
+    <UserAvatar :image-id="avatarimageid" class="avatar"></UserAvatar>
     <div class="text">
       <div class="name">{{ $cropText(name, 30) }}</div>
       <div class="title">{{ $cropText(title, 30) }}</div>
@@ -39,7 +39,7 @@
   </router-link>
 
   <div v-else class="user" :class="{clickable}">
-    <UserAvatar :image-id="avatarImageId" class="avatar"></UserAvatar>
+    <UserAvatar :image-id="avatarimageid" class="avatar"></UserAvatar>
     <div class="text">
       <div class="name">{{ $cropText(name, 30) }}</div>
       <div class="title">{{ $cropText(title, 30) }}</div>
@@ -58,8 +58,8 @@ export default {
       type: Number,
       required: true,
     },
-    avatarImageId: {
-      type: Number,
+    avatarimageid: {
+      type: String,
       required: true,
     },
     name: {

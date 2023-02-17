@@ -15,7 +15,7 @@ export default {
   components: {ServerImage},
   props: {
     imageId: {
-      type: Number,
+      type: String,
       required: true,
     },
   },
@@ -24,6 +24,6 @@ export default {
     return {
       img: defaultAvatarImage
     }
-  }
+  },
 }
 </script>

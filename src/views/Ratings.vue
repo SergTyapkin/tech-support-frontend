@@ -16,6 +16,7 @@
     text-align center
     margin 0
     transition transform 0.2s ease
+    flex (1/3)
     &:hover
       transform scale(1.1)
     .avatar

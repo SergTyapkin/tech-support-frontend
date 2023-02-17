@@ -160,7 +160,7 @@
             </div>
             <ul class="select-user-list scrollable" :class="{hidden: !inSelectingUser}">
               <li v-for="user in allUsers" class="user" @click="inSelectingUser = false; selectedUser = user">
-                <UserLine v-bind="user" clickable></UserLine>
+                <UserLine v-bind="user" :avatarimageid="user.avatarimageid" clickable></UserLine>
               </li>
             </ul>
             <div class="select-position" :class="{hidden: !selectedUser}" v-if="selectedUser">
