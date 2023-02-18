@@ -346,7 +346,7 @@ export default {
 
     async getAllUsers() {
       this.loading = true;
-      const res = await this.$api.getUsersBySearch('');
+      const res = await this.$api.getAllUsers();
       this.loading = false;
 
       if (!res.ok_) {

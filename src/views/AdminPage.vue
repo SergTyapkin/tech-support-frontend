@@ -180,7 +180,7 @@
         <ul v-else class="container scrollable">
           <li class="newUser" v-for="(user, listIdx) in newUsers">
             <div class="username-container">
-              <div class="username">{{ user.name }}</div>
+              <div class="username">{{ $usernameLow(user) }}</div>
               <div class="email">
                 <img src="../res/email-logo.svg" alt="email">
                 <span>{{ user.email }}</span>

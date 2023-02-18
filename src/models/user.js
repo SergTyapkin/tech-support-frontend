@@ -11,7 +11,9 @@ export default class User extends Model {
     joinedDate: '',
     email: "",
     telegram: "",
-    name: "",
+    firstName: "",
+    secondName: "",
+    thirdName: "",
     password: "",
     avatarImageId: null,
     title: null,
@@ -24,11 +26,13 @@ export default class User extends Model {
     super.set(data);
     this.isLogined = true;
     this.isGotten = true;
+    this.name = this.firstName + " " + this.secondName;
   }
 
   setDefault() {
     super._setDefault(this);
     this.isGotten = true;
+    this.name = ""
   }
 
   constructor() {

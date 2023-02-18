@@ -15,8 +15,8 @@ export class Api extends ApiRequest {
     getAllUsers = () => this.get(`/user/all`, {confirmedByAdmin: true});
     getUsersBySearch = (search) => this.get(`/user/all`, {search});
     getAnotherUser = (id) => this.get(`/user`, {id})
-    signUp = (password, email, name) => this.post(`/user`, {password, email, name});
-    updateUser = (userId, email, name, telegram) => this.put(`/user`, {userId, email, name, telegram});
+    signUp = (password, email, firstName, secondName, thirdName, telegram) => this.post(`/user`, {password, email, firstName, secondName, thirdName, telegram});
+    updateUser = (userId, email, firstName, secondName, thirdName, telegram) => this.put(`/user`, {userId, email, firstName, secondName, thirdName, telegram});
     updateUserTitle = (userId, title) => this.put(`/user`, {userId, title});
     updateUserAvatarImageId = (userId, avatarImageId) => this.put(`/user`, {userId, avatarImageId});
     updatePassword = (oldPassword, newPassword) => this.put(`/user/password`, {oldPassword, newPassword});

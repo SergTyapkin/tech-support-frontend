@@ -64,7 +64,12 @@ export default {
     },
     name: {
       type: String,
-      required: true,
+    },
+    firstname: {
+      type: String
+    },
+    secondname: {
+      type: String
     },
     title: {
       type: String,
@@ -72,6 +77,12 @@ export default {
     },
     clickable: Boolean,
     link: Boolean,
+  },
+
+  data() {
+    return {
+      name: this.$props.name || (this.$usernameLow(this.$props)),
+    }
   },
 }
 </script>

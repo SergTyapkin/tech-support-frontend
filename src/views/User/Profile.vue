@@ -268,7 +268,7 @@ hr
               </router-link>
             </div>
             <div v-if="!yours" class="username">
-              <div class="another-user-info">{{ user.name }}</div>
+              <div class="another-user-info">{{ $username(user) }}</div>
             </div>
             <input v-if="$user.isAdmin && !yours" type="text" class="title" v-model="user.title" @change="saveAnotherUserTitle" @keydown.enter="(event) => event.target.blur()">
             <div v-else class="title">{{ user.title }}</div>
@@ -321,7 +321,9 @@ hr
           <div v-if="yours">
             <FormExtended ref="form" no-bg
                   :fields="[
-                    { title: 'ТВОЁ ИМЯ', jsonName: 'name' },
+                    { title: 'ТВОЁ ИМЯ', jsonName: 'firstName' },
+                    { title: 'ТВОЯ ФАМИЛИЯ', jsonName: 'secondName' },
+                    { title: 'ТВОЁ ОТЧЕСТВО', jsonName: 'thirdName' },
                     { title: 'ТВОЙ Telegram', jsonName: 'telegram', type: 'telegram', info: 'всё что после @'},
                     { title: 'ТВОЙ E-mail', jsonName: 'email', type: 'email', info: user.isConfirmedEmail ? `<span class='__text-success'>Email подтвержден</span>` : `<b class='__text-error'>E-MAIL НЕ ПОДТВЕРЖДЕН. ВОССТАНОВИТЬ ПАРОЛЬ НЕ УДАСТСЯ</b>`},
                   ]"
@@ -440,10 +442,18 @@ export default {
       }));
     },
 
-    validate(name, email, telegram) {
+    validate(firstName, secondName, thirdName, email, telegram) {
       let ok = true;
-      if (name.length === 0) {
-        this.$refs.form.errors.name = 'Имя не может быть пустым';
+      if (firstName.length === 0) {
+        this.$refs.form.errors.firstName = 'Имя не может быть пустым';
+        ok = false;
+      }
+      if (secondName.length === 0) {
+        this.$refs.form.errors.secondName = 'Фамилия не может быть пустой';
+        ok = false;
+      }
+      if (thirdName.length === 0) {
+        this.$refs.form.errors.thirdName = 'Отчество не может быть пустым';
         ok = false;
       }
       if (email.length === 0) {
@@ -461,14 +471,16 @@ export default {
       if (!await this.$modal.confirm("Изменение данных", "Если вы изменили E-mail, он станет неподтверждённым. Придётся подтверждать заново"))
         return;
 
-      const name = this.$refs.form.values.name;
+      const firstName = this.$refs.form.values.firstName;
+      const secondName = this.$refs.form.values.secondName;
+      const thirdName = this.$refs.form.values.thirdName;
       const email = this.$refs.form.values.email;
       const telegram = this.$refs.form.values.telegram;
-      if (!this.validate(name, email, telegram))
+      if (!this.validate(firstName, secondName, thirdName, email, telegram))
         return;
 
       this.$refs.form.loading = true;
-      const response = await this.$api.updateUser(this.user.id, email, name, telegram);
+      const response = await this.$api.updateUser(this.user.id, email, firstName, secondName, thirdName, telegram);
       this.$refs.form.loading = false;
 
       if (response.ok_) {
@@ -554,7 +566,9 @@ export default {
         id: user.id,
         isAdmin: user.isAdmin,
         joinedDate: user.joineddate,
-        name: user.name,
+        firstName: user.firstname,
+        secondName: user.secondname,
+        thirdName: user.thirdname,
         position: user.position,
         rating: user.rating,
         telegram: user.telegram,

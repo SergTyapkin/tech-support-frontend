@@ -361,6 +361,8 @@ export default {
     global.$base_url_path = BASE_URL_PATH;
 
     global.$cropText = cropText;
+    global.$username = (user) => user.firstName + ' ' + (user.secondName || '');
+    global.$usernameLow = (user) => user.firstname + ' ' + (user.secondname || '');
   },
 
   methods: {
