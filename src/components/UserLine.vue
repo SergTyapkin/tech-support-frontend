@@ -24,6 +24,9 @@
       color textColor1
       line-height 0.8
       white-space nowrap
+      .thirdname
+        color textColor4
+        font-small()
     .title
       font-small-extra()
       color textColor3
@@ -33,7 +36,7 @@
   <router-link v-if="link" :to="{name: 'userProfile', params: {userId: id}}" class="user" :class="{clickable}">
     <UserAvatar :image-id="avatarimageid" class="avatar"></UserAvatar>
     <div class="text">
-      <div class="name">{{ $cropText(name, 30) }}</div>
+      <div class="name">{{ $cropText(name, 30) }} <span class="thirdname" v-if="withThirdname">{{ thirdname }}</span></div>
       <div class="title">{{ $cropText(title, 30) }}</div>
     </div>
   </router-link>
@@ -66,10 +69,13 @@ export default {
       type: String,
     },
     firstname: {
-      type: String
+      type: String,
     },
     secondname: {
-      type: String
+      type: String,
+    },
+    thirdname: {
+      type: String,
     },
     title: {
       type: String,
@@ -77,6 +83,7 @@ export default {
     },
     clickable: Boolean,
     link: Boolean,
+    withThirdname: Boolean,
   },
 
   data() {

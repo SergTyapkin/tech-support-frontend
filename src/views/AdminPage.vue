@@ -245,7 +245,7 @@
         <CircleLoading v-if="searchLoading" class="loading"></CircleLoading>
         <div v-else-if="searchUsers.length === 0" class="not-found-info">Пользователей не найдено</div>
         <ul v-else class="container scrollable">
-          <UserLine v-for="user in searchUsers" v-bind="user" clickable link></UserLine>
+          <UserLine v-for="user in searchUsers" v-bind="user" clickable link with-thirdname></UserLine>
         </ul>
       </div>
 
