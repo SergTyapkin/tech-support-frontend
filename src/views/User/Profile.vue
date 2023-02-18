@@ -321,8 +321,8 @@ hr
           <div v-if="yours">
             <FormExtended ref="form" no-bg
                   :fields="[
-                    { title: 'ТВОЁ ИМЯ', jsonName: 'firstName' },
                     { title: 'ТВОЯ ФАМИЛИЯ', jsonName: 'secondName' },
+                    { title: 'ТВОЁ ИМЯ', jsonName: 'firstName' },
                     { title: 'ТВОЁ ОТЧЕСТВО', jsonName: 'thirdName' },
                     { title: 'ТВОЙ Telegram', jsonName: 'telegram', type: 'telegram', info: 'всё что после @'},
                     { title: 'ТВОЙ E-mail', jsonName: 'email', type: 'email', info: user.isConfirmedEmail ? `<span class='__text-success'>Email подтвержден</span>` : `<b class='__text-error'>E-MAIL НЕ ПОДТВЕРЖДЕН. ВОССТАНОВИТЬ ПАРОЛЬ НЕ УДАСТСЯ</b>`},
