@@ -175,7 +175,7 @@
       <div class="buttons">
         <CircleLoading v-if="loading"></CircleLoading>
         <div v-else-if="!event.isyouparticipate && event.isnext" class="button-participate-group">
-          <div class="button-participate" @click="participate">Пойду</div>
+          <div class="button-participate" @click="participate" :disabled="!position">Пойду</div>
           <SelectList v-model="position" :list="allPositions" title="Чем займёшься" solid class="input"></SelectList>
         </div>
         <div v-else-if="event.isnext" class="button-participate not" @click="notParticipate">Не пойду</div>
