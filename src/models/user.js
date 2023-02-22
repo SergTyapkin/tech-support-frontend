@@ -26,7 +26,7 @@ export default class User extends Model {
     super.set(data);
     this.isLogined = true;
     this.isGotten = true;
-    this.name = this.firstName + " " + this.secondName;
+    this.name = this.firstName + " " + (this.thirdName ? this.thirdName : '');
   }
 
   setDefault() {
