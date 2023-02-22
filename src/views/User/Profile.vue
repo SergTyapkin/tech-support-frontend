@@ -268,7 +268,7 @@ hr
               </router-link>
             </div>
             <div v-if="!yours" class="username">
-              <div class="another-user-info">{{ $username(user) }}</div>
+              <div class="another-user-info">{{ $usernameFull(user) }}</div>
             </div>
             <input v-if="$user.isAdmin && !yours" type="text" class="title" v-model="user.title" @change="saveAnotherUserTitle" @keydown.enter="(event) => event.target.blur()">
             <div v-else class="title">{{ user.title }}</div>
