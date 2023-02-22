@@ -34,8 +34,8 @@
 <template>
   <div>
     <Filters :filters="filters" @change="onChangeFilters" class="filters">
-      <FloatingInput placeholder="Название мероприятия" no-info class="search-input" v-model="searchText" @input="getEvents"></FloatingInput>
-      <SelectList v-model="placeSearch" @input="getEvents" :list="allPlaces" :selected-id="-1" title="Место проведения" solid></SelectList>
+      <FloatingInput placeholder="Поиск по названию" no-info class="search-input" v-model="searchText" @input="getEvents"></FloatingInput>
+      <SelectList v-model="placeSearch" @input="getEvents" :list="allPlaces" :selected-id="-1" title="Поиск по месту" solid></SelectList>
     </Filters>
 
     <ul class="events-list">
