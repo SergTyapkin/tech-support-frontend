@@ -9,13 +9,13 @@
 
 <template>
   <div>
-    <Form class="from"
+    <FormExtended class="from"
           ref="form"
           title="Регистрация" description="Ну давай, покажи всю свою оригинальность"
           :fields="[
             { title: 'ИМЯ', autocomplete: 'on', jsonName: 'firstName', name: 'firstname', info: 'Давай знакомиться'},
             { title: 'ФАМИЛИЯ', autocomplete: 'on', jsonName: 'secondName', name: 'secondname'},
-            { title: 'ОТЧЕСТВО', autocomplete: 'on', jsonName: 'thirdName', name: 'thirdname', info: 'Ну надо'},
+            { title: 'ОТЧЕСТВО', autocomplete: 'on', jsonName: 'thirdName', name: 'thirdname'},
             { title: 'ПАРОЛЬ', autocomplete: 'on', jsonName: 'password', name: 'password', type: 'password', info: 'Забыл пароль? - пей таблетки'},
             { title: 'ПАРОЛЬ ЕЩЁ РАЗ', jsonName: 'passwordConfirm', name: 'password confirm', type: 'password', info: 'Не ошибись - это будет фиаско'},
             { title: 'E-mail', autocomplete: 'on', jsonName: 'email', name: 'email', type: 'email', info: 'Когда-нибудь пароль придётся восстанавливать'},
@@ -24,16 +24,16 @@
           submit-text="Погнали"
           @submit="signUp"
     >Уже есть аккаунт? <router-link :to="base_url_path + `/signin`" class="link">Войти</router-link>
-    </Form>
+    </FormExtended>
   </div>
 </template>
 
 
 <script>
-import Form from "../../components/FormExtended.vue";
+import FormExtended from "../../components/FormExtended.vue";
 
 export default {
-  components: {Form},
+  components: {FormExtended},
 
   data() {
     return {
@@ -90,8 +90,11 @@ export default {
     },
 
     async signUp({firstName, secondName, thirdName, password, passwordConfirm, email, telegram}) {
-      if (!this.validate(firstName, secondName, thirdName, password, passwordConfirm, email, telegram))
+      this.$refs.form.errors.email = "ОШИБКА";
+      if (!this.validate(firstName, secondName, thirdName, password, passwordConfirm, email, telegram)) {
+        this.$refs.form.showError();
         return;
+      }
 
       this.$refs.form.loading = true;
       const response = await this.$api.signUp(password, email, firstName, secondName, thirdName, telegram);

@@ -4,6 +4,8 @@
 .form
   margin-top 100px
   margin-bottom 100px
+  .form-code
+    margin 0
 
 .text-centered
   text-align center
@@ -17,7 +19,7 @@
 
 <template>
   <div>
-    <Form class="form"
+    <FormExtended class="form"
           v-if="!loginByCode"
           ref="form"
           title="Вход" description="Ну давай, вспомни пароль, войди в меня"
@@ -32,9 +34,9 @@
 
       <div class=" text-centered">или</div>
       <div class="button" @click="loginByCode = true">Войти по коду</div>
-    </Form>
+    </FormExtended>
 
-    <Form v-else
+    <FormExtended v-else
           ref="formEmail"
           title="Вход по коду" description="Можно не вспоминать пароль, а просто открыть почту"
           :fields="[
@@ -43,27 +45,28 @@
           submit-text="Выслать код"
           @submit="signInByEmailCodeSendEmail"
     >
-      <Form :no-bg="true"
+      <FormExtended :no-bg="true"
             ref="formCode"
             :fields="[
               { title: 'Одноразовый код', jsonName: 'code'},
             ]"
             submit-text="Войти"
             @submit="signInByEmailCode"
-      ></Form>
+            class="form-code"
+      ></FormExtended>
       <div class="text-centered">или</div>
       <div class="button" @click="loginByCode = false">Войти по паролю</div>
-    </Form>
+    </FormExtended>
   </div>
 </template>
 
 
 <script>
-import Form from "../../components/FormExtended.vue";
+import FormExtended from "../../components/FormExtended.vue";
 import FloatingInput from "../../components/FloatingInput.vue";
 
 export default {
-  components: {FloatingInput, Form},
+  components: {FloatingInput, FormExtended},
 
   data() {
     return {
@@ -125,8 +128,10 @@ export default {
     },
 
     async signInByEmailCodeSendEmail({email}) {
-      if (!this.validateEmail(email))
+      if (!this.validateEmail(email)) {
+        this.$refs.form.showError();
         return;
+      }
 
       this.$refs.formEmail.loading = true;
       const response = await this.$api.sendSignInEmail(email);
