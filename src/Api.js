@@ -34,10 +34,11 @@ export class Api extends ApiRequest {
     editEvent = (id, name, description, date, timeStart, timeEnd, placeId, eventTimeStart, eventTimeEnd, peopleNeeds) => this.put(`/event`, {id, name, date, timeStart, timeEnd, description, placeId, eventTimeStart, eventTimeEnd, peopleNeeds});
     deleteEventById = (id) => this.delete(`/event`, {id});
 
-    participateInEvent = (eventId, userId, positionId) => this.post(`/participation/event`, {eventId, userId, positionId});
+    participateInEvent = (eventId, userId, positionId, comment) => this.post(`/participation/event`, {eventId, userId, positionId, comment});
     notParticipateInEvent = (eventId, userId) => this.delete(`/participation/event`, {eventId, userId});
     updateParticipationScore = (id, score) => this.put(`/participation/event`, {id, score});
-    updateParticipationComment = (id, comment) => this.put(`/participation/event`, {id, comment});
+    updateParticipationCommentAdmin = (id, comment) => this.put(`/participation/event`, {id, comment});
+    updateParticipationCommentSelf = (id, comment) => this.put(`/participation/event/comment`, {id, comment});
     getUnvotedParticipations = () => this.get(`/participation/unvoted`);
 
     getParticipationRating = () => this.get(`/ratings`);

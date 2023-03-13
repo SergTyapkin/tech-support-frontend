@@ -19,6 +19,7 @@ user-padding-left-mobile = 5px
     padding-left user-padding-left-mobile
   .user-icon-container
   .user-icon
+    border none
     width (avatar-size - 4px)
     height (avatar-size - 4px)
     min-width (avatar-size - 4px)
@@ -149,7 +150,7 @@ user-padding-left-mobile = 5px
       <div class="userTitle">{{ $cropText(userTitle, 50) }}</div>
       <div class="range-input-container" :class="{'in-row': !$user.isAdmin}">
         <Range class="range" :min="0.25" :max="2" :step="0.25" v-model="score" @change="saveRating" :readonly="!$user.isAdmin" :with-delete="$user.isAdmin"></Range>
-        <input class="comm" ref="comment" placeholder="Комментарий" v-model="comment" @change="saveComment" @keydown.enter="$refs.comment.blur()" :readonly="!$user.isAdmin">
+        <input class="comm" ref="comment" placeholder="Комментарий" v-model="comment" @change="saveComment" @keydown.enter="$refs.comment.blur()" :readonly="!canEdit">
       </div>
     </div>
     <hr class="hrUserL">
@@ -184,7 +185,8 @@ export default {
     comment: String,
     score: Number,
 
-    canDelete: Boolean
+    canDelete: Boolean,
+    canEdit: Boolean,
   },
 
   data() {
@@ -213,7 +215,12 @@ export default {
     },
     async saveComment() {
       this.state = this.States.edited;
-      const res = await this.$api.updateParticipationComment(this.id, this.comment);
+      let res;
+      if (this.$user.isAdmin) {
+        res = await this.$api.updateParticipationCommentAdmin(this.id, this.comment);
+      } else {
+        res = await this.$api.updateParticipationCommentSelf(this.id, this.comment);
+      }
 
       if (!res.ok_) {
         this.$popups.error("Ошибка", "Не удалось сохранить комментарий");

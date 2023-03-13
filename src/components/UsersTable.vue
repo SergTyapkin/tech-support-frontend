@@ -58,6 +58,7 @@ user-padding-left = 20px
             :comment="participation.admincomment"
             :score="participation.score"
             :can-delete="canDelete"
+            :can-edit="($user.isAdmin) || (participation.userid === $user.id)"
             @delete="(id) => deleteUserFromList(0, id)"
       ></User>
     </div>
@@ -80,6 +81,7 @@ export default {
     usersLists: [],
 
     canDelete: Boolean,
+    canEditSelf: Boolean,
   },
 
   methods: {
@@ -87,9 +89,7 @@ export default {
 
     deleteUserFromList(listIdx, id) {
       const index = this.usersLists[listIdx]?.participations?.findIndex(u => u.id === id);
-      console.log(index, this.usersLists[listIdx])
       this.usersLists[listIdx]?.participations?.splice(index, 1);
-      console.log(this.usersLists[listIdx])
     }
   }
 };

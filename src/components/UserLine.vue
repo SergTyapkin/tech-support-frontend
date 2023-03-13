@@ -13,11 +13,10 @@
   &.clickable:hover
     background blocksBgColorHover
   .avatar
-    border-radius(50%)
     width 30px
     height 30px
     margin-right 5px
-    border 1px solid empColor1_2
+    border-color empColor1_2
   .text
     .name
       font-middle()

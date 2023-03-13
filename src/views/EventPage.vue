@@ -102,16 +102,17 @@
       .button-submit
         flex 0.5
         margin-right 20px
-      .button-participate-group
+      .participation-group
         flex 1
-        display flex
-        gap 20px
-        @media ({mobile})
-          flex-direction column
-      .button-participate
-        button-submit()
-        &.not
-          button-danger()
+        .button-participate-group
+          display flex
+          gap 20px
+          @media ({mobile})
+            flex-direction column
+        .button-participate
+          button-submit()
+      .button-not-participate
+        button-danger()
     .button-delete
       button-danger()
       display flex
@@ -154,7 +155,7 @@
         <div class="right-description">
           <RedactorAndRenderer info="А что мы будем делать?" placeholder="Описание" v-model="event.description" @input="onChange()" show-initial-preview></RedactorAndRenderer>
 
-          <UsersTable class="users-table" :users-lists="[{participations: event.participations}]" @change.stop="" @input.stop="" can-delete>
+          <UsersTable class="users-table" :users-lists="[{participations: event.participations}]" @change.stop @input.stop can-delete can-edit-self>
             <div class="add-participation-button" :class="{hidden: !$user.isAdmin || inSelectingUser || selectedUser}" @click="getAllUsers(); inSelectingUser = true">
               <img src="../res/plus.svg" alt="plus"><div class="text">Записать</div>
             </div>
@@ -174,11 +175,16 @@
 
       <div class="buttons">
         <CircleLoading v-if="loading"></CircleLoading>
-        <div v-else-if="!event.isyouparticipate && event.isnext" class="button-participate-group">
-          <div class="button-participate" @click="participate" :disabled="!position">Пойду</div>
-          <SelectList v-model="position" :list="allPositions" title="Чем займёшься" solid class="input"></SelectList>
+        <div v-else-if="!event.isyouparticipate && event.isnext" class="participation-group">
+          <div class="button-participate-group">
+            <div class="button-participate" @click="participate" :disabled="!position">Пойду</div>
+            <SelectList v-model="position" :list="allPositions" title="Чем займёшься" solid class="input"></SelectList>
+          </div>
+          <div class="participation-comment">
+            <FloatingInput @input.stop v-model="participationComment" placeholder="Комментарий к участию" no-info></FloatingInput>
+          </div>
         </div>
-        <div v-else-if="event.isnext" class="button-participate not" @click="notParticipate">Не пойду</div>
+        <div v-else-if="event.isnext" class="button-not-participate" @click="notParticipate">Не пойду</div>
       </div>
       <div v-if="$user.isAdmin" class="button-delete" @click="deleteEvent"><img src="../res/trash.svg" alt="delete">Удалить</div>
     </Form>
@@ -211,6 +217,7 @@ export default {
       event: {},
       position: undefined,
       place: undefined,
+      participationComment: '',
 
       allPlaces: [],
       allPositions: [],
@@ -267,14 +274,14 @@ export default {
       this.event = response;
     },
 
-    async addUserParticipation(userId, positionId) {
+    async addUserParticipation(userId, positionId, participationComment) {
       if (!positionId) {
         this.$modal.alert("Не выбрана направленность работы", "Выбери, чем будешь заниматься");
         return false;
       }
 
       this.loading = true;
-      const res = await this.$api.participateInEvent(this.eventId, userId, positionId);
+      const res = await this.$api.participateInEvent(this.eventId, userId, positionId, participationComment);
       this.loading = false;
 
       if (!res.ok_) {
@@ -287,7 +294,7 @@ export default {
     },
 
     async participate() {
-      if (await this.addUserParticipation(this.$user.id, this.position?.id))
+      if (await this.addUserParticipation(this.$user.id, this.position?.id, this.participationComment))
         this.event.isyouparticipate = true;
     },
     async participateOtherUser(userId, positionId) {

@@ -20,7 +20,7 @@
     &:hover
       transform scale(1.1)
     .avatar
-      border-radius(50%)
+      border none
       outline-width 2px
       outline-style solid
       outline-offset 2px

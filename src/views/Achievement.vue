@@ -20,6 +20,7 @@
     .row-levels
     .row-contacts
     .row-buttons
+    .row-users-achieved
       display flex
       width 100%
 
@@ -76,10 +77,12 @@
           color textColor4
 
     .row-levels
+    .row-users-achieved
       @media ({mobile})
         flex-direction column
       .levels-container
       .avatar-examples
+      .users-achieved
         .info
           font-small()
           color textColor4
@@ -90,6 +93,7 @@
         padding 10px 0
 
       .avatar-examples
+      .users-achieved
         flex 1
         overflow-x scroll
         block-dark-bg()
@@ -107,6 +111,7 @@
         &:hover
           transition all 0.2s ease
           filter brightness(2)
+
 
     .row-buttons
       .button-delete
@@ -148,7 +153,7 @@
         </div>
 
         <div class="markdown-container">
-          <RedactorAndRenderer info="Описание" @input="onChange" v-model="achievement.description" placeholder="Описание"></RedactorAndRenderer>
+          <RedactorAndRenderer info="Описание" @input="onChange" v-model="achievement.description" placeholder="Описание" show-initial-preview></RedactorAndRenderer>
         </div>
       </div>
 
@@ -170,6 +175,15 @@
         <a v-if="achievement.authortelegram" :href="`https://t.me/${achievement.authortelegram}`" target="_blank" class="user-link">
           <FloatingInput :model-value="`@${achievement.authortelegram}`" title="Связь с автором" readonly no-info class="input"></FloatingInput>
         </a>
+      </div>
+
+      <div class="row-users-achieved">
+        <div class="users-achieved scrollable">
+          <div class="info">Достижение получили</div>
+          <div class="images-container">
+            <UserAvatar v-for="user in achievement.usersachieved" :image-id="user.avatarimageid"></UserAvatar>
+          </div>
+        </div>
       </div>
 
       <CircleLoading v-if="loading"></CircleLoading>
@@ -198,10 +212,12 @@ import DragNDropLoader from "../components/DragNDropLoader.vue";
 import {IMAGE_MAX_RES, IMAGE_ACHIEVEMENT_MAX_RES} from "../constants";
 import ImageUploader from "../utils/imageUploader";
 import RedactorAndRenderer from "../components/Markdown/RedactorAndRenderer.vue";
+import UserAvatar from "../components/UserAvatar.vue";
 
 
 export default {
   components: {
+    UserAvatar,
     RedactorAndRenderer,
     Achievement,
     DragNDropLoader,
