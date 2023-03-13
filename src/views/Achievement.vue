@@ -112,6 +112,12 @@
           transition all 0.2s ease
           filter brightness(2)
 
+    .row-users-achieved
+      .user-icon-container
+        text-align center
+        .username
+          font-small()
+          color textColor4
 
     .row-buttons
       .button-delete
@@ -181,7 +187,10 @@
         <div class="users-achieved scrollable">
           <div class="info">Достижение получили</div>
           <div class="images-container">
-            <UserAvatar v-for="user in achievement.usersachieved" :image-id="user.avatarimageid"></UserAvatar>
+            <router-link v-for="user in achievement.usersachieved" :to="{name: 'profile', params: {userId: user.id}}" class="user-icon-container">
+              <UserAvatar :image-id="user.avatarimageid"></UserAvatar>
+              <div class="username">{{ user.username }}</div>
+            </router-link>
           </div>
         </div>
       </div>
