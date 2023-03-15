@@ -44,7 +44,6 @@
     .position
       color colorGold
     .avatar
-      width 100px
       outline-color colorGold
   .place-2
     align-self flex-end
@@ -52,14 +51,12 @@
     .position
       color colorSilver
     .avatar
-      width 80px
       outline-color colorSilver
   .place-3
     align-self flex-end
     .position
       color colorBronze
     .avatar
-      width 70px
       outline-color colorBronze
 
 .users-list
@@ -89,9 +86,6 @@
         color textColor2
         min-width 50px
       .avatar
-        border-radius(50%)
-        width 30px
-        height 30px
         border 1px solid empColor1_2
         margin-right 5px
       .text
@@ -110,7 +104,7 @@
     <header class="top-3">
       <router-link :to="{name: 'userProfile', params: {userId: users[1].id}}" class="place-2" v-if="users[1] !== undefined">
         <div class="position">#2</div>
-        <UserAvatar class="avatar" :image-id="users[1].avatarimageid"></UserAvatar>
+        <UserAvatar class="avatar" :image-id="users[1].avatarimageid" size="100px"></UserAvatar>
         <div class="name">{{ users[1].name }}</div>
         <div class="title">
           {{ users[1].title }}
@@ -119,7 +113,7 @@
       </router-link>
       <router-link :to="{name: 'userProfile', params: {userId: users[0].id}}" class="place-1" v-if="users[0] !== undefined">
         <div class="position">#1</div>
-        <UserAvatar class="avatar" :image-id="users[0].avatarimageid"></UserAvatar>
+        <UserAvatar class="avatar" :image-id="users[0].avatarimageid" size="80px"></UserAvatar>
         <div class="name">{{ users[0].name }}</div>
         <div class="title">
           {{ users[0].title }}
@@ -128,7 +122,7 @@
       </router-link>
       <router-link :to="{name: 'userProfile', params: {userId: users[2].id}}" class="place-3" v-if="users[2] !== undefined">
         <div class="position">#3</div>
-        <UserAvatar class="avatar" :image-id="users[2].avatarimageid"></UserAvatar>
+        <UserAvatar class="avatar" :image-id="users[2].avatarimageid" size="70px"></UserAvatar>
         <div class="name">{{ users[2].name }}</div>
         <div class="title">
           {{ users[2].title }}
@@ -142,7 +136,7 @@
         <router-link v-for="(user, idx) in users.slice(3)" :to="{name: 'userProfile', params: {userId: user.id}}" class="user">
           <div class="counter">{{ idx + 4 }}</div>
           <div class="rating">★{{ user.rating }}</div>
-          <UserAvatar :image-id="user.avatarimageid" class="avatar"></UserAvatar>
+          <UserAvatar :image-id="user.avatarimageid" class="avatar" size="30px"></UserAvatar>
           <div class="text">
             <div class="name">{{ user.name }}</div>
             <div class="title">{{ user.title }}</div>

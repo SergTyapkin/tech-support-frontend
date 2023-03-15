@@ -142,7 +142,7 @@ user-padding-left-mobile = 5px
 <template>
   <div class="user">
     <router-link :to="{name: 'profile', params: {userId: userId}}" class="user-icon-container" @contextmenu.prevent="deleteParticipation">
-      <UserAvatar :image-id="userImageId" class="user-icon"></UserAvatar>
+      <UserAvatar :image-id="userImageId" class="user-icon" size="80px" size-mobile="50px"></UserAvatar>
       <div v-if="$user.isAdmin && canDelete" class="delete-user" @click.stop.prevent="deleteParticipation"><img src="../res/trash.svg" alt="delete"></div>
     </router-link>
     <div class="info" :class="{isAdmin: $user.isAdmin}">

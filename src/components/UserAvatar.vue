@@ -11,10 +11,15 @@
   border-radius(50%)
   position relative
   overflow hidden
+  @media({mobile})
+    width var(--size-mobile)
+    min-width var(--size-mobile)
+    height var(--size-mobile)
+    min-height var(--size-mobile)
 </style>
 
 <template>
-  <ServerImage :image-id="imageId" :default-image-src="img" alt="avatar" class="avatar-image" :style="{'--size': size}"></ServerImage>
+  <ServerImage :image-id="imageId" :default-image-src="img" alt="avatar" class="avatar-image" :style="{'--size': size, '--size-mobile': sizeMobile}"></ServerImage>
 </template>
 
 <script>
@@ -32,13 +37,18 @@ export default {
     size: {
       type: String,
       default: "80px",
+    },
+    sizeMobile: {
+      type: String,
+      default: undefined,
     }
   },
 
   data() {
     return {
-      img: defaultAvatarImage
+      img: defaultAvatarImage,
+      sizeMobile: this.$props.sizeMobile ? this.$props.sizeMobile : this.$props.size,
     }
-  },
+  }
 }
 </script>
