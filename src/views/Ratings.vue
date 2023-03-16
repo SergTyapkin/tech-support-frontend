@@ -41,10 +41,25 @@
 
   .place-1
     align-self flex-start
+    position relative
     .position
       color colorGold
     .avatar
       outline-color colorGold
+      height 60px !important
+      min-height 60px !important
+      width 100px !important
+      min-width 100px !important
+    .info-big-bg
+      position absolute
+      inset 0
+      top -18px
+      font-size 30px
+      font-weight bold
+      text-align center
+      text-transform uppercase
+      line-height 70px
+      color mix(textColor4, transparent, 50%)
   .place-2
     align-self flex-end
     margin-bottom 20px
@@ -112,6 +127,7 @@
         </div>
       </router-link>
       <router-link :to="{name: 'userProfile', params: {userId: users[0].id}}" class="place-1" v-if="users[0] !== undefined">
+        <div class="info-big-bg">Жизнь потрепала</div>
         <div class="position">#1</div>
         <UserAvatar class="avatar" :image-id="users[0].avatarimageid" size="80px"></UserAvatar>
         <div class="name">{{ users[0].name }}</div>
