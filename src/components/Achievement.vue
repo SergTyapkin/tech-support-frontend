@@ -52,6 +52,11 @@
   &.level-5
     &::before
       content "V"
+  &.level-solo
+    &:before
+      color colorGold
+    .image
+      outline-color colorGold
   &.level-last
     &::after
       content ""
@@ -80,7 +85,7 @@
 </style>
 
 <template>
-  <div class="image-div" :class="`level-${level} ${level === maxLevels ? 'level-last' : ''} ${level === maxLevels - 1 ? 'level-last-prev' : ''}`">
+  <div class="image-div" :class="`level-${level} ${level === maxLevels ? (maxLevels === 1 ? 'level-solo' : 'level-last') : ''} ${level === maxLevels - 1 ? 'level-last-prev' : ''}`">
     <AchievementAvatar alt="achievement" :image-id="imageId"></AchievementAvatar>
   </div>
 </template>
