@@ -87,6 +87,16 @@ hr
       font-small()
       color textColor5
 
+  .see-all-achievements
+    block()
+    button-dashed()
+    border-bottom-left-radius 0
+    border-bottom-right-radius 0
+    img
+      width 30px
+      height 30px
+    width 100%
+
   .add-achievement
   .achievements-list
   .select-achievement-level
@@ -257,6 +267,8 @@ hr
           </div>
 
           <!-- ACHIEVEMENTS -->
+          <router-link v-if="yours" :to="{name: 'achievements'}" class="see-all-achievements"><img src="../../res/ratings.svg" alt="all achievements">Все достижения</router-link>
+
           <div class="achievements">
             <div v-if="achievements.length === 0" class="info">Достижений пока что нет</div>
             <router-link v-else
@@ -274,6 +286,7 @@ hr
             </router-link>
           </div>
           <div class="add-achievement" @click="inSelectingAchievement = true" :class="{hidden: !$user.isAdmin || inSelectingAchievement || selectedAchievement}"><img src="../../res/plus.svg" alt="add achievement">Добавить достижение</div>
+
           <AchievementsList :class="{hidden: !inSelectingAchievement}"
                             class="achievements-list scrollable"
                             @select="(achievement) => { inSelectingAchievement = false; selectedAchievement = deepClone(achievement); selectedAchievement.level = 1 }"

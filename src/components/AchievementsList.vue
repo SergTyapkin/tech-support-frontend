@@ -28,7 +28,6 @@
         font-middle()
         color textColor1
         line-height 0.8
-        white-space nowrap
       .description
         font-small-extra()
         color textColor3
@@ -41,8 +40,8 @@
     <div v-else v-for="achievement in achievements" @click="$emit('select', achievement)" class="achievement">
       <AchievementAvatar :image-id="achievement.imageid" class="avatar"></AchievementAvatar>
       <div class="text">
-        <div class="name">{{ $cropText(achievement.name, 30) }}</div>
-        <div class="description">{{ $cropText(cleanupMarkdownPreview(achievement.description), 60) }}</div>
+        <div class="name">{{ $cropText(achievement.name, previewSymbolsName) }}</div>
+        <div class="description">{{ $cropText(cleanupMarkdownPreview(achievement.description), previewSymbolsDescription) }}</div>
       </div>
     </div>
   </div>
@@ -61,6 +60,14 @@ export default {
   // select(achievement)
 
   props: {
+    previewSymbolsName: {
+      type: Number,
+      default: 30,
+    },
+    previewSymbolsDescription: {
+      type: Number,
+      default: 60,
+    }
   },
 
   data() {

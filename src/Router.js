@@ -17,6 +17,7 @@ import Ratings from "/src/views/Ratings.vue";
 import DocsList from "/src/views/DocsList.vue";
 import Doc from "/src/views/Doc.vue";
 import Achievement from "./views/Achievement.vue";
+import AchievementsList from "./views/AchievementsList.vue";
 
 import table from "/src/components/UsersTable.vue";
 
@@ -45,6 +46,7 @@ export default function createVueRouter(Store, App) {
 
         {path: BASE_URL_PATH + '/achievement', name: 'createAchievement', component: Achievement, meta: {loginRequired: true}},
         {path: BASE_URL_PATH + '/achievement/:achievementId', name: 'achievement', component: Achievement, meta: {loginRequired: true}},
+        {path: BASE_URL_PATH + '/achievements', name: 'achievements', component: AchievementsList, meta: {loginRequired: true}},
 
         {path: BASE_URL_PATH + '/ratings', name: 'ratings', component: Ratings, meta: {loginRequired: true}},
 
