@@ -119,7 +119,7 @@
     <header class="top-3">
       <router-link :to="{name: 'userProfile', params: {userId: users[1].id}}" class="place-2" v-if="users[1] !== undefined">
         <div class="position">#2</div>
-        <UserAvatar class="avatar" :image-id="users[1].avatarimageid" size="100px"></UserAvatar>
+        <UserAvatar class="avatar" :image-id="users[1].avatarimageid" size="85px"></UserAvatar>
         <div class="name">{{ users[1].name }}</div>
         <div class="title">
           {{ users[1].title }}
@@ -129,7 +129,7 @@
       <router-link :to="{name: 'userProfile', params: {userId: users[0].id}}" class="place-1" v-if="users[0] !== undefined">
         <div class="info-big-bg">Жизнь потрепала</div>
         <div class="position">#1</div>
-        <UserAvatar class="avatar" :image-id="users[0].avatarimageid" size="80px"></UserAvatar>
+        <UserAvatar class="avatar" :image-id="users[0].avatarimageid" size="100px"></UserAvatar>
         <div class="name">{{ users[0].name }}</div>
         <div class="title">
           {{ users[0].title }}

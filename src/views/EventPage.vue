@@ -155,7 +155,13 @@
         <div class="right-description">
           <RedactorAndRenderer info="А что мы будем делать?" placeholder="Описание" v-model="event.description" @input="onChange()" show-initial-preview></RedactorAndRenderer>
 
-          <UsersTable class="users-table" :users-lists="[{participations: event.participations}]" @change.stop @input.stop can-delete can-edit-self>
+          <UsersTable class="users-table"
+                      :users-lists="[{participations: event.participations}]"
+                      @change.stop
+                      @input.stop
+                      can-delete
+                      can-edit-self
+          >
             <div class="add-participation-button" :class="{hidden: !$user.isAdmin || inSelectingUser || selectedUser}" @click="getAllUsers(); inSelectingUser = true">
               <img src="../res/plus.svg" alt="plus"><div class="text">Записать</div>
             </div>

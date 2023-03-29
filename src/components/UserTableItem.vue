@@ -149,7 +149,7 @@ user-padding-left-mobile = 5px
       <div class="userName">{{ $cropText(userName, 30) }} <span class="position">{{ positionName }}</span></div>
       <div class="userTitle">{{ $cropText(userTitle, 50) }}</div>
       <div class="range-input-container" :class="{'in-row': !$user.isAdmin}">
-        <Range class="range" :min="0.25" :max="2" :step="0.25" v-model="score" @change="saveRating" :readonly="!$user.isAdmin" :with-delete="$user.isAdmin"></Range>
+        <Range class="range" :min="0.25" :max="2" :step="0.25" v-model="score" @change="saveRating" :readonly="!$user.isAdmin" :with-delete="$user.isAdmin" :disabled="!canEditScore"></Range>
         <input class="comm" ref="comment" placeholder="Комментарий" v-model="comment" @change="saveComment" @keydown.enter="$refs.comment.blur()" :readonly="!canEdit">
       </div>
     </div>
@@ -179,11 +179,12 @@ export default {
     userId: Number,
     userName: String,
     userTitle: String,
-    userImageId: Number,
+    userImageId: String,
     positionId: Number,
     positionName: String,
     comment: String,
     score: Number,
+    canEditScore: Boolean,
 
     canDelete: Boolean,
     canEdit: Boolean,
@@ -198,6 +199,8 @@ export default {
         error: 3,
       },
       state: 0,
+
+      score: this.$props.score,
     };
   },
 
@@ -252,6 +255,6 @@ export default {
       this.$emit('delete', this.id);
       this.$popups.success('Участие удалено', 'Ещё можно сжечь его на костре...');
     }
-  }
+  },
 };
 </script>

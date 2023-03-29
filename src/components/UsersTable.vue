@@ -17,6 +17,11 @@ user-padding-left = 20px
   @media ({mobile})
     height 100%
 
+  .edit-button
+    button()
+  .edit-button-save
+    button-success()
+
   .eventUsersList
     border-radius(5px)
 
@@ -40,6 +45,11 @@ user-padding-left = 20px
 
 <template>
   <div class="usersList scrollable">
+    <div class="edit-buttons-container" v-if="$user.isAdmin && (usersLists.reduce((total, cur) => cur.participations?.length || 0 + total, 0) > 0)">
+      <button v-if="!canEditScores" class="edit-button" @click="canEditScores = true">Изменить баллы</button>
+      <button v-else class="edit-button-save" @click="canEditScores = false">Не изменять баллы</button>
+    </div>
+
     <div class="eventUsersList" v-for="usersList in usersLists">
       <div class="eventName" v-if="usersList.eventName">
         <span class="name">{{usersList.eventName}}</span>
@@ -59,6 +69,7 @@ user-padding-left = 20px
             :score="participation.score"
             :can-delete="canDelete"
             :can-edit="($user.isAdmin) || (participation.userid === $user.id)"
+            :can-edit-score="canEditScores"
             @delete="(id) => deleteUserFromList(0, id)"
       ></User>
     </div>
@@ -84,6 +95,12 @@ export default {
     canEditSelf: Boolean,
   },
 
+  data() {
+    return {
+      canEditScores: false,
+    }
+  },
+
   methods: {
     dateToStr: dateToStr,
 
@@ -91,6 +108,6 @@ export default {
       const index = this.usersLists[listIdx]?.participations?.findIndex(u => u.id === id);
       this.usersLists[listIdx]?.participations?.splice(index, 1);
     }
-  }
+  },
 };
 </script>
