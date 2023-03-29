@@ -3,7 +3,7 @@
 </style>
 
 <template>
-  <ServerImage :image-id="imageId" :default-image-src="img" alt="avatar"></ServerImage>
+  <ServerImage :image-id="imageId" :default-image-src="img" alt="avatar" class="achievement-avatar"></ServerImage>
 </template>
 
 <script>

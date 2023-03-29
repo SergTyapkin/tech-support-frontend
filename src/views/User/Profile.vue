@@ -114,6 +114,11 @@ hr
       cursor pointer
       &:hover
         background blocksBgColorHover
+      .avatar
+        width 60px
+        height 60px
+        min-width 60px
+        min-height 60px
       .text
         padding 10px
         .name
