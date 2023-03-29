@@ -159,7 +159,7 @@
         </div>
 
         <div class="markdown-container">
-          <RedactorAndRenderer info="Описание" @input="onChange" v-model="achievement.description" placeholder="Описание" show-initial-preview></RedactorAndRenderer>
+          <RedactorAndRenderer info="Описание" @input="onChange" v-model="achievement.description" placeholder="Описание" :show-initial-preview="achievementId !== undefined"></RedactorAndRenderer>
         </div>
       </div>
 

@@ -88,7 +88,7 @@ hr
       color textColor5
 
   .add-achievement
-  .select-achievement
+  .achievements-list
   .select-achievement-level
     max-height 400px
     transition all 0.5s ease
@@ -102,33 +102,8 @@ hr
   .add-achievement
     button-dashed()
     margin-top 5px
-  .select-achievement
+  .achievements-list
     overflow-y scroll
-    block-dark-bg()
-    padding 0
-    .achievement
-      padding 10px 10px
-      display flex
-      font-medium()
-      transition all 0.2s ease
-      cursor pointer
-      &:hover
-        background blocksBgColorHover
-      .avatar
-        width 60px
-        height 60px
-        min-width 60px
-        min-height 60px
-      .text
-        padding 10px
-        .name
-          font-middle()
-          color textColor1
-          line-height 0.8
-          white-space nowrap
-        .description
-          font-small-extra()
-          color textColor3
   .select-achievement-level
     display flex
     align-items center
@@ -298,16 +273,11 @@ hr
               <div v-if="$user.isAdmin" class="delete-achievement" @click.stop.prevent="deleteAchievement(achievement.id)"><img src="../../res/trash.svg" alt="delete"></div>
             </router-link>
           </div>
-          <div class="add-achievement" @click="getAllAchievements(); inSelectingAchievement = true" :class="{hidden: !$user.isAdmin || inSelectingAchievement || selectedAchievement}"><img src="../../res/plus.svg" alt="add achievement">Добавить достижение</div>
-          <div class="select-achievement scrollable" :class="{hidden: !inSelectingAchievement}">
-            <div v-for="achievement in allAchievements" @click="inSelectingAchievement = false; selectedAchievement = deepClone(achievement); selectedAchievement.level = 1" class="achievement">
-              <AchievementAvatar :image-id="achievement.imageid" class="avatar"></AchievementAvatar>
-              <div class="text">
-                <div class="name">{{ $cropText(achievement.name, 30) }}</div>
-                <div class="description">{{ $cropText(cleanupMarkdownPreview(achievement.description), 60) }}</div>
-              </div>
-            </div>
-          </div>
+          <div class="add-achievement" @click="inSelectingAchievement = true" :class="{hidden: !$user.isAdmin || inSelectingAchievement || selectedAchievement}"><img src="../../res/plus.svg" alt="add achievement">Добавить достижение</div>
+          <AchievementsList :class="{hidden: !inSelectingAchievement}"
+                            class="achievements-list scrollable"
+                            @select="(achievement) => { inSelectingAchievement = false; selectedAchievement = deepClone(achievement); selectedAchievement.level = 1 }"
+          ></AchievementsList>
           <div class="select-achievement-level" :class="{hidden: !selectedAchievement}">
             <Achievement :max-levels="selectedAchievement?.levels" :level="selectedAchievement?.level" :image-id="selectedAchievement?.imageid" class="avatar"></Achievement>
             <Range v-if="selectedAchievement" class="range" :min="1" :max="selectedAchievement.levels" :step="1" no-value v-model="selectedAchievement.level"></Range>
@@ -374,9 +344,12 @@ import AchievementAvatar from "../../components/AchievementAvatar.vue";
 import Range from "../../components/Range.vue";
 import {cleanupMarkdownPreview, deepClone} from "../../utils/utils";
 import FloatingButton from "../../components/FloatingButton.vue";
+import AchievementsList from "../../components/AchievementsList.vue";
+
 
 export default {
   components: {
+    AchievementsList,
     FloatingButton,
     Range,
     AchievementAvatar,
@@ -396,10 +369,8 @@ export default {
       user: {},
       completedEvents: [],
       achievements: [],
-      allAchievements: undefined,
       loading: false,
       loadingConfirmEmail: false,
-      allAchievementsLoading: false,
 
       buttons: [],
 
@@ -584,20 +555,6 @@ export default {
       }
       this.achievements = achievements.achievements;
     },
-    async getAllAchievements(force=false) {
-      if (this.allAchievements && !force)
-        return;
-
-      this.allAchievementsLoading = true;
-      const achievements = await this.$api.getAchievements();
-      this.allAchievementsLoading = false;
-
-      if (!achievements.ok_) {
-        this.$popups.error("Ошибка", "Не удалось получить список всех достижений");
-        return;
-      }
-      this.allAchievements = achievements.achievements;
-    },
 
     async updateAvatar(dataURL) {
       // this.loading = true;
@@ -721,7 +678,6 @@ export default {
       this.isEdited = true;
     },
 
-    cleanupMarkdownPreview: cleanupMarkdownPreview,
     deepClone: deepClone,
   },
 
