@@ -54,9 +54,11 @@
       content "V"
   &.level-solo
     &:before
-      color colorGold
+      color colorSilver
     .image
-      outline-color colorGold
+      outline-color colorSilver
+      outline-width 1px
+      outline-offset 0
   &.level-last
     &::after
       content ""
