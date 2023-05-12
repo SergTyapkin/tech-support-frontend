@@ -121,7 +121,7 @@
 <template>
   <div class="image-div" :class="`level-${level} ${level === maxLevels ? (maxLevels === 1 ? 'level-solo' : 'level-last') : ''} ${level === maxLevels - 1 ? 'level-last-prev' : ''} ${special ? 'level-special' : ''} ${noLevel ? 'no-level' : ''}`">
     <svg v-if="special" class="heptagon-underlay" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path d="M 15.0864 1.656 A 5.6496 5.6496 90 0 1 20.544 0.192 l 18.3504 4.9152 a 5.6496 5.6496 90 0 1 3.9936 3.9936 l 4.9152 18.3504 a 5.6496 5.6496 90 0 1 -1.464 5.4576 L 32.9136 46.344 a 5.6496 5.6496 90 0 1 -5.4576 1.464 l -18.3504 -4.9152 a 5.6496 5.6496 90 0 1 -3.9936 -3.9936 L 0.192 20.544 a 5.6496 5.6496 90 0 1 1.464 -5.4576 L 15.0864 1.656 Z"></path></svg>
-    <AchievementAvatar class="image" alt="achievement" :image-id="imageId" border-width="2px" border-offset="2px" :size="size" :size-mobile="sizeMobile"></AchievementAvatar>
+    <AchievementAvatar :no-border-radius="special" class="image" alt="achievement" :image-id="imageId" border-width="2px" border-offset="2px" :size="size" :size-mobile="sizeMobile"></AchievementAvatar>
   </div>
 </template>
 

@@ -13,8 +13,9 @@ borderColor = var(--border-color, #ff00ff)
   .avatar-image
     width 100%
     height 100%
-    // border borderColor 1px solid // not works on Safari
-    border-radius(50%)
+    &:not(.no-border-radius)
+      // border borderColor 1px solid // not works on Safari
+      border-radius(50%)
     position relative
     overflow hidden
     @media({mobile})
@@ -33,8 +34,8 @@ borderColor = var(--border-color, #ff00ff)
 
 <template>
   <div class="avatar" :style="{'--size': size, '--size-mobile': sizeMobile, '--border-offset-default__': borderOffset, '--border-width-default__': borderWidth}">
-    <ServerImage :image-id="imageId" :default-image-src="defaultImageSrc" alt="avatar" class="avatar-image"></ServerImage>
-    <div class="border" :class="{'no-border': ['0px', '0', 0].includes(borderWidth)}"></div>
+    <ServerImage :image-id="imageId" :default-image-src="defaultImageSrc" alt="avatar" class="avatar-image" :class="{'no-border-radius': noBorderRadius}"></ServerImage>
+    <div v-if="!noBorderRadius" class="border" :class="{'no-border': ['0px', '0', 0].includes(borderWidth)}"></div>
   </div>
 </template>
 
@@ -74,7 +75,8 @@ export default {
     borderOffset: {
       type: String,
       default: '0px',
-    }
+    },
+    noBorderRadius: Boolean,
   },
 
   data() {

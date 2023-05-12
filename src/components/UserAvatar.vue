@@ -7,7 +7,15 @@
 </style>
 
 <template>
-  <CircleServerImage class="avatar-root" :default-image-src="img" :size="size" :size-mobile="sizeMobile" :image-id="imageId" :border-offset="borderOffset" :border-width="borderWidth"></CircleServerImage>
+  <CircleServerImage class="avatar-root"
+                     :default-image-src="img"
+                     :size="size"
+                     :size-mobile="sizeMobile"
+                     :image-id="imageId"
+                     :border-offset="borderOffset"
+                     :border-width="borderWidth"
+                     :no-border-radius="noBorderRadius"
+  ></CircleServerImage>
 </template>
 
 <script>
@@ -36,6 +44,7 @@ export default {
       type: String,
       default: '0px',
     },
+    noBorderRadius: Boolean,
   },
 
   data() {
