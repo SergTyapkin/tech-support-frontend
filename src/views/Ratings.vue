@@ -20,10 +20,10 @@
     &:hover
       transform scale(1.1)
     .avatar
-      border none
-      outline-width 2px
-      outline-style solid
-      outline-offset 2px
+      --border-width 2px
+      --border-offset 2px
+      margin-left auto
+      margin-right auto
     .position
       font-medium()
       margin-bottom 5px
@@ -45,7 +45,7 @@
     .position
       color colorGold
     .avatar
-      outline-color colorGold
+      --border-color-user colorGold
       height 60px !important
       min-height 60px !important
       width 100px !important
@@ -66,13 +66,13 @@
     .position
       color colorSilver
     .avatar
-      outline-color colorSilver
+      --border-color-user colorSilver
   .place-3
     align-self flex-end
     .position
       color colorBronze
     .avatar
-      outline-color colorBronze
+      --border-color-user colorBronze
 
 .users-list
   width 100%
@@ -99,9 +99,11 @@
         min-width 25px
       .rating
         color textColor2
-        min-width 50px
+        min-width 60px
       .avatar
-        border 1px solid empColor1_2
+        --border-width 1px
+        --border-offset 0px
+        --border-color-user empColor1_2
         margin-right 5px
       .text
         .name

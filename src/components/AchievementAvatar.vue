@@ -1,28 +1,40 @@
 <style lang="stylus" scoped>
+@require '../styles/constants.styl'
+@require '../styles/utils.styl'
 
+.avatar-root
+  --border-color var(--border-color-achievement, empColor2_2)
 </style>
 
 <template>
-  <ServerImage :image-id="imageId" :default-image-src="img" alt="avatar" class="achievement-avatar"></ServerImage>
+  <CircleServerImage class="avatar-root" :default-image-src="img" :size="size" :size-mobile="sizeMobile" :image-id="imageId" :border-offset="borderOffset" :border-width="borderWidth"></CircleServerImage>
 </template>
 
 <script>
 import ServerImage from "./ServerImage.vue";
 import defaultAvatarImage from '../res/default_achievement.png';
+import CircleServerImage from "./CircleServerImage.vue";
 
 
 export default {
-  components: {ServerImage},
+  // takes
+  // --border-color-achievement
+  // css variable with priority above props
+  components: {CircleServerImage, ServerImage},
   props: {
     imageId: {
-      type: Number,
+      type: String,
       required: true,
     },
+    size: String,
+    sizeMobile: String,
+    borderWidth: String,
+    borderOffset: String,
   },
 
   data() {
     return {
-      img: defaultAvatarImage
+      img: defaultAvatarImage,
     }
   }
 }

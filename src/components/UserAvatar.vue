@@ -2,52 +2,45 @@
 @require '../styles/constants.styl'
 @require '../styles/utils.styl'
 
-.avatar-image
-  width var(--size)
-  min-width var(--size)
-  height var(--size)
-  min-height var(--size)
-  border mix(textColor2, transparent) 1px solid
-  border-radius(50%)
-  position relative
-  overflow hidden
-  @media({mobile})
-    width var(--size-mobile)
-    min-width var(--size-mobile)
-    height var(--size-mobile)
-    min-height var(--size-mobile)
+.avatar-root
+  --border-color var(--border-color-user, mix(textColor2, transparent))
 </style>
 
 <template>
-  <ServerImage :image-id="imageId" :default-image-src="img" alt="avatar" class="avatar-image" :style="{'--size': size, '--size-mobile': sizeMobile}"></ServerImage>
+  <CircleServerImage class="avatar-root" :default-image-src="img" :size="size" :size-mobile="sizeMobile" :image-id="imageId" :border-offset="borderOffset" :border-width="borderWidth"></CircleServerImage>
 </template>
 
 <script>
 import ServerImage from "./ServerImage.vue";
 import defaultAvatarImage from '../res/default_avatar.png';
+import CircleServerImage from "./CircleServerImage.vue";
 
 
 export default {
-  components: {ServerImage},
+  // takes
+  // --border-color-user
+  // css variable with priority above props
+  components: {CircleServerImage, ServerImage},
   props: {
     imageId: {
       type: String,
       required: true,
     },
-    size: {
+    size: String,
+    sizeMobile: String,
+    borderWidth: {
       type: String,
-      default: "80px",
+      default: '1px',
     },
-    sizeMobile: {
+    borderOffset: {
       type: String,
-      default: undefined,
-    }
+      default: '0px',
+    },
   },
 
   data() {
     return {
       img: defaultAvatarImage,
-      sizeMobile: this.$props.sizeMobile ? this.$props.sizeMobile : this.$props.size,
     }
   }
 }

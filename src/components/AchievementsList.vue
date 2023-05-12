@@ -38,7 +38,7 @@
     <CircleLoading v-if="loading"></CircleLoading>
 
     <div v-else v-for="achievement in achievements" @click="$emit('select', achievement)" class="achievement">
-      <AchievementAvatar :image-id="achievement.imageid" class="avatar"></AchievementAvatar>
+      <AchievementAvatar :image-id="achievement.imageid" class="avatar" size="60px"></AchievementAvatar>
       <div class="text">
         <div class="name">{{ $cropText(achievement.name, previewSymbolsName) }}</div>
         <div class="description">{{ $cropText(cleanupMarkdownPreview(achievement.description), previewSymbolsDescription) }}</div>

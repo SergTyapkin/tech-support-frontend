@@ -30,20 +30,17 @@
         gap 10px
       .image-loader
         position relative
-        border-radius(50%)
-        overflow hidden
-        outline 2px solid empColor2_4
         width 128px
         height 128px
         margin-right 15px
-        .image
-          width 128px
-          height 128px
-          outline-offset 2px
+        .achievement-image
+          --border-color empColor2_4
         .avatar-div::before
         .avatar-div::after
         .image-overlay
           content 'Изменить'
+          border-radius(50%)
+          overflow hidden
           font-family Arial
           padding-left 5px
           font-size 15px
@@ -115,6 +112,10 @@
     .row-users-achieved
       .user-icon-container
         text-align center
+        .user-avatar
+          margin-left auto
+          margin-right auto
+          margin-bottom 4px
         .username
           font-small()
           color textColor4
@@ -150,11 +151,11 @@
                          :compress-size="compressSize"
         >
           <div class="avatar-div" @click.stop="updateAvatar(undefined)">
-            <AchievementAvatar :image-id="achievement.imageid"></AchievementAvatar>
+            <AchievementAvatar class="achievement-image" :image-id="achievement.imageid" size="128px" border-offset="2px" border-width="2px"></AchievementAvatar>
           </div>
         </DragNDropLoader>
         <div v-else class="image-loader">
-          <AchievementAvatar :image-id="achievement.imageid"></AchievementAvatar>
+          <AchievementAvatar class="achievement-image" :image-id="achievement.imageid" size="128px" border-offset="2px" border-width="2px"></AchievementAvatar>
           <div class="image-overlay" v-if="$user.isAdmin">Изображение можно будет изменить после создания</div>
         </div>
 
@@ -188,7 +189,7 @@
           <div class="info">Достижение получили</div>
           <div class="images-container">
             <router-link v-for="user in achievement.usersachieved" :to="{name: 'profile', params: {userId: user.id}}" class="user-icon-container">
-              <UserAvatar :image-id="user.avatarimageid"></UserAvatar>
+              <UserAvatar class="user-avatar" :image-id="user.avatarimageid" size="80px"></UserAvatar>
               <div class="username">{{ user.username }}</div>
             </router-link>
           </div>

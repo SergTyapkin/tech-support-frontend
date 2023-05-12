@@ -11,12 +11,11 @@
   display flex
   flex-direction column
   .title
-    block()
     font-large()
     text-align center
     width 100%
     padding-top 20px
-    padding-bottom 20px
+    padding-bottom 0
     margin-bottom 20px
   .achievements-list
     flex 1

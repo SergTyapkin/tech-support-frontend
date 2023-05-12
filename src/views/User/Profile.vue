@@ -149,14 +149,8 @@ hr
   font-large()
   margin-bottom -10px
 
-.image
 .avatar-div
-  width 80px
-  height 80px
-  border mix(textColor2, transparent) 1px solid
-  border-radius(50%)
   position relative
-  overflow hidden
 
 .avatar-container
   position relative
@@ -180,6 +174,8 @@ hr
   .avatar-div::before
   .avatar-div::after
     content 'Изменить'
+    border-radius(50%)
+    overflow hidden
     font-family Arial
     padding-left 5px
     font-size 15px
@@ -235,13 +231,13 @@ hr
                                  :compress-size="compressSize"
                 >
                   <div class="avatar-div" @click.stop="updateAvatar(undefined)">
-                    <UserAvatar :image-id="user.avatarImageId"></UserAvatar>
+                    <UserAvatar :image-id="user.avatarImageId" size="80px"></UserAvatar>
                   </div>
                 </DragNDropLoader>
                 <img v-if="user.avatarImageId" class="delete-avatar" src="../../res/trash.svg" alt="delete" @click.stop="deleteAvatarClick">
               </div>
               <div v-else class="avatar-div">
-                <UserAvatar :image-id="user.avatarImageId"></UserAvatar>
+                <UserAvatar :image-id="user.avatarImageId" size="80px" border-offset="0px" border-width="1px"></UserAvatar>
               </div>
 
               <router-link :to="{name: 'ratings'}" class="position">

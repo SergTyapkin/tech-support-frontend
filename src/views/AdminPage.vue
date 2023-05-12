@@ -16,6 +16,7 @@
 
 
 .allBoards
+  overflow-x scroll
   display flex
   @media ({mobile})
     flex-direction column
@@ -172,7 +173,7 @@
 
 <template>
   <CircleLoading v-if="loading" class="loading"></CircleLoading>
-  <div v-else class="allBoards" css-fullheight>
+  <div v-else class="allBoards scrollable" css-fullheight>
     <div class="column">
       <div class="newUsersBoard">
         <header class="header">Подтверждение новых пользователей</header>
