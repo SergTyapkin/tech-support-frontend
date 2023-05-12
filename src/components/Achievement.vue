@@ -11,6 +11,7 @@
   .heptagon-underlay
     position absolute
     inset -5%
+    fill url(#AvatarHeptagonUnderlaySvgFill)
   .image
     --border-color-achievement empColor2_1
     position absolute
@@ -103,12 +104,7 @@
     &:before
     &:after
       content none // disable stroke image and level text
-      .image
-        --border-width 0px
-        --border-color-achievement green
 
-    .heptagon-underlay
-      fill url(#AvatarHeptagonUnderlaySvgFill)
     .image
       --border-color-achievement colorSilver
       --border-width 1px
