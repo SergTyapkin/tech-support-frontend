@@ -662,12 +662,13 @@ export default {
 
       this.selectedAchievement.achievementid = this.selectedAchievement.id;
       this.selectedAchievement.id = response.id;
+
+      // delete another achievement levels
+      this.achievements = this.achievements.filter(ach => ach.achievementid !== this.selectedAchievement.achievementid);
+
       this.achievements.push(this.selectedAchievement);
       this.selectedAchievement = undefined;
       this.$popups.success('Сохранено', 'АААААЧИВКА!');
-
-      console.log(this.achievements)
-      console.log(this.selectedAchievement)
     },
 
     async deleteAchievement(id) {

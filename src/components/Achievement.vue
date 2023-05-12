@@ -54,13 +54,6 @@
   &.level-5
     &::before
       content "V"
-  &.level-solo
-    &:before
-      color colorSilver
-    .image
-      --border-color-achievement colorSilver
-      --border-width 1px
-      --border-offset unquote('0px')
   &.level-last
     &::after
       content ""
@@ -86,6 +79,13 @@
       bottom -6px
       font-weight bold
       color mix(colorBronze, black, 30%)
+  &.level-solo
+    &:before
+      content none
+    .image
+      --border-color-achievement colorSilver
+      --border-width 1px
+      --border-offset unquote('0px')
   &.level-special
     &:before
       content "SPECIAL"
