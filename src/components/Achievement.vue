@@ -114,8 +114,9 @@
     .image
       --border-width unquote('0px')
       --border-offset unquote('0px')
-      clip-path: url(#AvatarHeptagonSvgClip);
-      -webkit-clip-path: url(#AvatarHeptagonSvgClip);
+      will-change transform // to render on new layer (for clip-path on fucking Safari)
+      clip-path url(#AvatarHeptagonSvgClip)
+      -webkit-clip-path url(#AvatarHeptagonSvgClip)
 </style>
 
 <template>
