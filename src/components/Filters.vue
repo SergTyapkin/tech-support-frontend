@@ -61,7 +61,7 @@
 <template>
   <div class="root">
     <div class="checkbox-group" v-for="(filter, idx) in filters">
-      <input :id="'__' + filter.name + idx" type="checkbox" @change="$emit('change', filter)" v-model="filter.value">
+      <input :id="'__' + filter.name + idx" type="checkbox" @change="onChange(filter, idx)" v-model="filter.value">
       <label :for="'__' + filter.name + idx">{{ filter.name }}</label>
     </div>
 
@@ -77,7 +77,9 @@ export default {
     filters: {
       type: Array,
       required: true,
-    }
+    },
+    canBeNone: Boolean,
+    radio: Boolean,
   },
 
   data() {
@@ -86,13 +88,38 @@ export default {
   },
 
   mounted() {
+    let hasNotFalseFilter = false;
     this.filters.forEach((filter) => {
-      if (filter.value === undefined)
+      if (filter.value === undefined) {
         filter.value = false;
+      }
+      if (filter.value) {
+        hasNotFalseFilter = true;
+      }
     });
+
+    if (!this.canBeNone && !hasNotFalseFilter) { // if filter can't be none => select first filter
+      this.filters[0].value = true;
+    }
   },
 
   methods: {
+    onChange(filter, idx) {
+      if (!this.canBeNone && !this.filters.reduce((sum, filter) => sum || filter.value, false)) { // can't disable only 1 filter
+        filter.value = true;
+        return;
+      }
+
+      if (this.radio) {
+        // Drop all other filters
+        this.filters.forEach((filt) => {
+          if (filt !== filter)
+            filt.value = false;
+        });
+      }
+
+      this.$emit('change', filter);
+    }
   }
 };
 </script>

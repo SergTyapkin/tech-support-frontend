@@ -33,7 +33,7 @@
 
 <template>
   <div>
-    <Filters :filters="filters" @change="onChangeFilters" class="filters">
+    <Filters :filters="filters" @change="onChangeFilters" class="filters" radio>
       <FloatingInput placeholder="Поиск по названию" no-info class="search-input" v-model="searchText" @input="getEvents"></FloatingInput>
       <SelectList v-model="placeSearch" @input="getEvents" :list="allPlaces" :selected-id="-1" title="Поиск по месту" solid></SelectList>
     </Filters>
@@ -113,12 +113,6 @@ export default {
     },
 
     onChangeFilters(filter) {
-      // Drop all other filters
-      this.filters.forEach((filt) => {
-        if (filt !== filter)
-          filt.value = false;
-      });
-
       this.getEvents();
     },
 
@@ -169,7 +163,6 @@ export default {
       }
 
       response.places.push({id: -1, name: "---"});
-      console.log(response.places);
       this.allPlaces = response.places;
     }
   },

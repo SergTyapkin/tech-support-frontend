@@ -112,9 +112,5 @@ export default {
       description: this.$cropText(this.$props.description, 200),
     }
   },
-
-  mounted() {
-    console.log(this.eventTimeStart, this.eventTimeEnd)
-  }
 };
 </script>
