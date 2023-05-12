@@ -60,7 +60,7 @@
     .image
       --border-color-achievement colorSilver
       --border-width 1px
-      --border-offset 0px
+      --border-offset unquote('0px')
   &.level-last
     &::after
       content ""
@@ -108,12 +108,12 @@
     .image
       --border-color-achievement colorSilver
       --border-width 1px
-      --border-offset 0px
+      --border-offset unquote('0px')
 
   &.level-special
     .image
-      --border-width 0px
-      --border-offset 0px
+      --border-width unquote('0px')
+      --border-offset unquote('0px')
       clip-path: url(#AvatarHeptagonSvgClip);
       -webkit-clip-path: url(#AvatarHeptagonSvgClip);
 </style>
