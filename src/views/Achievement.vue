@@ -141,6 +141,22 @@
         img
           width 26px
           margin-right 10px
+
+    .auto-info
+      text-align center
+      .auto-title
+        font-large()
+        color empColor1_1
+        display flex
+        align-items center
+        justify-content center
+        img
+          height 20px
+          width 20px
+      .auto-description
+        font-small()
+        color textColor4
+        margin-bottom 50px
 </style>
 
 <template>
@@ -169,6 +185,11 @@
         </div>
       </div>
 
+      <div v-if="achievement.auto" class="auto-info">
+        <div class="auto-title">Авто-достижение <img src="../res/locked.svg" alt="locked"></div>
+        <div class="auto-description">Выставляется автоматически при выполнении каких-то критериев</div>
+      </div>
+
       <div class="row-levels" :class="{'is-admin': $user.isAdmin}">
         <div class="column-settings">
           <div class="levels-container" v-if="$user.isAdmin">
@@ -180,7 +201,7 @@
               :step="1"
               v-model="achievement.levels"
               class="range"
-              :disabled="achievement.special"
+              :disabled="achievement.special || achievement.auto"
               @change="() => {
                 onChange();
                 this.lastLevelsCount = this.achievement.levels
@@ -191,7 +212,7 @@
             <Filters class="filters"
                      :filters="filters"
                      can-be-none
-                     :disabled="!$user.isAdmin"
+                     :disabled="!$user.isAdmin || achievement.auto"
                      @change="(filter) => {
                        onChange();
                        achievement.special = filter.value;
@@ -229,7 +250,7 @@
 
       <CircleLoading v-if="loading"></CircleLoading>
       <div v-else class="row-buttons">
-        <div v-if="$user.isAdmin && achievementId !== undefined" class="button-delete" @click="deleteAchievement"><img src="../res/trash.svg" alt="delete">Удалить</div>
+        <div v-if="$user.isAdmin && achievementId !== undefined && !achievement.auto" class="button-delete" @click="deleteAchievement"><img src="../res/trash.svg" alt="delete">Удалить</div>
         <div v-if="achievementId === undefined" class="button-create" @click="createAchievement"><img src="../res/save.svg" alt="">Создать достижение</div>
       </div>
     </Form>
