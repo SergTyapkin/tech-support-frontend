@@ -250,6 +250,10 @@ hr
             </div>
             <input v-if="$user.isAdmin && !yours" type="text" class="title" v-model="user.title" @change="saveAnotherUserTitle" @keydown.enter="(event) => event.target.blur()">
             <div v-else class="title">{{ user.title }}</div>
+
+            <a v-if="!yours && user.telegram" :href="`https://t.me/${user.telegram}`" target="_blank" class="user-link">
+              <FloatingInput :model-value="`@${user.telegram}`" title="Telegram" readonly no-info class="input"></FloatingInput>
+            </a>
           </div>
 
           <hr>
@@ -289,7 +293,7 @@ hr
                             @select="(achievement) => { inSelectingAchievement = false; selectedAchievement = deepClone(achievement); selectedAchievement.level = 1 }"
           ></AchievementsList>
           <div class="select-achievement-level" :class="{hidden: !selectedAchievement}">
-            <Achievement :max-levels="selectedAchievement?.levels" :level="selectedAchievement?.level" :image-id="selectedAchievement?.imageid" class="avatar"></Achievement>
+            <Achievement :max-levels="selectedAchievement?.levels" :level="selectedAchievement?.level" :image-id="selectedAchievement?.imageid" :special="selectedAchievement?.special" class="avatar"></Achievement>
             <Range v-if="selectedAchievement" class="range" :min="1" :max="selectedAchievement.levels" :step="1" no-value v-model="selectedAchievement.level"></Range>
             <div class="button-select-achievement" @click="addAchievement()"><img src="../../res/save.svg" alt="save">Добавить</div>
           </div>
