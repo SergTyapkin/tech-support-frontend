@@ -20,7 +20,7 @@ blockquote-decoration-offset = 25px
 list-decoration-margin = 5px 0
 list-decoration-offset = 40px
 list-decoration-color = bgColor2
-p-decoration-margin = 5px 0
+p-decoration-margin = 15px 0
 img-decoration-margin = 0
 
 code
@@ -41,6 +41,10 @@ ul
 
 p
   margin p-decoration-margin
+  &:last-child
+    margin-bottom 0
+  &:first-child
+    margin-top 0
 img
   max-width 100%
   margin img-decoration-margin
