@@ -63,8 +63,8 @@ export class Api extends ApiRequest {
 
     getAchievements = () => this.get(`/achievements`);
     getAchievementById = (id) => this.get(`/achievements`, {id});
-    createAchievement = (name, description, levels) => this.post(`/achievements`, {name, description, levels});
-    editAchievement = (id, name, description, levels) => this.put(`/achievements`, {id, name, description, levels});
+    createAchievement = (name, description, levels, special) => this.post(`/achievements`, {name, description, levels, special});
+    editAchievement = (id, name, description, levels, special) => this.put(`/achievements`, {id, name, description, levels, special});
     updateAchievementImage = (id, imageId) => this.put(`/achievements`, {id, imageId});
     deleteAchievement = (id) => this.delete(`/achievements`, {id});
 

@@ -22,6 +22,8 @@
   .card
     margin 20px
 
+.filters
+  block()
 @media ({mobile})
   .filters
     > *
@@ -33,7 +35,7 @@
 
 <template>
   <div>
-    <Filters :filters="filters" @change="onChangeFilters" class="filters" radio>
+    <Filters class="filters" :filters="filters" @change="onChangeFilters" radio>
       <FloatingInput placeholder="Поиск по названию" no-info class="search-input" v-model="searchText" @input="getEvents"></FloatingInput>
       <SelectList v-model="placeSearch" @input="getEvents" :list="allPlaces" :selected-id="-1" title="Поиск по месту" solid></SelectList>
     </Filters>

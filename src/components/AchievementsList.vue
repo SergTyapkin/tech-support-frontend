@@ -20,8 +20,8 @@
       height 60px
       min-width 60px
       min-height 60px
-      border mix(textColor2, transparent) 1px solid
-      border-radius(50%)
+      --border-color-achievement mix(textColor2, transparent)
+      --border-width 1px
     .text
       padding 10px
       .name
@@ -38,7 +38,7 @@
     <CircleLoading v-if="loading"></CircleLoading>
 
     <div v-else v-for="achievement in achievements" @click="$emit('select', achievement)" class="achievement">
-      <AchievementAvatar :image-id="achievement.imageid" class="avatar" size="60px"></AchievementAvatar>
+      <Achievement :image-id="achievement.imageid" :special="achievement.special" no-level class="avatar" size="60px"></Achievement>
       <div class="text">
         <div class="name">{{ $cropText(achievement.name, previewSymbolsName) }}</div>
         <div class="description">{{ $cropText(cleanupMarkdownPreview(achievement.description), previewSymbolsDescription) }}</div>
@@ -48,13 +48,13 @@
 </template>
 
 <script>
-import AchievementAvatar from "./AchievementAvatar.vue";
+import Achievement from "./Achievement.vue";
 import CircleLoading from "./loaders/CircleLoading.vue";
 import {cleanupMarkdownPreview} from "../utils/utils";
 
 
 export default {
-  components: {CircleLoading, AchievementAvatar},
+  components: {CircleLoading, Achievement},
 
   emits: ['select'],
   // select(achievement)

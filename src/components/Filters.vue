@@ -3,9 +3,10 @@
 @require '../styles/fonts.styl'
 @require '../styles/utils.styl'
 
-.root
+.root-filters
   degree = 30deg
-  block()
+  user-select none
+  block-no-bg()
   display flex
   flex-wrap wrap
   align-items center
@@ -59,9 +60,9 @@
 </style>
 
 <template>
-  <div class="root">
+  <div class="root-filters">
     <div class="checkbox-group" v-for="(filter, idx) in filters">
-      <input :id="'__' + filter.name + idx" type="checkbox" @change="onChange(filter, idx)" v-model="filter.value">
+      <input :id="'__' + filter.name + idx" :disabled="disabled" type="checkbox" @change="onChange(filter, idx)" v-model="filter.value">
       <label :for="'__' + filter.name + idx">{{ filter.name }}</label>
     </div>
 
@@ -80,6 +81,10 @@ export default {
     },
     canBeNone: Boolean,
     radio: Boolean,
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {

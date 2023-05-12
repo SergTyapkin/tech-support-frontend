@@ -81,10 +81,6 @@ export default {
     return {
       sizeMobile: this.$props.sizeMobile ? this.$props.sizeMobile : this.$props.size,
     }
-  },
-
-  mounted() {
-    console.log("SIIIIZE", this.borderWidth, this.borderOffset);
   }
 }
 </script>

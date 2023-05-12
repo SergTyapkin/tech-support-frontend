@@ -277,6 +277,7 @@ hr
                            :level="achievement.level"
                            :max-levels="achievement.levels"
                            :image-id="achievement.imageid"
+                           :special="achievement.special"
               ></Achievement>
               <div v-if="$user.isAdmin" class="delete-achievement" @click.stop.prevent="deleteAchievement(achievement.id)"><img src="../../res/trash.svg" alt="delete"></div>
             </router-link>

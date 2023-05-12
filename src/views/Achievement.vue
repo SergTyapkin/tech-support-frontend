@@ -75,6 +75,8 @@
 
     .row-levels
     .row-users-achieved
+      &:not(.is-admin)
+        flex-direction column
       @media ({mobile})
         flex-direction column
       .levels-container
@@ -88,6 +90,9 @@
       .levels-container
         min-width 250px
         padding 10px 0
+      .special-container
+        .filters
+          padding 10px
 
       .avatar-examples
       .users-achieved
@@ -164,15 +169,41 @@
         </div>
       </div>
 
-      <div class="row-levels">
-        <div class="levels-container" v-if="$user.isAdmin">
-          <div class="info">Количество уровней</div>
-          <Range no-value :min="1" :max="5" :step="1" v-model="achievement.levels" class="range" @change="onChange"></Range>
+      <div class="row-levels" :class="{'is-admin': $user.isAdmin}">
+        <div class="column-settings">
+          <div class="levels-container" v-if="$user.isAdmin">
+            <div class="info">Количество уровней</div>
+            <Range
+              no-value
+              :min="1"
+              :max="5"
+              :step="1"
+              v-model="achievement.levels"
+              class="range"
+              :disabled="achievement.special"
+              @change="() => {
+                onChange();
+                this.lastLevelsCount = this.achievement.levels
+              }"
+            ></Range>
+          </div>
+          <div class="special-container">
+            <Filters class="filters"
+                     :filters="filters"
+                     can-be-none
+                     :disabled="!$user.isAdmin"
+                     @change="(filter) => {
+                       onChange();
+                       achievement.special = filter.value;
+                       filter.value ? achievement.levels = 1 : achievement.levels = lastLevelsCount
+                     }"
+            ></Filters>
+          </div>
         </div>
         <div class="avatar-examples scrollable">
           <div class="info">Изображения по уровням</div>
           <div class="images-container">
-            <Achievement v-if="achievement.levels" v-for="i in Number(achievement.levels)" :image-id="achievement.imageid" :level="i" :max-levels="Number(achievement.levels)"></Achievement>
+            <Achievement v-if="achievement.levels" v-for="i in Number(achievement.levels)" :image-id="achievement.imageid" :level="i" :special="achievement.special" :max-levels="Number(achievement.levels)"></Achievement>
           </div>
         </div>
       </div>
@@ -223,10 +254,12 @@ import {IMAGE_MAX_RES, IMAGE_ACHIEVEMENT_MAX_RES} from "../constants";
 import ImageUploader from "../utils/imageUploader";
 import RedactorAndRenderer from "../components/Markdown/RedactorAndRenderer.vue";
 import UserAvatar from "../components/UserAvatar.vue";
+import Filters from "../components/Filters.vue";
 
 
 export default {
   components: {
+    Filters,
     UserAvatar,
     RedactorAndRenderer,
     Achievement,
@@ -243,6 +276,9 @@ export default {
       achievementId: this.$route.params.achievementId,
 
       achievement: {},
+
+      filters: [{name: 'Редкое'}],
+      lastLevelsCount: undefined,
 
       loading: false,
       isEdited: false,
@@ -268,11 +304,13 @@ export default {
         return;
       }
       this.achievement = response;
+      this.filters[0].value = this.achievement.special;
+      this.lastLevelsCount = this.achievement.levels;
     },
 
     async updateAchievementData() {
       this.loading = true;
-      const res = await this.$api.editAchievement(this.achievementId, this.achievement.name, this.achievement.description, this.achievement.levels, this.achievement.imageid);
+      const res = await this.$api.editAchievement(this.achievementId, this.achievement.name, this.achievement.description, this.achievement.levels, this.achievement.special);
       this.loading = false;
 
       if (!res.ok_) {
@@ -291,7 +329,7 @@ export default {
       }
 
       this.loading = true;
-      const res = await this.$api.createAchievement(this.achievement.name, this.achievement.description, this.achievement.levels);
+      const res = await this.$api.createAchievement(this.achievement.name, this.achievement.description, this.achievement.levels, this.achievement.special);
       this.loading = false;
 
       if (!res.ok_) {

@@ -9,6 +9,7 @@ slider-length = 200px
 thumb-size = 3px
 
 .slider-container
+  user-select none
   display flex
   align-items center
   position relative

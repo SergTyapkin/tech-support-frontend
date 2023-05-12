@@ -14,6 +14,9 @@
   .image
     --border-color-achievement empColor2_1
     position absolute
+    top 50%
+    left 50%
+    transform translate(-50%, -50%)
   &::before
     content ""
     position absolute
@@ -96,6 +99,13 @@
       transform rotate(75deg)
     &:after
       content none // disable stroke image
+  &.no-level
+    &:before
+    &:after
+      content none // disable stroke image and level text
+      .image
+        --border-width 0px
+        --border-color-achievement green
 
     .heptagon-underlay
       fill url(#AvatarHeptagonUnderlaySvgFill)
@@ -103,12 +113,17 @@
       --border-color-achievement colorSilver
       --border-width 1px
       --border-offset 0px
+
+  &.level-special
+    .image
+      --border-width 0px
+      --border-offset 0px
       clip-path: url(#AvatarHeptagonSvgClip);
       -webkit-clip-path: url(#AvatarHeptagonSvgClip);
 </style>
 
 <template>
-  <div class="image-div" :class="`level-${level} ${level === maxLevels ? (maxLevels === 1 ? 'level-solo' : 'level-last') : ''} ${level === maxLevels - 1 ? 'level-last-prev' : ''} ${special ? 'level-special' : ''}`">
+  <div class="image-div" :class="`level-${level} ${level === maxLevels ? (maxLevels === 1 ? 'level-solo' : 'level-last') : ''} ${level === maxLevels - 1 ? 'level-last-prev' : ''} ${special ? 'level-special' : ''} ${noLevel ? 'no-level' : ''}`">
     <svg v-if="special" class="heptagon-underlay" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path d="M 15.0864 1.656 A 5.6496 5.6496 90 0 1 20.544 0.192 l 18.3504 4.9152 a 5.6496 5.6496 90 0 1 3.9936 3.9936 l 4.9152 18.3504 a 5.6496 5.6496 90 0 1 -1.464 5.4576 L 32.9136 46.344 a 5.6496 5.6496 90 0 1 -5.4576 1.464 l -18.3504 -4.9152 a 5.6496 5.6496 90 0 1 -3.9936 -3.9936 L 0.192 20.544 a 5.6496 5.6496 90 0 1 1.464 -5.4576 L 15.0864 1.656 Z"></path></svg>
     <AchievementAvatar class="image" alt="achievement" :image-id="imageId" border-width="2px" border-offset="2px" :size="size" :size-mobile="sizeMobile"></AchievementAvatar>
   </div>
@@ -125,18 +140,9 @@ export default {
       type: Number,
       required: true,
     },
-    level: {
-      type: Number,
-      required: true,
-    },
-    maxLevels: {
-      type: Number,
-      required: true,
-    },
-    special: {
-      type: Boolean,
-      default: true,
-    },
+    level: Number,
+    maxLevels: Number,
+    special: Boolean,
     size: {
       type: String,
       default: '60px',
@@ -144,7 +150,8 @@ export default {
     sizeMobile: {
       type: String,
       default: '60px',
-    }
+    },
+    noLevel: Boolean,
   },
 }
 </script>
