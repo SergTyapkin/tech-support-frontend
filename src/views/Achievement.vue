@@ -185,7 +185,7 @@
         </div>
       </div>
 
-      <div v-if="achievement.auto" class="auto-info">
+      <div v-if="!achievement.auto" class="auto-info">
         <div class="auto-title">Авто-достижение <img src="../res/locked.svg" alt="locked"></div>
         <div class="auto-description">Выставляется автоматически при выполнении каких-то критериев</div>
       </div>

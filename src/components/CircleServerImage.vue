@@ -28,14 +28,24 @@ borderColor = var(--border-color, #ff00ff)
     position absolute
     inset calc(-1 * (var(--border-offset, var(--border-offset-default__)) + var(--border-width, var(--border-width-default__))))
     background radial-gradient(transparent 0%, transparent calc(70% - var(--border-width, var(--border-width-default__))), borderColor calc(70%), transparent calc(70% + 1px))
-    &.no-border
+
+  &.no-border
+    .border
       background none
 </style>
 
 <template>
-  <div class="avatar" :style="{'--size': size, '--size-mobile': sizeMobile, '--border-offset-default__': borderOffset, '--border-width-default__': borderWidth}">
+  <div class="avatar"
+       :style="{
+         '--size': size,
+         '--size-mobile': sizeMobile,
+         '--border-offset-default__': borderOffset,
+         '--border-width-default__': borderWidth,
+       }"
+       :class="{'no-border': ['0px', '0', 0].includes(borderWidth)}"
+  >
     <ServerImage :image-id="imageId" :default-image-src="defaultImageSrc" alt="avatar" class="avatar-image" :class="{'no-border-radius': noBorderRadius}"></ServerImage>
-    <div v-if="!noBorderRadius" class="border" :class="{'no-border': ['0px', '0', 0].includes(borderWidth)}"></div>
+    <div v-if="!noBorderRadius" class="border"></div>
   </div>
 </template>
 
