@@ -28,6 +28,7 @@
                       :preview-symbols-name="9999"
                       :preview-symbols-description="9999"
                       @select="(achievement) => {$router.push({name: 'achievement', params: {achievementId: achievement.id}})}"
+                      @loaded="$scroll.restore()"
     ></AchievementsList>
   </div>
 </template>

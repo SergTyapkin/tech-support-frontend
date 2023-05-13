@@ -155,6 +155,7 @@ export default {
       this.authorname = response.authorname;
       this.authortelegram = response.authortelegram;
     }
+    this.$scroll.restore();
 
     this.loading = true;
     const allPlaces = await this.$api.getPlaces();

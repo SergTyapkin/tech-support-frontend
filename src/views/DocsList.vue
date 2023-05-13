@@ -116,6 +116,8 @@ export default {
     }
 
     this.docs = response.docs || [];
+
+    this.$scroll.restore();
   },
 
   methods: {

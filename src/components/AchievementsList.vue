@@ -56,7 +56,7 @@ import {cleanupMarkdownPreview} from "../utils/utils";
 export default {
   components: {CircleLoading, Achievement},
 
-  emits: ['select'],
+  emits: ['select', 'loaded'],
   // select(achievement)
 
   props: {
@@ -76,8 +76,9 @@ export default {
       achievements: [],
     }
   },
-  mounted() {
-    this.getAllAchievements();
+  async mounted() {
+    await this.getAllAchievements();
+    this.$emit('loaded');
   },
 
 

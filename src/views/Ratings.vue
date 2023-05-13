@@ -189,6 +189,8 @@ export default {
     }
 
     this.users = response.ratings;
+
+    this.$scroll.restore();
   }
 }
 </script>
