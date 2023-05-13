@@ -649,8 +649,6 @@ export default {
     },
 
     async addAchievement() {
-      console.log(this.selectedAchievement)
-
       this.loading = true;
       const response = await this.$api.addUserAchievement(this.user.id, this.selectedAchievement.id, this.selectedAchievement.level);
       this.loading = false;
