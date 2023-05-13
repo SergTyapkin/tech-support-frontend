@@ -1,7 +1,9 @@
 // Make Vue plugin: vue.use(<imported ScrollRestore>);
+import {nextTick} from "vue";
+
 export default {
   install: (app, workingElement, restorationHrefsAllowed) => {
-    app.config.globalProperties.$scroll = new ScrollRestore(workingElement, restorationHrefsAllowed);
+    app.config.globalProperties.$scroll = new ScrollRestore(app, workingElement, restorationHrefsAllowed);
   }
 }
 
@@ -10,7 +12,8 @@ export class ScrollRestore {
   restorationHrefsAllowed = undefined;
   workingElement = HTMLElement || window;
 
-  constructor(workingElement = window, restorationHrefsAllowed=undefined) {
+  constructor(app, workingElement = window, restorationHrefsAllowed=undefined) {
+    this.$app = app;
     this.workingElement = workingElement;
     this.restorationHrefsAllowed = restorationHrefsAllowed;
     this.restorationMap = {};
@@ -30,13 +33,17 @@ export class ScrollRestore {
     const offsetLeft = this.workingElement.scrollX || this.workingElement.scrollLeft;
     const href = this._getHref();
     if (this.restorationHrefsAllowed === undefined || (Object.keys(this.restorationHrefsAllowed).includes(href))) {
+      // console.log(href, this.restorationMap[href])
       this.restorationMap[href] = [offsetTop, offsetLeft];
     }
   }
 
-  restore() {
+  async restore() {
+    await nextTick();
+
     const href = this._getHref();
     const savedScroll = this.restorationMap[href];
+    // console.log("RESTORE:", href, this.restorationMap)
     if (savedScroll !== undefined) {
       if (this.workingElement === window) {
         this.workingElement.scrollTo(savedScroll[0], savedScroll[1]);
