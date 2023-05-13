@@ -4,6 +4,7 @@ import App from './App.vue'
 import Store from './Store.js'
 import createVueRouter from './Router.js'
 import Api from "./Api";
+import ScrollRestore from "./ScrollRestore";
 
 import './styles/global.styl';
 import './styles/show-hide.styl';
@@ -16,5 +17,6 @@ const app = createApp(App)
   .use(Api, API_URL)
   .use(Router)
   .use(Store)
+  .use(ScrollRestore, document.body)
   .mount('#app');
 Store.$app = app;

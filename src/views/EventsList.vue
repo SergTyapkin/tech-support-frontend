@@ -112,6 +112,7 @@ export default {
   methods: {
     async init() {
       await this.getEvents();
+      this.$scroll.restore();
     },
 
     onChangeFilters(filter) {
