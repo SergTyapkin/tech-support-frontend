@@ -85,6 +85,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    storingName: {
+      type: String,
+      default: undefined
+    }
   },
 
   data() {
@@ -102,6 +106,17 @@ export default {
         hasNotFalseFilter = true;
       }
     });
+
+    if (this.storingName !== undefined) {
+      if (this.$store.state.__filters === undefined) {
+        this.$store.state.__filters = {}
+      }
+      const storedState = this.$store.state.__filters[this.storingName];
+      if (storedState !== undefined) {
+        this.filters.forEach((filter, i) => this.filters[i] = storedState[i]);
+      }
+      this.$store.state.__filters[this.storingName] = this.filters;
+    }
 
     if (!this.canBeNone && !hasNotFalseFilter) { // if filter can't be none => select first filter
       this.filters[0].value = true;
