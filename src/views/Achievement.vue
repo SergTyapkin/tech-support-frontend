@@ -104,6 +104,8 @@
           display flex
           gap 40px
           padding 5px
+          .image
+            min-width 60px
 
     .row-contacts
       .user-link
@@ -225,7 +227,7 @@
         <div class="avatar-examples scrollable">
           <div class="info">Изображения по уровням</div>
           <div class="images-container">
-            <Achievement v-if="achievement.levels" v-for="i in Number(achievement.levels)" :image-id="achievement.imageid" :level="i" :special="achievement.special" :max-levels="Number(achievement.levels)"></Achievement>
+            <Achievement class="image" v-if="achievement.levels" v-for="i in Number(achievement.levels)" :image-id="achievement.imageid" :level="i" :special="achievement.special" :max-levels="Number(achievement.levels)"></Achievement>
           </div>
         </div>
       </div>
