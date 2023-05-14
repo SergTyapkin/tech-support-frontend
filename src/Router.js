@@ -129,7 +129,7 @@ export default function createVueRouter(Store, scrollToTopDenyHrefs=[]) {
 
     Router.afterEach(async (to, from, next) => {
         const inDenyList = scrollToTopDenyHrefs.reduce((sum, cur) => sum || cur.test(to.fullPath), false);
-        if (!inDenyList) {
+        if (!inDenyList || (from.name === to.name)) {
             await nextTick();
             scrollSmoothly(document.body, 0);
         } else {

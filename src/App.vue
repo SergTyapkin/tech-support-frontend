@@ -155,7 +155,9 @@ animation-time-rule = cubic-bezier(0.29, 0.82, 0.36, 0.99)
     <div></div>
   </div>
 
-  <TopBar v-if="$store.state.user.isLogined" class="top-bar"></TopBar>
+  <TopBar v-if="$store.state.user.isLogined"
+          class="top-bar"
+  ></TopBar>
   <div class="wrapper">
     <CircleLoading v-if="!$store.state.user.isGotten" class="loading"></CircleLoading>
     <router-view v-else v-slot="{ Component }">
@@ -323,7 +325,7 @@ import Popups from "/src/components/vue-plugins/Popups.vue";
 import CircleLoading from "/src/components/loaders/CircleLoading.vue";
 import {API_URL, BASE_URL_PATH} from "./constants";
 import TopBar from "./components/TopBar.vue";
-import {cropText} from "./utils/utils";
+import {cropText, scrollSmoothly} from "./utils/utils";
 
 export default {
   components: {TopBar, CircleLoading, Modal, Popups},
@@ -376,7 +378,7 @@ export default {
       }
       this.$user.setDefault();
       await this.$router.push({name: "default"});
-    },
+    }
   }
 };
 </script>
