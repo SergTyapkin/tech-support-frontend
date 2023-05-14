@@ -24,9 +24,10 @@ import table from "/src/components/UsersTable.vue";
 import Page404 from '/src/views/Page404.vue'
 
 import {BASE_URL_PATH} from "./constants";
+import {scrollSmoothly, scrollSmoothlyStop} from "./utils/utils";
 
 
-export default function createVueRouter(Store, App) {
+export default function createVueRouter(Store, scrollToTopDenyHrefs=[]) {
     const routes = [
         {path: BASE_URL_PATH + '/', name: 'default'},
         {path: BASE_URL_PATH + '/signin', name: 'signin', component: SignIn, meta: {noLoginRequired: true}},
@@ -118,6 +119,19 @@ export default function createVueRouter(Store, App) {
 
         smartBasePartRedirect();
         return;
+    });
+
+    Router.setScrollToTopDenyPagesList = (list) => {
+        scrollToTopDenyHrefs = list.map((el) => RegExp(Router.resolve(el).fullPath));
+        return scrollToTopDenyHrefs;
+    };
+
+    Router.afterEach(async (to, from, next) => {
+        const inDenyList = scrollToTopDenyHrefs.reduce((sum, cur) => sum || cur.test(to.fullPath), false);
+        if (!inDenyList)
+            scrollSmoothly(document.body, 0);
+        else
+            scrollSmoothlyStop();
     });
 
     Router.beforeResolve(async (to) => {

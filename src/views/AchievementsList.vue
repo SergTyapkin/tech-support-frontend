@@ -4,10 +4,6 @@
 @require '../styles/utils.styl'
 
 .root
-  max-height 'calc(100% - %s)' % header-height
-  @media ({mobile})
-    max-height 'calc(100% - %s)' % header-height-mobile
-    padding 0
   display flex
   flex-direction column
   .title
@@ -19,12 +15,13 @@
     margin-bottom 20px
   .achievements-list
     flex 1
+    margin-bottom 20px
 </style>
 
 <template>
   <div class="root">
     <div class="title">Список всех достижений</div>
-    <AchievementsList class="achievements-list scrollable"
+    <AchievementsList class="achievements-list"
                       :preview-symbols-name="9999"
                       :preview-symbols-description="9999"
                       @select="(achievement) => {$router.push({name: 'achievement', params: {achievementId: achievement.id}})}"

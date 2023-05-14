@@ -4,7 +4,6 @@
 @require '../styles/utils.styl'
 
 .achievements-list
-  overflow-y scroll
   block-dark-bg()
   padding 0
   .achievement

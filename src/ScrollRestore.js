@@ -7,16 +7,25 @@ export default {
   }
 }
 
+const HREF_SCROLLS_COUNT_IGNORE = 5;
+
 export class ScrollRestore {
   restorationMap = {};
   restorationHrefsAllowed = undefined;
   workingElement = HTMLElement || window;
+  prevHref = undefined;
+  curHref = undefined;
+  newHrefCount = 0;
+  prevPageChangeDetectHref = undefined;
 
   constructor(app, workingElement = window, restorationHrefsAllowed=undefined) {
     this.$app = app;
     this.workingElement = workingElement;
     this.restorationHrefsAllowed = restorationHrefsAllowed;
     this.restorationMap = {};
+    this.prevHref = this._getHref();
+    this.curHref = this.prevHref;
+    this.prevPageChangeDetectHref = this.prevHref;
     this._onScrollListener = () => {this._onScroll()};
     this.workingElement.addEventListener("scroll", this._onScrollListener);
   }
@@ -32,18 +41,34 @@ export class ScrollRestore {
     const offsetTop = this.workingElement.scrollY || this.workingElement.scrollTop;
     const offsetLeft = this.workingElement.scrollX || this.workingElement.scrollLeft;
     const href = this._getHref();
-    if (this.restorationHrefsAllowed === undefined || (Object.keys(this.restorationHrefsAllowed).includes(href))) {
-      // console.log(href, this.restorationMap[href])
-      this.restorationMap[href] = [offsetTop, offsetLeft];
+
+    // console.log("CUR", href, this.prevHref, this.curHref, this.prevPageChangeDetectHref);
+    if (href !== this.prevHref) {  // we're on new page
+      if (href !== this.curHref || this.prevPageChangeDetectHref !== href) {  // fast change on another new page
+        this.newHrefCount = 0;
+        this.prevHref = this.curHref;
+        this.curHref = href;
+      } else {
+        this.newHrefCount++; // we're just on new page
+        // console.log(this.newHrefCount)
+        if (this.newHrefCount > HREF_SCROLLS_COUNT_IGNORE) { // we're long time on new page
+          this.prevHref = href;
+          this.newHrefCount = 0;
+        }
+      }
+    } else { // we're long time on this page
+      if ((this.restorationHrefsAllowed === undefined) || (this.restorationHrefsAllowed.reduce((sum, cur) => sum || cur.test(href), false))) {
+        // console.log("SAVE:", href, this.restorationMap[href]);
+        this.restorationMap[href] = [offsetTop, offsetLeft];
+      }
     }
+    this.prevPageChangeDetectHref = href;
   }
 
   async restore() {
-    await nextTick();
-
     const href = this._getHref();
     const savedScroll = this.restorationMap[href];
-    // console.log("RESTORE:", href, this.restorationMap)
+    console.log("RESTORE:", href, this.restorationMap);
     if (savedScroll !== undefined) {
       if (this.workingElement === window) {
         this.workingElement.scrollTo(savedScroll[0], savedScroll[1]);

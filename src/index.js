@@ -12,11 +12,21 @@ import './styles/scrollbars.styl';
 import './styles/glitch.styl';
 import {API_URL} from "./constants";
 
+
 const Router = createVueRouter(Store);
+const restoreScrollPages = Router.setScrollToTopDenyPagesList([
+  'events',
+  'achievements',
+  'ratings',
+  'doc',
+  'docs',
+]);
+console.log("SCROLL WILL BE RESTORED ON PAGES:", restoreScrollPages);
+
 const app = createApp(App)
   .use(Api, API_URL)
   .use(Router)
   .use(Store)
-  .use(ScrollRestore, document.body)
+  .use(ScrollRestore, document.body, restoreScrollPages)
   .mount('#app');
 Store.$app = app;
