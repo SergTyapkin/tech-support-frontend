@@ -25,6 +25,7 @@ import Page404 from '/src/views/Page404.vue'
 
 import {BASE_URL_PATH} from "./constants";
 import {scrollSmoothly, scrollSmoothlyStop} from "./utils/utils";
+import {nextTick} from "vue";
 
 
 export default function createVueRouter(Store, scrollToTopDenyHrefs=[]) {
@@ -128,10 +129,12 @@ export default function createVueRouter(Store, scrollToTopDenyHrefs=[]) {
 
     Router.afterEach(async (to, from, next) => {
         const inDenyList = scrollToTopDenyHrefs.reduce((sum, cur) => sum || cur.test(to.fullPath), false);
-        if (!inDenyList)
+        if (!inDenyList) {
+            await nextTick();
             scrollSmoothly(document.body, 0);
-        else
+        } else {
             scrollSmoothlyStop();
+        }
     });
 
     Router.beforeResolve(async (to) => {
