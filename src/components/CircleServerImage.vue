@@ -10,6 +10,12 @@ borderColor = var(--border-color, #ff00ff)
   min-width var(--size)
   height var(--size)
   min-height var(--size)
+  @media({mobile})
+    width var(--size-mobile)
+    min-width var(--size-mobile)
+    height var(--size-mobile)
+    min-height var(--size-mobile)
+
   .avatar-image
     width 100%
     height 100%
@@ -18,11 +24,6 @@ borderColor = var(--border-color, #ff00ff)
       border-radius(50%)
     position relative
     overflow hidden
-    @media({mobile})
-      width var(--size-mobile)
-      min-width var(--size-mobile)
-      height var(--size-mobile)
-      min-height var(--size-mobile)
 
   .border // and on Safari we need this shit
     position absolute
