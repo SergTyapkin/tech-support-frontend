@@ -102,7 +102,7 @@
         min-width 60px
       .avatar
         --border-width 1px
-        --border-offset 0px
+        --border-offset unquote('0px')
         --border-color-user empColor1_2
         margin-right 5px
       .text
