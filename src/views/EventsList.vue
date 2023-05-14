@@ -35,9 +35,22 @@
 
 <template>
   <div>
-    <Filters class="filters" :filters="filters" @change="onChangeFilters" radio storing-name="eventsListFilters">
+    <Filters class="filters"
+             :filters="filters"
+             @change="onChangeFilters"
+             radio
+             storing-name="eventsList"
+    >
       <FloatingInput placeholder="Поиск по названию" no-info class="search-input" v-model="searchText" @input="getEvents"></FloatingInput>
       <SelectList v-model="placeSearch" @input="getEvents" :list="allPlaces" :selected-id="-1" title="Поиск по месту" solid></SelectList>
+      <Filters :filters="reversedOrderFilters"
+               can-be-none
+               @change="(filter) => {
+                 this.isReversedEventsOrder = filter.value;
+                 this.events?.reverse();
+               }"
+               storing-name="eventsListReversedOrder"
+      ></Filters>
     </Filters>
 
     <ul class="events-list">
@@ -93,12 +106,14 @@ export default {
       loading: true,
 
       events: undefined,
+      isReversedEventsOrder: false,
 
       userId: this.$route.query.userId,
 
       allPlaces: [],
 
       filters: [{id: 0, name: 'Прошедшие'}, {id: 1, name: 'Все'}, {id: 2, name: 'Предстояшие', value: true}],
+      reversedOrderFilters: [{name: 'Сначала новые'}],
       searchText: '',
       placeSearch: undefined,
     }
@@ -116,6 +131,13 @@ export default {
     },
 
     onChangeFilters(filter) {
+      if (filter.id === 2) {
+        this.isReversedEventsOrder = false;
+        this.reversedOrderFilters[0].value = false;
+      } else {
+        this.isReversedEventsOrder = true;
+        this.reversedOrderFilters[0].value = true;
+      }
       this.getEvents();
     },
 
@@ -125,7 +147,7 @@ export default {
       if (this.filters[0].value) {
         filtersObj.type = "past";
       } else if (this.filters[1].value) {
-        ;
+
       } else if (this.filters[2].value) {
         filtersObj.type = "next";
       }
@@ -153,6 +175,8 @@ export default {
       }
 
       this.events = response.events || [];
+      if (this.isReversedEventsOrder)
+        this.events.reverse();
     },
 
     async getPlaces() {
