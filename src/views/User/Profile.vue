@@ -57,6 +57,7 @@ hr
     display flex
     flex-wrap wrap
     justify-content space-evenly
+    overflow-x hidden
     gap 30px
     &.closed
       min-height 60px
