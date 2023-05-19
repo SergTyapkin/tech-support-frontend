@@ -161,6 +161,7 @@
                       @input.stop
                       can-delete
                       can-edit-self
+                      ref="usersTable"
           >
             <div class="add-participation-button" :class="{hidden: !$user.isAdmin || inSelectingUser || selectedUser}" @click="getAllUsers(); inSelectingUser = true">
               <img src="../res/plus.svg" alt="plus"><div class="text">Записать</div>
@@ -265,6 +266,8 @@ export default {
       return;
     }
     this.allPositions = response.positions;
+
+    this.$refs.usersTable.$el.scrollIntoView({block: "start", inline: "nearest", behavior: "smooth"});
   },
 
 

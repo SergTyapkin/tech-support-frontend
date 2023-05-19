@@ -21,7 +21,11 @@ const restoreScrollPages = Router.setScrollToTopDenyPagesList([
   'doc',
   'docs',
 ]);
-console.log("SCROLL WILL BE RESTORED ON PAGES:", restoreScrollPages);
+const denyScrollToTopPages = Router.appendScrollToTopDenyPagesList(
+  'event',
+);
+console.log("SCROLL WILL BE RESTORED ON PAGES:", denyScrollToTopPages);
+
 
 const app = createApp(App)
   .use(Api, API_URL)

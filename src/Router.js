@@ -122,8 +122,17 @@ export default function createVueRouter(Store, scrollToTopDenyHrefs=[]) {
         return;
     });
 
+    Router.getRegExpForPage = (pageName) => {
+        return RegExp(Router.resolve(pageName).fullPath);
+    };
+
     Router.setScrollToTopDenyPagesList = (list) => {
-        scrollToTopDenyHrefs = list.map((el) => RegExp(Router.resolve(el).fullPath));
+        scrollToTopDenyHrefs = list.map((el) => Router.getRegExpForPage(el));
+        return scrollToTopDenyHrefs;
+    };
+
+    Router.appendScrollToTopDenyPagesList = (...pageNames) => {
+        scrollToTopDenyHrefs = scrollToTopDenyHrefs.concat(pageNames.map((el) => Router.getRegExpForPage(el)));
         return scrollToTopDenyHrefs;
     };
 

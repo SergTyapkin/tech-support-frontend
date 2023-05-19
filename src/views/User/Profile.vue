@@ -58,6 +58,8 @@ hr
     flex-wrap wrap
     justify-content space-evenly
     gap 30px
+    &.closed
+      min-height 60px
     .achievement-container
       position relative
       .delete-achievement
@@ -223,7 +225,7 @@ hr
                 <div class="info ">рейтинг</div>
               </router-link>
 
-              <CircleLoading v-if="loading"></CircleLoading>
+              <CircleLoading v-if="loading" size="80px"></CircleLoading>
 
               <div v-else-if="yours" class="avatar-container">
                 <DragNDropLoader class="image-loader" @load="updateAvatar"
@@ -269,8 +271,9 @@ hr
           <!-- ACHIEVEMENTS -->
           <router-link v-if="yours" :to="{name: 'achievements'}" class="see-all-achievements"><img src="../../res/ratings.svg" alt="all achievements">Все достижения</router-link>
 
-          <div class="achievements">
-            <div v-if="achievements.length === 0" class="info">Достижений пока что нет</div>
+          <div class="achievements roll-active closed" ref="achievementsList">
+            <CircleLoading v-if="loadingAchievements" size="30px"></CircleLoading>
+            <div v-else-if="achievements.length === 0" class="info">Достижений пока что нет</div>
             <router-link v-else
                          v-for="achievement in achievements"
                          :to="{name: 'achievement', params: {achievementId: achievement.achievementid}}"
@@ -344,7 +347,7 @@ hr
 import Form from "/src/components/Form.vue";
 import FormExtended from "/src/components/FormExtended.vue";
 import FloatingInput from "../../components/FloatingInput.vue";
-import {isClosedRoll, openRoll} from "../../utils/show-hide";
+import {isClosedRoll, openRoll, openRollList} from "../../utils/show-hide";
 import CircleLoading from "../../components/loaders/CircleLoading.vue";
 import {nextTick} from "vue";
 import {BASE_URL_PATH, IMAGE_MAX_RES, IMAGE_PROFILE_MAX_RES} from "../../constants";
@@ -385,6 +388,7 @@ export default {
       achievements: [],
       loading: false,
       loadingConfirmEmail: false,
+      loadingAchievements: false,
 
       buttons: [],
 
@@ -559,15 +563,17 @@ export default {
     },
 
     async getAchievements() {
-      this.loading = true;
+      this.loadingAchievements = true;
       const achievements = await this.$api.getUserAchievements(this.user.id);
-      this.loading = false;
+      this.loadingAchievements = false;
 
       if (!achievements.ok_) {
         this.$popups.error("Ошибка", "Не удалось получить список достижений");
         return;
       }
       this.achievements = achievements.achievements;
+      await nextTick();
+      openRollList(this.$refs.achievementsList);
     },
 
     async updateAvatar(dataURL) {

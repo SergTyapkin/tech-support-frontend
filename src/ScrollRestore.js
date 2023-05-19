@@ -1,5 +1,4 @@
-// Make Vue plugin: vue.use(<imported ScrollRestore>);
-import {nextTick} from "vue";
+// Make Vue plugin: vue.use(<imported ScrollRestore>, document.body, restorationHrefsAllowed);
 
 export default {
   install: (app, workingElement, restorationHrefsAllowed) => {
