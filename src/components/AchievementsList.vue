@@ -6,7 +6,12 @@
 .achievements-list
   block-dark-bg()
   padding 0
+  display flex
+  justify-content space-evenly
+  flex-wrap wrap
   .achievement
+    width 100%
+    max-width 100vw
     padding 10px 10px
     display flex
     font-medium()
@@ -23,6 +28,9 @@
       --border-width 1px
     .text
       padding 10px
+      transition all 0.2s ease
+      max-width 100vw
+      max-height 100vh
       .name
         font-middle()
         color textColor1
@@ -30,10 +38,22 @@
       .description
         font-small-extra()
         color textColor3
+
+  &.as-cells
+    padding 20px
+    .achievement
+      max-width 80px
+      overflow hidden
+      border-radius(10px)
+      .text
+        opacity 0
+        max-width 0
+        max-height 0
+        padding 0
 </style>
 
 <template>
-  <div class="achievements-list">
+  <div class="achievements-list" :class="{'as-cells': asCells}">
     <CircleLoading v-if="loading"></CircleLoading>
 
     <div v-else v-for="achievement in achievements" @click="$emit('select', achievement)" class="achievement">
@@ -66,7 +86,8 @@ export default {
     previewSymbolsDescription: {
       type: Number,
       default: 60,
-    }
+    },
+    asCells: Boolean,
   },
 
   data() {
