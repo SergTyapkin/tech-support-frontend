@@ -674,6 +674,9 @@ export default {
       this.achievements.push(this.selectedAchievement);
       this.selectedAchievement = undefined;
       this.$popups.success('Сохранено', 'АААААЧИВКА!');
+
+      await nextTick();
+      openRoll(this.$refs.achievementsList);
     },
 
     async deleteAchievement(id) {
