@@ -61,7 +61,7 @@ export default {
 
   mounted() {
     if (!this.$user.canExecuteSQL) {
-      this.$popups.error("Ты не админ", "Не влезай, убьёт");
+      this.$popups.error("Тебе сюда низя", "Не влезай, убьёт");
       this.$router.push({name: 'profile'});
     }
   },
