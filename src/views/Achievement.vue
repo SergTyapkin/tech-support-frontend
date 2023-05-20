@@ -163,11 +163,11 @@
 
 <template>
   <div class="root" css-fullheight @input="onChange">
-    <Form :noSubmit="!$user.isAdmin" class="form-achievement" :class="{'is-admin': $user.isAdmin}" @submit="updateAchievementData">
-      <FloatingInput v-model="achievement.name" title="Название" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
+    <Form :noSubmit="!$user.canEditAchievements" class="form-achievement" :class="{'is-admin': $user.canEditAchievements}" @submit="updateAchievementData">
+      <FloatingInput v-model="achievement.name" title="Название" :readonly="!$user.canEditAchievements" no-info class="input"></FloatingInput>
 
       <div class="row-description">
-        <DragNDropLoader v-if="$user.isAdmin && achievementId !== undefined"
+        <DragNDropLoader v-if="$user.canEditAchievements && achievementId !== undefined"
                          class="image-loader"
                          @load="updateAvatar"
                          :crop-size="cropSize"
@@ -179,11 +179,11 @@
         </DragNDropLoader>
         <div v-else class="image-loader">
           <AchievementAvatar class="achievement-image" :image-id="achievement.imageid" size="128px" border-offset="2px" border-width="2px"></AchievementAvatar>
-          <div class="image-overlay" v-if="$user.isAdmin">Изображение можно будет изменить после создания</div>
+          <div class="image-overlay" v-if="$user.canEditAchievements">Изображение можно будет изменить после создания</div>
         </div>
 
         <div class="markdown-container">
-          <RedactorAndRenderer info="Описание" @input="onChange" v-model="achievement.description" placeholder="Описание" :show-initial-preview="achievementId !== undefined"></RedactorAndRenderer>
+          <RedactorAndRenderer info="Описание" @input="onChange" v-model="achievement.description" placeholder="Описание" :show-initial-preview="achievementId !== undefined" :can-edit="$user.canEditAchievements"></RedactorAndRenderer>
         </div>
       </div>
 
@@ -192,9 +192,9 @@
         <div class="auto-description">Выставляется автоматически при выполнении каких-то критериев</div>
       </div>
 
-      <div class="row-levels" :class="{'is-admin': $user.isAdmin}">
+      <div class="row-levels" :class="{'is-admin': $user.canEditAchievements}">
         <div class="column-settings">
-          <div class="levels-container" v-if="$user.isAdmin">
+          <div class="levels-container" v-if="$user.canEditAchievements">
             <div class="info">Количество уровней</div>
             <Range
               no-value
@@ -211,11 +211,11 @@
             ></Range>
           </div>
           <div class="special-container">
-            <Filters v-if="$user.isAdmin || achievement.special"
+            <Filters v-if="$user.canEditAchievements || achievement.special"
                      class="filters"
                      :filters="filters"
                      can-be-none
-                     :disabled="!$user.isAdmin || achievement.auto"
+                     :disabled="!$user.canEditAchievements || achievement.auto"
                      @change="(filter) => {
                        onChange();
                        achievement.special = filter.value;
@@ -252,9 +252,9 @@
       </div>
 
       <CircleLoading v-if="loading"></CircleLoading>
-      <div v-else class="row-buttons">
-        <div v-if="$user.isAdmin && achievementId !== undefined && !achievement.auto" class="button-delete" @click="deleteAchievement"><img src="../res/trash.svg" alt="delete">Удалить</div>
+      <div v-else-if="$user.canEditAchievements" class="row-buttons">
         <div v-if="achievementId === undefined" class="button-create" @click="createAchievement"><img src="../res/save.svg" alt="">Создать достижение</div>
+        <div v-else-if="!achievement.auto" class="button-delete" @click="deleteAchievement"><img src="../res/trash.svg" alt="delete">Удалить</div>
       </div>
     </Form>
 

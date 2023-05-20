@@ -30,6 +30,14 @@
     flex-direction column
     gap 20px
     flex 1
+
+  .execute-sql-button
+    button-danger()
+    button-dashed()
+    padding 20px
+    width 100%
+    text-align center
+
   .newUsersBoard
   .participationsBoard
   .searchUsersBoard
@@ -177,7 +185,8 @@
     <div class="column">
       <div class="newUsersBoard">
         <header class="header">Подтверждение новых пользователей</header>
-        <div v-if="newUsers.length === 0" class="not-found-info">Новых пользователей нет</div>
+        <div v-if="!$user.canConfirmNewUsers" class="not-found-info">Нет доступа</div>
+        <div v-else-if="newUsers.length === 0" class="not-found-info">Новых пользователей нет</div>
         <ul v-else class="container scrollable">
           <li class="newUser" v-for="(user, listIdx) in newUsers">
             <div class="username-container">
@@ -197,9 +206,11 @@
         </ul>
       </div>
 
+
       <div class="setupPlacesBoard">
         <header class="header">Возможные места проведения</header>
-        <div class="container">
+        <div v-if="!$user.canEditPlaces" class="not-found-info">Нет доступа</div>
+        <div v-else class="container">
           <AddableList class="addable-list scrollable"
                        v-model="places"
                        placeholder="название места"
@@ -211,18 +222,22 @@
           ></AddableList>
         </div>
       </div>
+
+      <router-link v-if="$user.canExecuteSQL" :to="{name: 'sql'}" class="execute-sql-button">Выполнение SQL</router-link>
     </div>
 
     <div class="column">
       <div class="participationsBoard">
         <header class="header">Раздача баллов за мероприятия</header>
-        <UsersTable :users-lists="participations" v-if="participations.length"></UsersTable>
-        <div v-else class="not-found-info">Неоцененных участий нет</div>
+        <div v-if="!$user.canEditParticipations" class="not-found-info">Нет доступа</div>
+        <div v-else-if="participations.length === 0" class="not-found-info">Неоцененных участий нет</div>
+        <UsersTable v-else :users-lists="participations"></UsersTable>
       </div>
 
       <div class="setupPositionsBoard">
         <header class="header">Возможные направления работы</header>
-        <div class="container">
+        <div v-if="!$user.canEditPositions" class="not-found-info">Нет доступа</div>
+        <div v-else class="container">
           <AddableList class="addable-list scrollable"
                        v-model="positions"
                        placeholder="направление"
@@ -255,7 +270,8 @@
 
         <CircleLoading v-if="achievementsLoading" class="loading"></CircleLoading>
         <ul v-else class="container scrollable">
-          <li v-if="achievements.length === 0" class="not-found-info">Достижений нет</li>
+          <li v-if="!$user.canEditAchievements" class="not-found-info">Нет доступа</li>
+          <li v-else-if="achievements.length === 0" class="not-found-info">Достижений нет</li>
           <router-link v-else v-for="achievement in achievements" :to="{name: 'achievement', params: {achievementId: achievement.id}}" class="user">
             <AchievementAvatar :image-id="achievement.imageid" class="avatar"></AchievementAvatar>
             <div class="text">
@@ -269,6 +285,7 @@
         </ul>
       </div>
     </div>
+
     <CircleLoading v-if="overlayLoading" class="overlay-loading"></CircleLoading>
   </div>
 </template>

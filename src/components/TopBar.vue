@@ -93,13 +93,13 @@ height-mobile = header-height-mobile
       <span>Профиль</span>
     </router-link>
 
-    <router-link v-if="!$user.isAdmin" :to="routes.ratings" class="ratings button" :class="{active: $route.fullPath === routes.ratings}" @click="$emit('click', 'ratings')">
-      <img src="../res/ratings.svg" alt="">
-      <span>Рейтинги</span>
-    </router-link>
-    <router-link v-else :to="routes.admin" class="admin button" :class="{active: $route.fullPath === routes.admin}" @click="$emit('click', 'admin')">
+    <router-link v-if="$user.canAccessAdminPage" :to="routes.admin" class="admin button" :class="{active: $route.fullPath === routes.admin}" @click="$emit('click', 'admin')">
       <img src="../res/admin.svg" alt="">
       <span>Админская</span>
+    </router-link>
+    <router-link v-else :to="routes.ratings" class="ratings button" :class="{active: $route.fullPath === routes.ratings}" @click="$emit('click', 'ratings')">
+      <img src="../res/ratings.svg" alt="">
+      <span>Рейтинги</span>
     </router-link>
   </div>
 </template>

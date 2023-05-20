@@ -60,7 +60,7 @@ export default {
   },
 
   mounted() {
-    if (!this.$user.isAdmin) {
+    if (!this.$user.canExecuteSQL) {
       this.$popups.error("Ты не админ", "Не влезай, убьёт");
       this.$router.push({name: 'profile'});
     }

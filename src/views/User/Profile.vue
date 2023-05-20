@@ -63,6 +63,10 @@ hr
       min-height 60px
     .achievement-container
       position relative
+      transition all 0.2s ease
+      &:hover
+        filter brightness(1.2)
+        transform scale(1.05)
       .delete-achievement
         position absolute
         left 50%
@@ -251,7 +255,7 @@ hr
             <div v-if="!yours" class="username">
               <div class="another-user-info">{{ $usernameFull(user) }}</div>
             </div>
-            <input v-if="$user.isAdmin && !yours" type="text" class="title" v-model="user.title" @change="saveAnotherUserTitle" @keydown.enter="(event) => event.target.blur()">
+            <input v-if="$user.canEditUsersTitles && !yours" type="text" class="title" v-model="user.title" @change="saveAnotherUserTitle" @keydown.enter="(event) => event.target.blur()">
             <div v-else class="title">{{ user.title }}</div>
 
             <a v-if="!yours && user.telegram" :href="`https://t.me/${user.telegram}`" target="_blank" class="user-link">
@@ -287,10 +291,10 @@ hr
                            :image-id="achievement.imageid"
                            :special="achievement.special"
               ></Achievement>
-              <div v-if="$user.isAdmin" class="delete-achievement" @click.stop.prevent="deleteAchievement(achievement.id)"><img src="../../res/trash.svg" alt="delete"></div>
+              <div v-if="$user.canAssignAchievements" class="delete-achievement" @click.stop.prevent="deleteAchievement(achievement.id)"><img src="../../res/trash.svg" alt="delete"></div>
             </router-link>
           </div>
-          <div class="add-achievement" @click="inSelectingAchievement = true" :class="{hidden: !$user.isAdmin || inSelectingAchievement || selectedAchievement}"><img src="../../res/plus.svg" alt="add achievement">Добавить достижение</div>
+          <div class="add-achievement" @click="inSelectingAchievement = true" :class="{hidden: !$user.canAssignAchievements || inSelectingAchievement || selectedAchievement}"><img src="../../res/plus.svg" alt="add achievement">Добавить достижение</div>
 
           <AchievementsList :class="{hidden: !inSelectingAchievement}"
                             class="achievements-list scrollable"
@@ -551,7 +555,6 @@ export default {
         avatarImageId: user.avatarimageid,
         completedEvents: user.completedevents,
         id: user.id,
-        isAdmin: user.isAdmin,
         joinedDate: user.joineddate,
         firstName: user.firstname,
         secondName: user.secondname,

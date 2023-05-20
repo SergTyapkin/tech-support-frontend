@@ -71,13 +71,13 @@
 
 <template>
   <div class="root" css-fullheight @input="onChange">
-    <FloatingInput title="Название" ref="title" :readonly="!$user.isAdmin" v-model="title" no-info class="title input"></FloatingInput>
+    <FloatingInput title="Название" ref="title" :readonly="!$user.canEditDocs" v-model="title" no-info class="title input"></FloatingInput>
     <div class="info-inputs">
-      <SelectList v-model="place" @input="onChange" :selected-id="placeId" :list="allPlaces" ref="place" title="Место" :readonly="!$user.isAdmin" class="place input" solid></SelectList>
-      <SelectList v-model="position" @input="onChange" :selected-id="positionId" :list="allPositions" ref="position" title="Направленность" :readonly="!$user.isAdmin" class="position input" solid></SelectList>
+      <SelectList v-model="place" @input="onChange" :selected-id="placeId" :list="allPlaces" ref="place" title="Место" :readonly="!$user.canEditDocs" class="place input" solid></SelectList>
+      <SelectList v-model="position" @input="onChange" :selected-id="positionId" :list="allPositions" ref="position" title="Направленность" :readonly="!$user.canEditDocs" class="position input" solid></SelectList>
     </div>
     <div class="error-text" v-if="errorText.length">{{ errorText }}</div>
-    <RedactorAndRenderer info="Редактор" v-model="text" @input="errorText = ''; onChange()" :class="{error: errorText.length}" placeholder="Текст" :show-initial-preview="docId !== undefined"></RedactorAndRenderer>
+    <RedactorAndRenderer info="Редактор" v-model="text" @input="errorText = ''; onChange()" :class="{error: errorText.length}" placeholder="Текст" :show-initial-preview="docId !== undefined" :can-edit="$user.canEditDocs"></RedactorAndRenderer>
 
     <FloatingInput v-model="authorname" title="Автор" readonly no-info class="input"></FloatingInput>
     <a v-if="authortelegram" :href="`https://t.me/${authortelegram}`" target="_blank" class="user-link">
@@ -85,10 +85,10 @@
     </a>
 
     <CircleLoading v-if="loading"></CircleLoading>
-    <div class="buttons-container" v-else-if="$user.isAdmin && this.docId === undefined">
+    <div class="buttons-container" v-else-if="$user.canEditDocs && this.docId === undefined">
       <div class="save-button" @click="createDoc"><img src="../res/save.svg" alt="">Создать документ</div>
     </div>
-    <div class="buttons-container" v-else-if="$user.isAdmin">
+    <div class="buttons-container" v-else-if="$user.canEditDocs">
       <div class="delete-button" @click="deleteDoc"><img src="../res/trash.svg" alt="">Удалить</div>
     </div>
 
@@ -133,7 +133,7 @@ export default {
 
   async mounted() {
     if (this.docId === undefined) {
-      if (!this.$user.isAdmin) {
+      if (!this.$user.canEditDocs) {
         this.$popups.error("Ошибка", "id документа нет в строке запроса");
         this.$router.push({name: "default"});
         return;

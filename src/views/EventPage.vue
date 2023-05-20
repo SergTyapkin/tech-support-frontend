@@ -126,24 +126,24 @@
 
 <template>
   <div class="root" css-fullheight @input="onChange">
-    <Form :noSubmit="!$user.isAdmin" class="form-event" :class="{'is-admin': $user.isAdmin}" @submit="updateEventData">
+    <Form :noSubmit="!$user.canEditEvents" class="form-event" :class="{'is-admin': $user.canEditEvents}" @submit="updateEventData">
       <div class="event-info">
         <div class="left-description">
           <div class="main-info">
-            <FloatingInput v-model="event.name" title="Название" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
-            <SelectList v-model="place" @input="onChange" :selected-id="event.placeid" :list="allPlaces" title="Место проведения" solid :readonly="!$user.isAdmin" class="input"></SelectList>
+            <FloatingInput v-model="event.name" title="Название" :readonly="!$user.canEditEvents" no-info class="input"></FloatingInput>
+            <SelectList v-model="place" @input="onChange" :selected-id="event.placeid" :list="allPlaces" title="Место проведения" solid :readonly="!$user.canEditEvents" class="input"></SelectList>
           </div>
 
           <div class="main-info">
-            <FloatingInput v-model="event.date" type="date" title="Дата проведения" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
-            <FloatingInput v-model="event.timestart" type="time" title="Приходить c" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
-            <FloatingInput v-model="event.timeend" type="time" title="Оставаться до" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
-            <FloatingInput v-model="event.peopleneeds" type="number" title="Людей необходимо" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
+            <FloatingInput v-model="event.date" type="date" title="Дата проведения" :readonly="!$user.canEditEvents" no-info class="input"></FloatingInput>
+            <FloatingInput v-model="event.timestart" type="time" title="Приходить c" :readonly="!$user.canEditEvents" no-info class="input"></FloatingInput>
+            <FloatingInput v-model="event.timeend" type="time" title="Оставаться до" :readonly="!$user.canEditEvents" no-info class="input"></FloatingInput>
+            <FloatingInput v-model="event.peopleneeds" type="number" title="Людей необходимо" :readonly="!$user.canEditEvents" no-info class="input"></FloatingInput>
           </div>
 
           <div class="main-info">
-            <FloatingInput v-model="event.eventtimestart" type="time" title="Начало мероприятия" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
-            <FloatingInput v-model="event.eventtimeend" type="time" title="Конец мероприятия" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
+            <FloatingInput v-model="event.eventtimestart" type="time" title="Начало мероприятия" :readonly="!$user.canEditEvents" no-info class="input"></FloatingInput>
+            <FloatingInput v-model="event.eventtimeend" type="time" title="Конец мероприятия" :readonly="!$user.canEditEvents" no-info class="input"></FloatingInput>
           </div>
 
           <FloatingInput v-model="event.authorname" title="Автор мероприятия" readonly no-info class="input"></FloatingInput>
@@ -153,7 +153,7 @@
         </div>
 
         <div class="right-description">
-          <RedactorAndRenderer info="А что мы будем делать?" placeholder="Описание" v-model="event.description" @input="onChange()" show-initial-preview></RedactorAndRenderer>
+          <RedactorAndRenderer info="А что мы будем делать?" placeholder="Описание" v-model="event.description" @input="onChange()" show-initial-preview :can-edit="$user.canEditEvents"></RedactorAndRenderer>
 
           <UsersTable class="users-table"
                       :users-lists="[{participations: event.participations}]"
@@ -163,7 +163,7 @@
                       can-edit-self
                       ref="usersTable"
           >
-            <div class="add-participation-button" :class="{hidden: !$user.isAdmin || inSelectingUser || selectedUser}" @click="getAllUsers(); inSelectingUser = true">
+            <div class="add-participation-button" :class="{hidden: !$user.canEditParticipations || inSelectingUser || selectedUser}" @click="getAllUsers(); inSelectingUser = true">
               <img src="../res/plus.svg" alt="plus"><div class="text">Записать</div>
             </div>
             <ul class="select-user-list scrollable" :class="{hidden: !inSelectingUser}">
@@ -193,7 +193,7 @@
         </div>
         <div v-else-if="event.isnext" class="button-not-participate" @click="notParticipate">Не пойду</div>
       </div>
-      <div v-if="$user.isAdmin" class="button-delete" @click="deleteEvent"><img src="../res/trash.svg" alt="delete">Удалить</div>
+      <div v-if="$user.canEditEvents" class="button-delete" @click="deleteEvent"><img src="../res/trash.svg" alt="delete">Удалить</div>
     </Form>
 
     <FloatingButton v-if="isEdited" title="Сохранить" green @click="updateEventData">

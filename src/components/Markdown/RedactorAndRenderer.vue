@@ -35,13 +35,13 @@
     <div class="top-buttons">
       <div class="info" v-if="modeRedactor">{{ info }}</div>
       <div class="info" v-if="!modeRedactor">
-        <span v-if="$user.isAdmin">Превью</span>
+        <span v-if="canEdit">Превью</span>
         <span v-else>Описание</span>
       </div>
       <div v-if="modeRedactor" class="switch-button" @click="modeRedactor = !modeRedactor">Посмотреть превью</div>
-      <div v-else-if="accessNotAdmins || $user.isAdmin" class="switch-button" @click="modeRedactor = !modeRedactor">В редактор</div>
+      <div v-else-if="accessNotAdmins || canEdit" class="switch-button" @click="modeRedactor = !modeRedactor">В редактор</div>
     </div>
-    <MarkdownRedactor :class="{hidden: !modeRedactor}" v-if="$user.isAdmin" class="redactor" @input="(text) => {$emit('input', text); updateVModel(text);}" @change="$refs.renderer?.update" ref="text" v-model="modelValue" :placeholder="placeholder" :rows="10"></MarkdownRedactor>
+    <MarkdownRedactor :class="{hidden: !modeRedactor}" v-if="canEdit" class="redactor" @input="(text) => {$emit('input', text); updateVModel(text);}" @change="$refs.renderer?.update" ref="text" v-model="modelValue" :placeholder="placeholder" :rows="10"></MarkdownRedactor>
     <MarkdownRenderer :class="{hidden: modeRedactor}" class="renderer scrollable" ref="renderer"></MarkdownRenderer>
   </div>
 </template>
@@ -61,6 +61,7 @@ export default {
     placeholder: String,
     showInitialPreview: Boolean,
     accessNotAdmins: Boolean,
+    canEdit: Boolean,
   },
 
   data() {

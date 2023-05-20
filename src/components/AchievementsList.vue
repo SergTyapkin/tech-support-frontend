@@ -15,7 +15,7 @@
     padding 10px 10px
     display flex
     font-medium()
-    transition all 0.2s ease
+    transition all 0.5s ease
     cursor pointer
     &:hover
       background blocksBgColorHover

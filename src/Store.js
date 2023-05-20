@@ -22,7 +22,6 @@ const Store = new Vuex.Store({
           email: u.email,
           telegram: u.telegram,
           id: u.id,
-          isAdmin: u.isadmin,
           isConfirmedEmail: u.isconfirmedemail,
           isConfirmedByAdmin: u.isconfirmedbyadmin,
           joinedDate: u.joineddate,
@@ -33,6 +32,17 @@ const Store = new Vuex.Store({
           completedEvents: u.completedevents,
           rating: u.rating,
           position: u.position,
+
+          canEditAchievements: u.caneditachievements,
+          canAssignAchievements: u.canassignachievements,
+          canConfirmNewUsers: u.canconfirmnewusers,
+          canEditEvents: u.caneditevents,
+          canEditUsersTitles: u.canedituserstitles,
+          canEditParticipations: u.caneditparticipations,
+          canEditDocs: u.caneditdocs,
+          canEditPlaces: u.caneditplaces,
+          canEditPositions: u.caneditpositions,
+          canExecuteSQL: u.canexecutesql,
         });
       } else {
         state.commit('DELETE_USER');

@@ -84,7 +84,7 @@
         </router-link>
       </li>
 
-      <router-link :to="{name: 'createDoc'}" v-if="$user.isAdmin" class="create-doc">
+      <router-link :to="{name: 'createDoc'}" v-if="$user.canEditDocs" class="create-doc">
         <img src="../res/plus.svg" alt="plus"><div class="text">Создать</div>
       </router-link>
     </ul>

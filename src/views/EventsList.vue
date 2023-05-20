@@ -79,7 +79,7 @@
       </li>
     </ul>
 
-    <router-link v-if="$user.isAdmin" :to="{name: 'createEvent'}"><FloatingButton title="Создать"><img src="../res/plus_bold.svg" alt="plus"></FloatingButton></router-link>
+    <router-link v-if="$user.canEditEvents" :to="{name: 'createEvent'}"><FloatingButton title="Создать"><img src="../res/plus_bold.svg" alt="plus"></FloatingButton></router-link>
   </div>
 </template>
 

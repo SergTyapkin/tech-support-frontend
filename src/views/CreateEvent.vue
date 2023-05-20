@@ -51,7 +51,7 @@
       <div class="left-column">
         <div v-if="errorText" class="error-text">{{ errorText }}</div>
         <FloatingInput v-model="name" title="Название" class="nameNewEvent"></FloatingInput>
-        <RedactorAndRenderer v-model="description" placeholder="Описание - что нужно будет делать" info="Превью"></RedactorAndRenderer>
+        <RedactorAndRenderer v-model="description" can-edit placeholder="Описание - что нужно будет делать" info="Превью"></RedactorAndRenderer>
         <div class="timeNewEvent">
           <FloatingInput v-model="date" type="date" title="Дата" class="inputDT"></FloatingInput>
           <FloatingInput v-model="timeEventStart" type="time" title="Начало в" class="inputDT"></FloatingInput>

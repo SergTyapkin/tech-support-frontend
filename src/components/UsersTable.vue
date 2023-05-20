@@ -45,7 +45,7 @@ user-padding-left = 20px
 
 <template>
   <div class="usersList scrollable">
-    <div class="edit-buttons-container" v-if="$user.isAdmin && (usersLists.reduce((total, cur) => cur.participations?.length || 0 + total, 0) > 0)">
+    <div class="edit-buttons-container" v-if="$user.canEditParticipations && (usersLists.reduce((total, cur) => cur.participations?.length || 0 + total, 0) > 0)">
       <button v-if="!canEditScores" class="edit-button" @click="canEditScores = true">Изменить баллы</button>
       <button v-else class="edit-button-save" @click="canEditScores = false">Не изменять баллы</button>
     </div>
@@ -68,7 +68,7 @@ user-padding-left = 20px
             :comment="participation.admincomment"
             :score="participation.score"
             :can-delete="canDelete"
-            :can-edit="($user.isAdmin) || (participation.userid === $user.id)"
+            :can-edit="($user.canEditParticipations) || (participation.userid === $user.id)"
             :can-edit-score="canEditScores"
             @delete="(id) => deleteUserFromList(0, id)"
       ></User>
