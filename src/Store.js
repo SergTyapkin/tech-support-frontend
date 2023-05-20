@@ -38,6 +38,7 @@ const Store = new Vuex.Store({
           canConfirmNewUsers: u.canconfirmnewusers,
           canEditEvents: u.caneditevents,
           canEditUsersTitles: u.canedituserstitles,
+          canEditUsersData: u.caneditusersdata,
           canEditParticipations: u.caneditparticipations,
           canEditDocs: u.caneditdocs,
           canEditPlaces: u.caneditplaces,

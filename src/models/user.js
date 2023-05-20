@@ -25,6 +25,7 @@ export default class User extends Model {
     canConfirmNewUsers: false,
     canEditEvents: false,
     canEditUsersTitles: false,
+    canEditUsersData: false,
     canEditParticipations: false,
     canEditDocs: false,
     canEditPlaces: false,
