@@ -550,7 +550,6 @@ export default {
         this.$popups.error("Ошибка", "Не удалось получить информацио о пользователе");
         return;
       }
-      console.log(this.userId);
       this.user = {
         avatarImageId: user.avatarimageid,
         completedEvents: user.completedevents,

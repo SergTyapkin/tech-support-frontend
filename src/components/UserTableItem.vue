@@ -143,9 +143,9 @@ user-padding-left-mobile = 5px
   <div class="user">
     <router-link :to="{name: 'profile', params: {userId: userId}}" class="user-icon-container" @contextmenu.prevent="deleteParticipation">
       <UserAvatar :image-id="userImageId" class="user-icon" size="80px" size-mobile="50px"></UserAvatar>
-      <div v-if="$user.canEditParticipations && canDelete" class="delete-user" @click.stop.prevent="deleteParticipation"><img src="../res/trash.svg" alt="delete"></div>
+      <div v-if="canEdit && canDelete" class="delete-user" @click.stop.prevent="deleteParticipation"><img src="../res/trash.svg" alt="delete"></div>
     </router-link>
-    <div class="info" :class="{canEditParticipations: $user.canEditParticipations}">
+    <div class="info" :class="{isAdmin: $user.canEditParticipations}">
       <div class="userName">{{ $cropText(userName, 30) }} <span class="position">{{ positionName }}</span></div>
       <div class="userTitle">{{ $cropText(userTitle, 50) }}</div>
       <div class="range-input-container" :class="{'in-row': !$user.canEditParticipations}">

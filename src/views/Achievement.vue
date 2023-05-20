@@ -312,6 +312,7 @@ export default {
   async mounted() {
     if (this.achievementId === undefined) {
       this.achievement.levels = 3;
+      this.achievement.special = false;
       return;
     }
     await this.getAchievementData();

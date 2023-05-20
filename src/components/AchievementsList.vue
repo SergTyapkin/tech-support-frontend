@@ -116,7 +116,6 @@ export default {
         return;
       }
       this.achievements = achievements.achievements;
-      console.log(this.achievements)
     },
 
     cleanupMarkdownPreview: cleanupMarkdownPreview,

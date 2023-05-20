@@ -268,10 +268,10 @@
       <div class="achievementsBoard">
         <header class="header">Достижения</header>
 
-        <CircleLoading v-if="achievementsLoading" class="loading"></CircleLoading>
+        <div v-if="!$user.canEditAchievements" class="not-found-info">Нет доступа</div>
+        <CircleLoading v-else-if="achievementsLoading" class="loading"></CircleLoading>
         <ul v-else class="container scrollable">
-          <li v-if="!$user.canEditAchievements" class="not-found-info">Нет доступа</li>
-          <li v-else-if="achievements.length === 0" class="not-found-info">Достижений нет</li>
+          <li v-if="achievements.length === 0" class="not-found-info">Достижений нет</li>
           <router-link v-else v-for="achievement in achievements" :to="{name: 'achievement', params: {achievementId: achievement.id}}" class="user">
             <AchievementAvatar :image-id="achievement.imageid" class="avatar"></AchievementAvatar>
             <div class="text">
@@ -333,6 +333,9 @@ export default {
 
   methods: {
     async getNewUsers() {
+      if (!this.$user.canConfirmNewUsers)
+        return;
+
       this.loading = true;
       const res = await this.$api.getUnconfirmedUsers();
       this.loading = false;
@@ -346,6 +349,9 @@ export default {
     },
 
     async getUnvotedParticipations() {
+      if (!this.$user.canEditParticipations)
+        return;
+
       this.loading = true;
       const res = await this.$api.getUnvotedParticipations();
       this.loading = false;
@@ -389,6 +395,9 @@ export default {
     },
 
     async getPlaces() {
+      if (!this.$user.canEditPlaces)
+        return;
+
       this.loading = true;
       const res = await this.$api.getPlaces();
       this.loading = false;
@@ -402,6 +411,9 @@ export default {
     },
 
     async getPositions() {
+      if (!this.$user.canEditPositions)
+        return;
+
       this.loading = true;
       const res = await this.$api.getPositions();
       this.loading = false;
@@ -415,6 +427,9 @@ export default {
     },
 
     async getAchievements() {
+      if (!this.$user.canEditAchievements)
+        return;
+
       this.achievementsLoading = true;
       const res = await this.$api.getAchievements();
       this.achievementsLoading = false;

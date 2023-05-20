@@ -111,14 +111,11 @@ export default {
       }
     });
 
-    console.log(this.storingName)
     if (this.storingName !== undefined) {
       if (this.$store.state.__filters === undefined) {
         this.$store.state.__filters = {}
       }
-      console.log(this.$store.state);
       const storedState = this.$store.state.__filters[this.storingName];
-      console.log(storedState);
       if (storedState !== undefined) {
         this.filters.forEach((filter, i) => {
           this.filters[i] = storedState[i];

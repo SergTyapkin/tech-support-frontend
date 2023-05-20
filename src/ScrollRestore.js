@@ -67,7 +67,7 @@ export class ScrollRestore {
   async restore() {
     const href = this._getHref();
     const savedScroll = this.restorationMap[href];
-    console.log("RESTORE:", href, this.restorationMap);
+    console.log("RESTORE SCROLL:", href, this.restorationMap);
     if (savedScroll !== undefined) {
       if (this.workingElement === window) {
         this.workingElement.scrollTo(savedScroll[0], savedScroll[1]);
