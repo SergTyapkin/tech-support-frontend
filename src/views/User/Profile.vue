@@ -66,7 +66,6 @@ hr
       transition all 0.2s ease
       &:hover
         filter brightness(1.2)
-        transform scale(1.05)
       .delete-achievement
         position absolute
         left 50%
