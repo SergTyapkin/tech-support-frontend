@@ -29,7 +29,7 @@
       <div class="fields-container">
         <div id="sql-fields">
           <div class="header-small">Вот сейчас спокойно, дыши, без DROP, DELETE и TRUNCATE, пожалуйста</div>
-          <textarea rows=4 class="textarea scrollable" v-model="sql"></textarea>
+          <textarea rows=4 class="textarea scrollable" v-model="sql" @keydown.ctrl.enter="execute"></textarea>
 
           <label class="header-small">Результат</label>
           <textarea rows=12 class="textarea scrollable" :value="result" disabled></textarea>
