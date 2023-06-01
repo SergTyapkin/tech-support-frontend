@@ -244,7 +244,7 @@
           <div class="info">Достижение получили</div>
           <div class="images-container">
             <router-link v-for="user in achievement.usersachieved" :to="{name: 'profile', params: {userId: user.id}}" class="user-icon-container">
-              <UserAvatar class="user-avatar" :image-id="user.avatarimageid" size="80px"></UserAvatar>
+              <UserAvatar class="user-avatar" :image-id="user.avatarimageid" size="80px" :user-id="user.id"></UserAvatar>
               <div class="username">{{ user.username }}</div>
             </router-link>
           </div>

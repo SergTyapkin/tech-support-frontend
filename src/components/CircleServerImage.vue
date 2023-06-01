@@ -47,6 +47,7 @@ borderColor = var(--border-color, #ff00ff)
   >
     <ServerImage :image-id="imageId" :default-image-src="defaultImageSrc" alt="avatar" class="avatar-image" :class="{'no-border-radius': noBorderRadius}"></ServerImage>
     <div v-if="!noBorderRadius" class="border"></div>
+    <slot></slot>
   </div>
 </template>
 

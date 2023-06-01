@@ -237,13 +237,13 @@ hr
                                  :compress-size="compressSize"
                 >
                   <div class="avatar-div" @click.stop="updateAvatar(undefined)">
-                    <UserAvatar :image-id="user.avatarImageId" size="80px"></UserAvatar>
+                    <UserAvatar :image-id="user.avatarImageId" size="80px" :user-id="user.id"></UserAvatar>
                   </div>
                 </DragNDropLoader>
                 <img v-if="user.avatarImageId" class="delete-avatar" src="../../res/trash.svg" alt="delete" @click.stop="deleteAvatarClick">
               </div>
               <div v-else class="avatar-div">
-                <UserAvatar :image-id="user.avatarImageId" size="80px" border-offset="0px" border-width="1px"></UserAvatar>
+                <UserAvatar :image-id="user.avatarImageId" size="80px" border-offset="0px" border-width="1px" :user-id="user.id"></UserAvatar>
               </div>
 
               <router-link :to="{name: 'ratings'}" class="position">

@@ -2,20 +2,36 @@
 @require '../styles/constants.styl'
 @require '../styles/utils.styl'
 
-.avatar-root
-  --border-color var(--border-color-user, mix(textColor2, transparent))
+.user-avatar-root
+  position relative
+  .avatar-root
+    --border-color var(--border-color-user, mix(textColor2, transparent))
+
+  .trophy
+    position absolute
+    top var(--top)
+    right var(--right)
+    left var(--left)
+    bottom var(--bottom)
+    width 100%
+    height 100%
+    transform scale(var(--scale))
 </style>
 
 <template>
-  <CircleServerImage class="avatar-root"
-                     :default-image-src="img"
-                     :size="size"
-                     :size-mobile="sizeMobile"
-                     :image-id="imageId"
-                     :border-offset="borderOffset"
-                     :border-width="borderWidth"
-                     :no-border-radius="noBorderRadius"
-  ></CircleServerImage>
+  <div class="user-avatar-root">
+    <CircleServerImage class="avatar-root"
+                       :default-image-src="img"
+                       :size="size"
+                       :size-mobile="sizeMobile"
+                       :image-id="imageId"
+                       :border-offset="borderOffset"
+                       :border-width="borderWidth"
+                       :no-border-radius="noBorderRadius"
+    >
+      <img class="trophy" v-if="trophy !== undefined" :src="trophy.image" :style="{'--top': trophy.top, '--left': trophy.left, '--right': trophy.right, '--bottom': trophy.bottom, '--scale': trophy.scale || 1}" alt="trophy">
+    </CircleServerImage>
+  </div>
 </template>
 
 <script>
@@ -23,6 +39,16 @@ import ServerImage from "./ServerImage.vue";
 import defaultAvatarImage from '../res/default_avatar.png';
 import CircleServerImage from "./CircleServerImage.vue";
 
+import ShamanCap from "../res/trophies/shamanСap.png"
+
+const USERS_TROPHIES = {
+  20: {
+    image: ShamanCap,
+    top: "-40%",
+    left: "-30%",
+    scale: "0.9"
+  },
+}
 
 export default {
   // takes
@@ -30,6 +56,10 @@ export default {
   // css variable with priority above props
   components: {CircleServerImage, ServerImage},
   props: {
+    userId: {
+      type: Number,
+      required: true,
+    },
     imageId: {
       type: String,
       required: true,
@@ -50,6 +80,24 @@ export default {
   data() {
     return {
       img: defaultAvatarImage,
+
+      trophy: undefined,
+    }
+  },
+
+  mounted() {
+    this.updateUserTrophy();
+  },
+
+  methods: {
+    updateUserTrophy() {
+      this.trophy = USERS_TROPHIES[this.$props.userId];
+    },
+  },
+
+  watch: {
+    userId() {
+      this.updateUserTrophy();
     }
   }
 }
