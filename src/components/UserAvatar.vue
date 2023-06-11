@@ -6,6 +6,7 @@
   position relative
   .avatar-root
     --border-color var(--border-color-user, mix(textColor2, transparent))
+    margin auto
 
   .trophy
     position absolute

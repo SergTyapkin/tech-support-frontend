@@ -47,7 +47,12 @@
     .position
       color colorGold
     .avatar
+      margin-top 15px
+      margin-left auto
+      margin-right auto
       --border-color-user colorGold
+      height 75px
+      width 140px
     .info-big-bg
       position absolute
       inset 0
@@ -129,7 +134,7 @@
       <router-link :to="{name: 'userProfile', params: {userId: users[0].id}}" class="place-1" v-if="users[0] !== undefined">
         <div class="info-big-bg">Жизнь потрепала</div>
         <div class="position">#1</div>
-        <UserAvatar class="avatar" :image-id="users[0].avatarimageid" size="100px" :user-id="users[0].id"></UserAvatar>
+        <UserAvatar class="avatar" :image-id="users[0].avatarimageid" size="100%" :user-id="users[0].id"></UserAvatar>
         <div class="name">{{ users[0].name }}</div>
         <div class="title">
           {{ users[0].title }}
