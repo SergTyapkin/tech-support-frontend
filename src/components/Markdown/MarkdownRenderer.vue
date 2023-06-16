@@ -72,12 +72,12 @@ export default {
       html: '',
       text: this.$props.initialText,
       sanitizeOptions: {
-        allowedTags: ['audio', 'video', 's', 'del', 'b', 'i', 'em', 'strong', 'a', 'iframe'],
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat(['audio', 'video', 's', 'del', 'b', 'i', 'em', 'strong', 'a', 'iframe', 'code']),
         allowedIframeHostnames: ['www.youtube.com'],
-        allowedAttributes: {
+        allowedAttributes:  Object.assign(sanitizeHtml.defaults.allowedAttributes, {
           'a': [ 'href' ],
           'iframe': [ 'src', 'width', 'height', 'allow', 'allowfullscreen', 'title', 'frameborder' ]
-        },
+        }),
       }
     }
   },
@@ -93,7 +93,9 @@ export default {
         this.text = text;
 
       const parsed = marked.parse(this.text, {breaks: true});
+      console.log(parsed)
       this.html = sanitizeHtml(parsed, this.sanitizeOptions);
+      console.log(this.html)
     }
   }
 };
