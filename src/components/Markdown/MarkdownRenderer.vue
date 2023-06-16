@@ -56,7 +56,7 @@ img
 
 <script>
 import {marked} from "marked";
-import {HtmlSanitizer} from "@jitbit/htmlsanitizer";
+
 
 export default {
   props: {
