@@ -56,6 +56,7 @@ img
 
 <script>
 import {marked} from "marked";
+import * as sanitizeHtml from 'sanitize-html';
 
 
 export default {
@@ -70,14 +71,18 @@ export default {
     return {
       html: '',
       text: this.$props.initialText,
+      sanitizeOptions: {
+        allowedTags: ['audio', 'video', 's', 'del', 'b', 'i', 'em', 'strong', 'a', 'iframe'],
+        allowedIframeHostnames: ['www.youtube.com'],
+        allowedAttributes: {
+          'a': [ 'href' ],
+          'iframe': [ 'src', 'width', 'height', 'allow', 'allowfullscreen', 'title', 'frameborder' ]
+        },
+      }
     }
   },
 
   mounted() {
-    HtmlSanitizer.AllowedTags['AUDIO'] = true;
-    HtmlSanitizer.AllowedTags['S'] = true;
-    HtmlSanitizer.AllowedTags['DEL'] = true;
-
     if (this.text)
       this.update();
   },
@@ -88,7 +93,7 @@ export default {
         this.text = text;
 
       const parsed = marked.parse(this.text, {breaks: true});
-      this.html = HtmlSanitizer.SanitizeHtml(parsed);
+      this.html = sanitizeHtml(parsed, this.sanitizeOptions);
     }
   }
 };
