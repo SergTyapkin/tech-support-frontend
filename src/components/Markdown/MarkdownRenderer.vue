@@ -56,7 +56,7 @@ img
 
 <script>
 import {marked} from "marked";
-import * as sanitizeHtml from 'sanitize-html';
+import sanitizeHtml from 'sanitize-html';
 
 
 export default {
