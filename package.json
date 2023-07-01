@@ -4,7 +4,7 @@
   "license": "MIT",
   "private": true,
   "author": {
-    "name": "Sergey Tyapkin, Konstantin Naraykin"
+    "name": "Sergey Tyapkin"
   },
   "scripts": {
     "dev": "vite --open",
