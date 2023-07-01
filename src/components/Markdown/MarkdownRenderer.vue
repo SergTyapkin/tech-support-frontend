@@ -1,6 +1,5 @@
 <style lang="stylus">
 @require '../../styles/constants.styl'
-@require '../../styles/utils.styl'
 
 ._markdown_renderer
   display block
@@ -93,9 +92,7 @@ export default {
         this.text = text;
 
       const parsed = marked.parse(this.text, {breaks: true});
-      console.log(parsed)
       this.html = sanitizeHtml(parsed, this.sanitizeOptions);
-      console.log(this.html)
     }
   }
 };
