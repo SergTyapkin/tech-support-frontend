@@ -76,15 +76,15 @@
     <div class="title">
       Пользователь: <span class="username">{{ $usernameFull($user) }}</span>
       <br>
-      Отчетный период: <span class="period">Зимний семестр 2023</span>
+      Отчетный период: <span class="period">II семестр 22/23 учебного года</span>
     </div>
 
     <table class="table">
       <thead>
           <tr class="title">
             <th class="name">Мероприятие</th>
-            <th class="datetime">Время начала</th>
-            <th class="position">Род деятельности</th>
+            <th class="datetime">Время проведения</th>
+<!--            <th class="position">Род деятельности</th>-->
           </tr>
       </thead>
       <tbody>
@@ -92,7 +92,7 @@
         <tr v-for="p in participations" class="string">
           <th class="name">{{ p.name }}</th>
           <th class="datetime">{{ p.date }} {{ p.timestart }}</th>
-          <th class="position">{{ p.positionname }}</th>
+<!--          <th class="position">{{ p.positionname }}</th>-->
         </tr>
       </tbody>
     </table>

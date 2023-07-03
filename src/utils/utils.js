@@ -85,7 +85,7 @@ export function dateToStr(date, strict=false) {
     const months = ['янв', 'фев', 'марта', 'апр', 'мая', 'июня', 'июля', 'фвг', 'сент', 'окт', 'ноя', 'дек'];
     if (!strict)
         return `${dateDay} ${months[Number(dateMonth)]}${year}`;
-    return `${String(dateDay).padStart(2, '0')}.${String(dateMonth).padStart(2, '0')}.${String(dateYear).padStart(4, '0')}`
+    return `${String(dateDay).padStart(2, '0')}.${String(dateMonth + 1).padStart(2, '0')}.${String(dateYear).padStart(4, '0')}`
 }
 export function timeToStr(time) {
     if (!time && time !== '')
