@@ -25,31 +25,32 @@
     .period
       font-style italic
 
-  .table
+  table
     max-width 700px
-    display grid
-    grid-template 1fr / 1fr 1fr 1fr
-    .title
+    border-spacing 0
+
+    thead
       font-large()
       font-weight bold
-      display contents
-      > *
+      th
         border-bottom 1px solid borderColor
-        padding-bottom 5px
-        margin-bottom 5px
-    .string
-      display contents
+    tbody
       font-medium()
-      > *:not(:last-child)
-        margin-right 8px
-      > *
+      th
         border 0px solid borderColor
         border-right-width 1px
-        padding 4px
-    .title
-    .strong
-      > *:not(:last-child)
-        padding-right 10px
+        font-weight normal
+        &:not(:last-child)
+          margin-right 8px
+        &.datetime
+          white-space nowrap
+      tr.filler
+        th
+          border none
+          padding 3px
+    th
+      padding 6px 15px
+      text-align left
 
     margin-bottom 40px
   .info
@@ -78,18 +79,23 @@
       Отчетный период: <span class="period">Зимний семестр 2023</span>
     </div>
 
-    <div class="table">
-      <div class="title">
-        <div class="name">Мероприятие</div>
-        <div class="datetime">Время начала</div>
-        <div class="position">Род деятельности</div>
-      </div>
-      <div v-for="p in participations" class="string">
-        <div class="name">{{ p.name }}</div>
-        <div class="datetime">{{ p.date }} {{ p.timestart }}</div>
-        <div class="position">{{ p.positionname }}</div>
-      </div>
-    </div>
+    <table class="table">
+      <thead>
+          <tr class="title">
+            <th class="name">Мероприятие</th>
+            <th class="datetime">Время начала</th>
+            <th class="position">Род деятельности</th>
+          </tr>
+      </thead>
+      <tbody>
+        <tr class="filler"><th></th><th></th><th></th></tr>
+        <tr v-for="p in participations" class="string">
+          <th class="name">{{ p.name }}</th>
+          <th class="datetime">{{ p.date }} {{ p.timestart }}</th>
+          <th class="position">{{ p.positionname }}</th>
+        </tr>
+      </tbody>
+    </table>
 
     <div class="info">
       Отчет предоставлен сайтом техподдержки Art Club МГТУ им. Н.Э. Баумана
