@@ -203,6 +203,9 @@ hr
     .avatar-div::after
       opacity 1
 
+.button-get-extract
+  button-submit()
+  margin-bottom 30px
 .button-logout
   button()
 </style>
@@ -337,6 +340,8 @@ hr
         <div v-if="yours" class="password-form-submit-container" @click.prevent="clickOnChangePassword">
           <input type="submit" value="Сменить пароль">
         </div>
+
+        <router-link class="button-get-extract" :to="{name: 'participationsExtract'}">Выписка по мероприятиям</router-link>
 
         <button v-if="yours" class="button-logout" @click="logOut">Выйти</button>
       </Form>

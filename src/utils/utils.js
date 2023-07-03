@@ -72,7 +72,7 @@ export function secondsToStrTime(seconds) {
     return val.toFixed(1).toString() + ' ' + units;
 }
 
-export function dateToStr(date) {
+export function dateToStr(date, strict=false) {
     const now = new Date();
     date = new Date(date);
     const dateYear = date.getFullYear();
@@ -83,7 +83,9 @@ export function dateToStr(date) {
     if (now.getFullYear() !== dateYear)
         year = ' ' + dateYear;
     const months = ['янв', 'фев', 'марта', 'апр', 'мая', 'июня', 'июля', 'фвг', 'сент', 'окт', 'ноя', 'дек'];
-    return `${dateDay} ${months[Number(dateMonth)]}${year}`;
+    if (!strict)
+        return `${dateDay} ${months[Number(dateMonth)]}${year}`;
+    return `${String(dateDay).padStart(2, '0')}.${String(dateMonth).padStart(2, '0')}.${String(dateYear).padStart(4, '0')}`
 }
 export function timeToStr(time) {
     if (!time && time !== '')

@@ -19,13 +19,12 @@ import Doc from "/src/views/Doc.vue";
 import Achievement from "./views/Achievement.vue";
 import AchievementsList from "./views/AchievementsList.vue";
 
-import table from "/src/components/UsersTable.vue";
-
 import Page404 from '/src/views/Page404.vue'
 
 import {BASE_URL_PATH} from "./constants";
 import {scrollSmoothly, scrollSmoothlyStop} from "./utils/utils";
 import {nextTick} from "vue";
+import ParticipationsExtract from "./views/ParticipationsExtract.vue";
 
 
 export default function createVueRouter(Store, scrollToTopDenyHrefs=[]) {
@@ -55,8 +54,9 @@ export default function createVueRouter(Store, scrollToTopDenyHrefs=[]) {
         {path: BASE_URL_PATH + '/admin', name: 'admin', component: AdminPage, meta: {loginRequired: true}},
         {path: BASE_URL_PATH + '/sql', name: 'sql', component: SqlExecute, meta: {loginRequired: true}},
 
+        {path: BASE_URL_PATH + '/participations/extract', name: 'participationsExtract', component: ParticipationsExtract},
+
         {path: BASE_URL_PATH + '/:catchAll(.*)', component: Page404},
-        {path: BASE_URL_PATH + '/table', component: table},
     ]
 
     const Router = createRouter({

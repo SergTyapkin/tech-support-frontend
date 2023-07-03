@@ -42,6 +42,7 @@ export class Api extends ApiRequest {
     getUnvotedParticipations = () => this.get(`/participation/unvoted`);
 
     getParticipationRating = () => this.get(`/ratings`);
+    getParticipationsExtract = () => this.get(`/participation/extract`);
 
     getPositions = () => this.get(`/position/all`);
     getPositionById = (id) => this.get(`/position`, {id});
