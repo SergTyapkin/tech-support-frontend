@@ -41,8 +41,11 @@
       display contents
       font-medium()
       > *:not(:last-child)
-        border-right 1px solid borderColor
-        margin-right 5px
+        margin-right 8px
+      > *
+        border 0px solid borderColor
+        border-right-width 1px
+        padding 4px
     .title
     .strong
       > *:not(:last-child)
