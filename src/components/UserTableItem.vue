@@ -141,7 +141,7 @@ user-padding-left-mobile = 5px
 
 <template>
   <div class="user">
-    <router-link :to="{name: 'profile', params: {userId: userId}}" class="user-icon-container" @contextmenu.prevent="deleteParticipation">
+    <router-link :to="{name: 'userProfile', params: {userId: userId}}" class="user-icon-container" @contextmenu.prevent="deleteParticipation">
       <UserAvatar :image-id="userImageId" class="user-icon" size="80px" size-mobile="50px" :user-id="id"></UserAvatar>
       <div v-if="canEdit && canDelete" class="delete-user" @click.stop.prevent="deleteParticipation"><img src="../res/trash.svg" alt="delete"></div>
     </router-link>
@@ -202,6 +202,10 @@ export default {
 
       score: this.$props.score,
     };
+  },
+
+  mounted() {
+    console.log("USERTABLEITEM:", this.userId);
   },
 
   methods: {

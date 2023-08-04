@@ -377,7 +377,7 @@ export default {
         return;
       }
       this.$user.setDefault();
-      await this.$router.push({name: "default"});
+      this.$router.push({name: "signin"});
     }
   }
 };

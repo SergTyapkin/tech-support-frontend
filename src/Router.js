@@ -29,7 +29,6 @@ import ParticipationsExtract from "./views/ParticipationsExtract.vue";
 
 export default function createVueRouter(Store, scrollToTopDenyHrefs=[]) {
     const routes = [
-        {path: BASE_URL_PATH + '/', name: 'default'},
         {path: BASE_URL_PATH + '/signin', name: 'signin', component: SignIn, meta: {noLoginRequired: true}},
         {path: BASE_URL_PATH + '/signup', name: 'signup', component: SignUp, meta: {noLoginRequired: true}},
         {path: BASE_URL_PATH + '/profile', name: 'profile', component: Profile, meta: {loginRequired: true}},

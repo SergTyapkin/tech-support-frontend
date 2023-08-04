@@ -241,7 +241,7 @@ export default {
   async mounted() {
     if (this.eventId === undefined) {
       this.$popups.error("Ошибка", "id события нет в строке запроса");
-      this.$router.push({name: "default"});
+      this.$router.push({name: "events"});
       return;
     }
 

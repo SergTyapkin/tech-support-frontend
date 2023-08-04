@@ -27,7 +27,7 @@ export default {
 
   async mounted() {
     await this.confirmEmail();
-    this.$router.push('/profile');
+    this.$router.push({name: 'profile'});
   },
 
   methods: {

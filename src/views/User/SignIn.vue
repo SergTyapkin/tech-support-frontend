@@ -173,7 +173,7 @@ export default {
         this.$refs.formCode.loading = false;
         this.$popups.success('Отличный вход!', 'Ну привет...');
         this.$refs.formCode.errors = {};
-        this.$router.push('/profile');
+        this.$router.push({name: 'profile'});
         return;
       }
 

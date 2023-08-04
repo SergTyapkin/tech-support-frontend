@@ -82,7 +82,7 @@ export function dateToStr(date, strict=false) {
     let year = '';
     if (now.getFullYear() !== dateYear)
         year = ' ' + dateYear;
-    const months = ['янв', 'фев', 'марта', 'апр', 'мая', 'июня', 'июля', 'фвг', 'сент', 'окт', 'ноя', 'дек'];
+    const months = ['янв', 'фев', 'марта', 'апр', 'мая', 'июня', 'июля', 'авг', 'сент', 'окт', 'ноя', 'дек'];
     if (!strict)
         return `${dateDay} ${months[Number(dateMonth)]}${year}`;
     return `${String(dateDay).padStart(2, '0')}.${String(dateMonth + 1).padStart(2, '0')}.${String(dateYear).padStart(4, '0')}`

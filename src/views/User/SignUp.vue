@@ -106,7 +106,7 @@ export default {
         this.$refs.form.loading = false;
         this.$popups.success('Аккаунт создан!');
         this.$refs.form.errors = {};
-        this.$router.push('/profile');
+        this.$router.push({name: 'profile'});
         return;
       }
 

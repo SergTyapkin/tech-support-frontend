@@ -542,7 +542,7 @@ export default {
         return;
       }
       this.$user.setDefault();
-      await this.$router.push('/');
+      this.$router.push({name: 'signin'});
     },
 
     async getAnotherUser() {

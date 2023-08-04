@@ -135,7 +135,7 @@ export default {
     if (this.docId === undefined) {
       if (!this.$user.canEditDocs) {
         this.$popups.error("Ошибка", "id документа нет в строке запроса");
-        this.$router.push({name: "default"});
+        this.$router.push({name: "docs"});
         return;
       }
     } else {
