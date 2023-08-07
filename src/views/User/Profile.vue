@@ -186,6 +186,16 @@ hr
           font-small()
           font-bold()
           color textColor2
+        &.current-session
+          border 1px empColor1_1 solid
+          position relative
+          &::after
+            content "Текущая"
+            font-small()
+            color textColor4
+            right 10px
+            top 7px
+
     .close-all-sessions-button
       button-danger()
 
@@ -407,7 +417,7 @@ hr
         <div v-if="yours" class="see-all-sessions-button" @click.prevent="openAllSessions">Посмотреть все сессии</div>
         <div v-if="yours" ref="allSessionsContainer" class="roll-active closed all-sessions-form-container">
           <div class="sessions-container">
-            <div v-for="session in sessions" class="session">
+            <div v-for="session in sessions" class="session" :class="{'current-session': session.isCurrent}">
               <div class="ip">{{ session.ip }}</div>
               <div class="expires">До {{ session.expires }}</div>
               <div class="info">{{ session.browser }}, {{ session.os }}, {{ session.geolocation }}</div>
