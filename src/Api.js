@@ -8,14 +8,16 @@ export default {
 }
 
 export class Api extends ApiRequest {
-    signIn = (email, password) => this.post(`/user/auth`, {email, password});
+    signIn = (email, password, clientBrowser, clientOS) => this.post(`/user/auth`, {email, password, clientBrowser, clientOS});
     signOut = () => this.delete(`/user/session`);
+    deleteAnotherSessions = () => this.delete('/user/sessions/another');
+    getAllSessions = () => this.get('/user/sessions/all');
     getUser = () => this.get(`/user`)
     getUnconfirmedUsers = () => this.get(`/user/all`, {confirmedByAdmin: false});
     getAllUsers = () => this.get(`/user/all`, {confirmedByAdmin: true});
     getUsersBySearch = (search) => this.get(`/user/all`, {search});
     getAnotherUser = (id) => this.get(`/user`, {id})
-    signUp = (password, email, firstName, secondName, thirdName, telegram) => this.post(`/user`, {password, email, firstName, secondName, thirdName, telegram});
+    signUp = (password, email, firstName, secondName, thirdName, telegram, clientBrowser, clientOS) => this.post(`/user`, {password, email, firstName, secondName, thirdName, telegram, clientBrowser, clientOS});
     updateUser = (userId, email, firstName, secondName, thirdName, telegram) => this.put(`/user`, {userId, email, firstName, secondName, thirdName, telegram});
     updateUserTitle = (userId, title) => this.put(`/user`, {userId, title});
     updateUserAvatarImageId = (userId, avatarImageId) => this.put(`/user`, {userId, avatarImageId});
@@ -24,7 +26,7 @@ export class Api extends ApiRequest {
     sendRestorePasswordEmail = (email) => this.post(`/user/password/restore`, {email});
     restorePassword = (code, newPassword) => this.put(`/user/password/restore`, {code, newPassword});
     sendSignInEmail = (email) => this.post(`/user/auth/code`, {email});
-    signInByEmailCode = (email, code) => this.post(`/user/auth/code`, {email, code});
+    signInByEmailCode = (email, code, clientBrowser, clientOS) => this.post(`/user/auth/code`, {email, code, clientBrowser, clientOS});
     confirmEmailSendMessage = () => this.post(`/user/email/confirm`);
     confirmEmailByCode = (code) => this.put(`/user/email/confirm`, {code});
 

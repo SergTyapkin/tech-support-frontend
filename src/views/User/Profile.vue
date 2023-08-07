@@ -21,13 +21,16 @@ hr
       align-items flex-end
       width 100%
       text-align center
+
     .rating
     .position
       flex 1
       font-large()
+
       .info
         font-small()
       transition all 0.2s ease
+
       &:hover
         transform scale(1.1)
 
@@ -47,6 +50,7 @@ hr
   .quest-statistics
     padding 10px
     background #00000033
+
     .quest
       height 30px
       line-height 30px
@@ -59,13 +63,17 @@ hr
     justify-content space-evenly
     overflow-x hidden
     gap 30px
+
     &.closed
       min-height 60px
+
     .achievement-container
       position relative
       transition all 0.2s ease
+
       &:hover
         filter brightness(1.2)
+
       .delete-achievement
         position absolute
         left 50%
@@ -76,9 +84,11 @@ hr
         transition all 0.2s ease
         z-index 999
         padding-bottom 10px
+
         img
           width 40px
           height 40px
+
       .delete-achievement:hover
       .achievement:hover + .delete-achievement
         top -50px
@@ -87,8 +97,10 @@ hr
         @media ({mobile})
           top 10px
           pointer-events none
+
       .delete-achievement:hover
-          transform translateX(-50%) scale(1.1)
+        transform translateX(-50%) scale(1.1)
+
     .info
       font-small()
       color textColor5
@@ -98,6 +110,7 @@ hr
     button-dashed()
     border-bottom-left-radius 0
     border-bottom-right-radius 0
+
     img
       width 30px
       height 30px
@@ -109,6 +122,7 @@ hr
     max-height 400px
     transition all 0.5s ease
     overflow hidden
+
     &.hidden
       max-height 0
       transition all 0.5s cubic-bezier(0, 1, 0, 1)
@@ -118,20 +132,26 @@ hr
   .add-achievement
     button-dashed()
     margin-top 5px
+
   .achievements-list
     overflow-y scroll
+
   .select-achievement-level
     display flex
     align-items center
     flex-direction column
+
     .avatar
       margin-top 10px
       margin-bottom 10px
+
     .range
       margin-bottom 20px
+
     .button-select-achievement
       button-submit()
       width min-content
+
       img
         width 20px
         height 20px
@@ -141,10 +161,34 @@ hr
     margin-bottom 20px
     color empColor2_1
     font-weight bold
+
   .password-form-container
     margin-bottom 0
-  .password-form-submit-container
-    margin-top 0
+
+  .button-get-extract
+  .password-change-button
+  .see-all-sessions-button
+    button-submit()
+    margin-top 30px
+
+  .all-sessions-form-container
+    .sessions-container
+      .session
+        block-clickable()
+        padding 20px
+        .ip
+          font-large()
+          font-bold()
+        .expires
+          font-small()
+          color textColor4
+        .info
+          font-small()
+          font-bold()
+          color textColor2
+    .close-all-sessions-button
+      button-danger()
+
 
 .logout
   width 100%
@@ -160,6 +204,7 @@ hr
 
 .avatar-container
   position relative
+
   .delete-avatar
     position absolute
     right -40px
@@ -169,8 +214,10 @@ hr
     width 40px
     opacity 0
     pointer-events none
+
   .delete-avatar:hover
     transform scale(1.1)
+
 .avatar-container:hover
   .delete-avatar
     opacity 1
@@ -195,17 +242,17 @@ hr
     opacity 0
     transition opacity 0.3s ease
     cursor pointer
+
   .avatar-div::after
     content 'Отпустите, чтобы загрузить'
+
   .avatar-div:hover::before
     opacity 1
+
   .image-loader.in-drag
     .avatar-div::after
       opacity 1
 
-.button-get-extract
-  button-submit()
-  margin-bottom 30px
 .button-logout
   button()
 </style>
@@ -214,9 +261,10 @@ hr
 @require '../../styles/constants.styl'
 
 .__text-success
-    color colorYes
+  color colorYes
+
 .__text-error
-    color colorNo
+  color colorNo
 
 </style>
 
@@ -243,10 +291,12 @@ hr
                     <UserAvatar :image-id="user.avatarImageId" size="80px" :user-id="user.id"></UserAvatar>
                   </div>
                 </DragNDropLoader>
-                <img v-if="user.avatarImageId" class="delete-avatar" src="../../res/trash.svg" alt="delete" @click.stop="deleteAvatarClick">
+                <img v-if="user.avatarImageId" class="delete-avatar" src="../../res/trash.svg" alt="delete"
+                     @click.stop="deleteAvatarClick">
               </div>
               <div v-else class="avatar-div">
-                <UserAvatar :image-id="user.avatarImageId" size="80px" border-offset="0px" border-width="1px" :user-id="user.id"></UserAvatar>
+                <UserAvatar :image-id="user.avatarImageId" size="80px" border-offset="0px" border-width="1px"
+                            :user-id="user.id"></UserAvatar>
               </div>
 
               <router-link :to="{name: 'ratings'}" class="position">
@@ -257,11 +307,13 @@ hr
             <div v-if="!yours" class="username">
               <div class="another-user-info">{{ $usernameFull(user) }}</div>
             </div>
-            <input v-if="$user.canEditUsersTitles && !yours" type="text" class="title" v-model="user.title" @change="saveAnotherUserTitle" @keydown.enter="(event) => event.target.blur()">
+            <input v-if="$user.canEditUsersTitles && !yours" type="text" class="title" v-model="user.title"
+                   @change="saveAnotherUserTitle" @keydown.enter="(event) => event.target.blur()">
             <div v-else class="title">{{ user.title }}</div>
 
             <a v-if="!yours && user.telegram" :href="`https://t.me/${user.telegram}`" target="_blank" class="user-link">
-              <FloatingInput :model-value="`@${user.telegram}`" title="Telegram" readonly no-info class="input"></FloatingInput>
+              <FloatingInput :model-value="`@${user.telegram}`" title="Telegram" readonly no-info
+                             class="input"></FloatingInput>
             </a>
           </div>
 
@@ -276,7 +328,9 @@ hr
           </div>
 
           <!-- ACHIEVEMENTS -->
-          <router-link v-if="yours" :to="{name: 'achievements'}" class="see-all-achievements"><img src="../../res/ratings.svg" alt="all achievements">Все достижения</router-link>
+          <router-link v-if="yours" :to="{name: 'achievements'}" class="see-all-achievements"><img
+            src="../../res/ratings.svg" alt="all achievements">Все достижения
+          </router-link>
 
           <div class="achievements roll-active closed" ref="achievementsList">
             <CircleLoading v-if="loadingAchievements" size="30px"></CircleLoading>
@@ -293,61 +347,84 @@ hr
                            :image-id="achievement.imageid"
                            :special="achievement.special"
               ></Achievement>
-              <div v-if="$user.canAssignAchievements" class="delete-achievement" @click.stop.prevent="deleteAchievement(achievement.id)"><img src="../../res/trash.svg" alt="delete"></div>
+              <div v-if="$user.canAssignAchievements" class="delete-achievement"
+                   @click.stop.prevent="deleteAchievement(achievement.id)"><img src="../../res/trash.svg" alt="delete">
+              </div>
             </router-link>
           </div>
-          <div class="add-achievement" @click="inSelectingAchievement = true" :class="{hidden: !$user.canAssignAchievements || inSelectingAchievement || selectedAchievement}"><img src="../../res/plus.svg" alt="add achievement">Добавить достижение</div>
+          <div class="add-achievement" @click="inSelectingAchievement = true"
+               :class="{hidden: !$user.canAssignAchievements || inSelectingAchievement || selectedAchievement}"><img
+            src="../../res/plus.svg" alt="add achievement">Добавить достижение
+          </div>
 
           <AchievementsList :class="{hidden: !inSelectingAchievement}"
                             class="achievements-list scrollable"
                             @select="(achievement) => { inSelectingAchievement = false; selectedAchievement = deepClone(achievement); selectedAchievement.level = 1 }"
           ></AchievementsList>
           <div class="select-achievement-level" :class="{hidden: !selectedAchievement}">
-            <Achievement :max-levels="selectedAchievement?.levels" :level="selectedAchievement?.level" :image-id="selectedAchievement?.imageid" :special="selectedAchievement?.special" class="avatar"></Achievement>
-            <Range v-if="selectedAchievement" class="range" :min="1" :max="selectedAchievement.levels" :step="1" no-value v-model="selectedAchievement.level"></Range>
-            <div class="button-select-achievement" @click="addAchievement()"><img src="../../res/save.svg" alt="save">Добавить</div>
+            <Achievement :max-levels="selectedAchievement?.levels" :level="selectedAchievement?.level"
+                         :image-id="selectedAchievement?.imageid" :special="selectedAchievement?.special"
+                         class="avatar"></Achievement>
+            <Range v-if="selectedAchievement" class="range" :min="1" :max="selectedAchievement.levels" :step="1"
+                   no-value v-model="selectedAchievement.level"></Range>
+            <div class="button-select-achievement" @click="addAchievement()"><img src="../../res/save.svg" alt="save">Добавить
+            </div>
           </div>
           <!-- ACHIEVEMENTS (END) -->
 
           <div v-if="yours">
             <FormExtended ref="form" no-bg
-                  :fields="[
-                    { title: 'ТВОЯ ФАМИЛИЯ', jsonName: 'secondName' },
-                    { title: 'ТВОЁ ИМЯ', jsonName: 'firstName' },
-                    { title: 'ТВОЁ ОТЧЕСТВО', jsonName: 'thirdName' },
-                    { title: 'ТВОЙ Telegram', jsonName: 'telegram', type: 'telegram', info: 'всё что после @'},
-                    { title: 'ТВОЙ E-mail', jsonName: 'email', type: 'email', info: user.isConfirmedEmail ? `<span class='__text-success'>Email подтвержден</span>` : `<b class='__text-error'>E-MAIL НЕ ПОДТВЕРЖДЕН. ВОССТАНОВИТЬ ПАРОЛЬ НЕ УДАСТСЯ</b>`},
-                  ]"
-                  :no-submit="true"
-                  @input="onChange"
+                          :fields="[
+                            { title: 'ТВОЯ ФАМИЛИЯ', jsonName: 'secondName' },
+                            { title: 'ТВОЁ ИМЯ', jsonName: 'firstName' },
+                            { title: 'ТВОЁ ОТЧЕСТВО', jsonName: 'thirdName' },
+                            { title: 'ТВОЙ Telegram', jsonName: 'telegram', type: 'telegram', info: 'всё что после @'},
+                            { title: 'ТВОЙ E-mail', jsonName: 'email', type: 'email', info: user.isConfirmedEmail ? `<span class='__text-success'>Email подтвержден</span>` : `<b class='__text-error'>E-MAIL НЕ ПОДТВЕРЖДЕН. ВОССТАНОВИТЬ ПАРОЛЬ НЕ УДАСТСЯ</b>`},
+                          ]"
+                          :no-submit="true"
+                          @input="onChange"
             ></FormExtended>
-            <input v-if="!user.isConfirmedEmail && !loadingConfirmEmail" type="submit" value="Подтвердить E-mail" class="confirm-email-input" @click="confirmEmailSendMessage">
+            <input v-if="!user.isConfirmedEmail && !loadingConfirmEmail" type="submit" value="Подтвердить E-mail"
+                   class="confirm-email-input" @click="confirmEmailSendMessage">
             <CircleLoading v-if="loadingConfirmEmail"></CircleLoading>
           </div>
         </div>
 
         <div v-if="yours" ref="passwordFormContainer" class="roll-active closed password-form-container">
           <FormExtended ref="passwordForm" no-bg no-submit
-                :fields="[
-                    { title: 'Старый пароль', jsonName: 'oldPassword', type: 'password'},
-                    { title: 'Новый пароль', jsonName: 'newPassword', type: 'password'},
-                    { title: 'Новый пароль ещё раз', jsonName: 'newPasswordConfirm', type: 'password'},
-                  ]"
-                submit-text="Сменить пароль"
-                @submit="changePassword"
+                        :fields="[
+                          { title: 'Старый пароль', jsonName: 'oldPassword', type: 'password'},
+                          { title: 'Новый пароль', jsonName: 'newPassword', type: 'password'},
+                          { title: 'Новый пароль ещё раз', jsonName: 'newPasswordConfirm', type: 'password'},
+                        ]"
+                        submit-text="Сменить пароль"
+                        @submit="changePassword"
           ></FormExtended>
         </div>
-        <div v-if="yours" class="password-form-submit-container" @click.prevent="clickOnChangePassword">
-          <input type="submit" value="Сменить пароль">
-        </div>
 
-        <router-link class="button-get-extract" :to="{name: 'participationsExtract'}">Выписка по мероприятиям</router-link>
+        <div v-if="yours" class="password-change-button" @click.prevent="clickOnChangePassword">Сменить пароль</div>
+        <router-link v-if="yours" class="button-get-extract" :to="{name: 'participationsExtract'}">Выписка по мероприятиям</router-link>
+        <div v-if="yours" class="see-all-sessions-button" @click.prevent="openAllSessions">Посмотреть все сессии</div>
+        <div v-if="yours" ref="allSessionsContainer" class="roll-active closed all-sessions-form-container">
+          <div class="sessions-container">
+            <div v-for="session in sessions" class="session">
+              <div class="ip">{{ session.ip }}</div>
+              <div class="expires">До {{ session.expires }}</div>
+              <div class="info">{{ session.browser }}, {{ session.os }}, {{ session.geolocation }}</div>
+            </div>
+          </div>
+          <div class="close-all-sessions-button" @click.prevent="terminateAllSessions">
+            <CircleLoading v-if="loadingTerminateSessions"></CircleLoading>
+            <span v-else>Завершить все сессии</span>
+          </div>
+        </div>
 
         <button v-if="yours" class="button-logout" @click="logOut">Выйти</button>
       </Form>
     </div>
 
-    <FloatingButton v-if="isEdited" title="Сохранить" green @click="changeData"><img src="../../res/save.svg" alt="save"></FloatingButton>
+    <FloatingButton v-if="isEdited" title="Сохранить" green @click="changeData"><img src="../../res/save.svg"
+                                                                                     alt="save"></FloatingButton>
   </div>
 </template>
 
@@ -356,7 +433,7 @@ hr
 import Form from "/src/components/Form.vue";
 import FormExtended from "/src/components/FormExtended.vue";
 import FloatingInput from "../../components/FloatingInput.vue";
-import {isClosedRoll, openRoll, openRollList} from "../../utils/show-hide";
+import {closeRoll, isClosedRoll, openRoll, openRollList} from "../../utils/show-hide";
 import CircleLoading from "../../components/loaders/CircleLoading.vue";
 import {nextTick} from "vue";
 import {BASE_URL_PATH, IMAGE_MAX_RES, IMAGE_PROFILE_MAX_RES} from "../../constants";
@@ -368,7 +445,7 @@ import UserAvatar from "../../components/UserAvatar.vue";
 import Achievement from "../../components/Achievement.vue";
 import AchievementAvatar from "../../components/AchievementAvatar.vue";
 import Range from "../../components/Range.vue";
-import {cleanupMarkdownPreview, deepClone} from "../../utils/utils";
+import {cleanupMarkdownPreview, dateToStr, deepClone, timeToStr} from "../../utils/utils";
 import FloatingButton from "../../components/FloatingButton.vue";
 import AchievementsList from "../../components/AchievementsList.vue";
 
@@ -380,7 +457,8 @@ export default {
     Range,
     AchievementAvatar,
     Achievement,
-    UserAvatar, TopBar, ArrowListElement, DragNDropLoader, CircleLoading, FloatingInput, FormExtended, Form},
+    UserAvatar, TopBar, ArrowListElement, DragNDropLoader, CircleLoading, FloatingInput, FormExtended, Form
+  },
 
   data() {
     return {
@@ -398,8 +476,10 @@ export default {
       loading: false,
       loadingConfirmEmail: false,
       loadingAchievements: false,
+      loadingTerminateSessions: false,
 
       buttons: [],
+      sessions: [],
 
       base_url_path: this.$base_url_path,
       api_url: this.$api.apiUrl,
@@ -500,6 +580,32 @@ export default {
         return;
       }
       this.changePassword(this.$refs.passwordForm.values);
+    },
+
+    async openAllSessions() {
+      this.loading = true;
+      const res = await this.$api.getAllSessions();
+      this.loading = false;
+      if (!res.ok_) {
+        this.$popups.error('Неизвестная ошибка', 'Не удалось получить сессии');
+        return;
+      }
+      this.sessions = res.sessions;
+      this.sessions.forEach(session => {
+        session.expires = dateToStr(session.expires);
+      })
+      openRoll(this.$refs.allSessionsContainer);
+    },
+    async terminateAllSessions() {
+      this.loadingTerminateSessions = true;
+      const res = await this.$api.deleteAnotherSessions();
+      this.loadingTerminateSessions = false;
+      if (!res.ok_) {
+        this.$popups.error('Неизвестная ошибка', 'Не удалось завершить сессии');
+        return;
+      }
+      this.$popups.success('Успех', 'Все другие сессии завершены');
+      closeRoll(this.$refs.allSessionsContainer);
     },
 
     async changePassword({oldPassword, newPassword, newPasswordConfirm}) {

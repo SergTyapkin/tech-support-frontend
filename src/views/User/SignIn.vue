@@ -64,6 +64,7 @@
 <script>
 import FormExtended from "../../components/FormExtended.vue";
 import FloatingInput from "../../components/FloatingInput.vue";
+import {detectBrowser, detectOS} from "../../utils/utils";
 
 export default {
   components: {FloatingInput, FormExtended},
@@ -103,7 +104,7 @@ export default {
         return;
 
       this.$refs.form.loading = true;
-      const response = await this.$api.signIn(email, password);
+      const response = await this.$api.signIn(email, password, detectBrowser(), detectOS());
       this.$refs.form.loading = false;
 
       if (response.ok_) {
@@ -164,7 +165,7 @@ export default {
         return;
 
       this.$refs.formCode.loading = true;
-      const response = await this.$api.signInByEmailCode(email, code);
+      const response = await this.$api.signInByEmailCode(email, code, detectBrowser(), detectOS());
       this.$refs.formCode.loading = false;
 
       if (response.ok_) {

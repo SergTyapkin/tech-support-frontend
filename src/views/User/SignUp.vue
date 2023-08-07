@@ -31,6 +31,7 @@
 
 <script>
 import FormExtended from "../../components/FormExtended.vue";
+import {detectBrowser, detectOS} from "../../utils/utils";
 
 export default {
   components: {FormExtended},
@@ -97,7 +98,7 @@ export default {
       }
 
       this.$refs.form.loading = true;
-      const response = await this.$api.signUp(password, email, firstName, secondName, thirdName, telegram);
+      const response = await this.$api.signUp(password, email, firstName, secondName, thirdName, telegram, detectBrowser(), detectOS());
       this.$refs.form.loading = false;
 
       if (response.ok_) {
