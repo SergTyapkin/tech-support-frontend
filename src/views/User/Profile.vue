@@ -190,7 +190,8 @@ hr
           border 1px empColor1_1 solid
           position relative
           &::after
-            content "Текущая"
+            position absolute
+            content "Текущая сессия"
             font-small()
             color textColor4
             right 10px
