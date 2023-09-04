@@ -5,7 +5,6 @@
 
 
 .root-ratings
-  position relative
   .period-list
     @media({desktop})
       position absolute
