@@ -54,6 +54,8 @@ export class Api extends ApiRequest {
 
     getPlaces = () => this.get(`/place/all`);
     getPlaceById = (id) => this.get(`/place`, {id});
+    getPeriods = () => this.get(`/period/all`);
+    getPeriodById = (id) => this.get(`/period`, {id});
     addPlace = (name) => this.post(`/place`, {name});
     editPlace = (id, name) => this.put(`/place`, {id, name});
     deletePlace = (id) => this.delete(`/place`, {id});
