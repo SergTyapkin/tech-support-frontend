@@ -43,6 +43,7 @@ export class Api extends ApiRequest {
     updateParticipationCommentSelf = (id, comment) => this.put(`/participation/event/comment`, {id, comment});
     getUnvotedParticipations = () => this.get(`/participation/unvoted`);
 
+    getParticipationRatingWithDates = (dateStart, dateEnd) => this.get(`/ratings`, {dateStart, dateEnd});
     getParticipationRating = () => this.get(`/ratings`);
     getParticipationsExtract = () => this.get(`/participation/extract`);
 
