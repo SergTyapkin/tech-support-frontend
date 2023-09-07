@@ -115,7 +115,6 @@ field()
       field()
       color textColor3
       height item-height
-      white-space nowrap
       background bg-color
       &.selected
         color textColor1

@@ -30,8 +30,6 @@ user-padding-left = 20px
       color mix(textColor1, empColor2_1, 60%)
       padding 0 15px
       margin 10px 0 5px 0
-      width 100px
-      white-space nowrap
       .date
         margin-left 20px
         color textColor5
