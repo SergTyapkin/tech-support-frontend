@@ -31,6 +31,7 @@ user-padding-left = 20px
       padding 0 15px
       margin 10px 0 5px 0
       .date
+        white-space nowrap
         margin-left 20px
         color textColor5
         font-small()
