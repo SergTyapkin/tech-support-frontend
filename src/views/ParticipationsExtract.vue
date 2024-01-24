@@ -76,7 +76,7 @@
     <div class="title">
       Пользователь: <span class="username">{{ $usernameFull($user) }}</span>
       <br>
-      Отчетный период: <span class="period">II семестр 22/23 учебного года</span>
+      Отчетный период: <span class="period">I семестр 23/24 учебного года</span>
     </div>
 
     <table class="table">

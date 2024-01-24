@@ -31,6 +31,6 @@ const app = createApp(App)
   .use(Api, API_URL)
   .use(Router)
   .use(Store)
-  .use(ScrollRestore, document.body, restoreScrollPages)
+  .use(ScrollRestore, restoreScrollPages)
   .mount('#app');
 Store.$app = app;

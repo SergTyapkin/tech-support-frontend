@@ -1,8 +1,7 @@
-// Make Vue plugin: vue.use(<imported ScrollRestore>, document.body, restorationHrefsAllowed);
-
+// Make Vue plugin: vue.use(<imported ScrollRestore>, restorationHrefsAllowed, HTMLElement);
 export default {
-  install: (app, workingElement, restorationHrefsAllowed) => {
-    app.config.globalProperties.$scroll = new ScrollRestore(app, workingElement, restorationHrefsAllowed);
+  install: (app, restorationHrefsAllowed, workingElement = document.body) => {
+    app.config.globalProperties.$scroll = new ScrollRestore(app, restorationHrefsAllowed, workingElement);
   }
 }
 
@@ -17,7 +16,7 @@ export class ScrollRestore {
   newHrefCount = 0;
   prevPageChangeDetectHref = undefined;
 
-  constructor(app, workingElement = window, restorationHrefsAllowed=undefined) {
+  constructor(app, restorationHrefsAllowed=undefined, workingElement = window) {
     this.$app = app;
     this.workingElement = workingElement;
     this.restorationHrefsAllowed = restorationHrefsAllowed;
