@@ -1,7 +1,14 @@
 <style lang="stylus" scoped>
 @require '../styles/fonts.styl'
 @require '../styles/utils.styl'
+@require '../styles/buttons.styl'
 @require '../styles/constants.styl'
+
+
+.root-docs-list
+  .loading
+    margin 0 auto
+
 
 .list
   display flex
@@ -10,7 +17,9 @@
   justify-content space-evenly
   list-style none
   margin 0
-  padding 0
+  padding-left 0
+  padding-right 0
+  padding-top 0
   margin-bottom 20px
   @media ({desktop})
     margin-top 40px
@@ -51,41 +60,35 @@
         color textColor3
 
   .create-doc
-    margin-top 30px
-    block-clickable()
-    background none
-    border 2px dashed borderColor
-    display flex
-    align-items center
-    justify-content center
+    button-dashed()
+    margin-top 10px
+    margin-bottom 20px
     padding 10px
     width 50%
-    img
-      margin-right 10px
-      width 40px
 </style>
 
 <template>
-  <ul class="list">
-    <CircleLoading v-if="loading" class="info"></CircleLoading>
+  <div class="root-docs-list">
+    <CircleLoading v-if="loading" class="loading"></CircleLoading>
+    <ul v-else class="list">
+      <li v-if="!docs.length" class="info">Документации пока нет</li>
 
-    <li v-else-if="!docs.length" class="info">Документации пока нет</li>
+      <li v-for="doc in docs" class="doc">
+        <router-link :to="{name: 'doc', params: {docId: doc.id}}" class="link-container">
+          <div class="header">{{ doc.title }}</div>
+          <div class="info-characters">
+            <div><img src="../res/place.svg" alt="Place:">{{ doc.placename }}</div>
+            <div><img src="../res/work.svg" alt="Work:">{{ doc.positionname }}</div>
+          </div>
+          <div class="text">{{ $cropText(cleanupMarkdownPreview(doc.text), 100) }}</div>
+        </router-link>
+      </li>
 
-    <li v-for="doc in docs" class="doc">
-      <router-link :to="{name: 'doc', params: {docId: doc.id}}" class="link-container">
-        <div class="header">{{ doc.title }}</div>
-        <div class="info-characters">
-          <div><img src="../res/place.svg" alt="Place:">{{ doc.placename }}</div>
-          <div><img src="../res/work.svg" alt="Work:">{{ doc.positionname }}</div>
-        </div>
-        <div class="text">{{ $cropText(cleanupMarkdownPreview(doc.text), 100) }}</div>
+      <router-link :to="{name: 'createDoc'}" v-if="$user.canEditDocs" class="create-doc">
+        <img src="../res/plus.svg" alt="plus"><div class="text">Создать</div>
       </router-link>
-    </li>
-
-    <router-link :to="{name: 'createDoc'}" v-if="$user.isAdmin" class="create-doc">
-      <img src="../res/plus.svg" alt="plus"><div class="text">Создать</div>
-    </router-link>
-  </ul>
+    </ul>
+  </div>
 </template>
 
 <script>
@@ -113,6 +116,8 @@ export default {
     }
 
     this.docs = response.docs || [];
+
+    this.$scroll.restore();
   },
 
   methods: {

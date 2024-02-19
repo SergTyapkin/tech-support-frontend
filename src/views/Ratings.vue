@@ -3,113 +3,141 @@
 @require '../styles/utils.styl'
 @require '../styles/constants.styl'
 
-.top-3
-  display flex
-  justify-content space-between
-  height 250px
-  max-width 500px
-  margin 30px auto 0 auto
-  padding-right 10px
-  .place-1
-  .place-2
-  .place-3
-    text-align center
-    margin 0
-    transition transform 0.2s ease
-    &:hover
-      transform scale(1.1)
-    .avatar
-      border-radius(50%)
-      outline-width 2px
-      outline-style solid
-      outline-offset 2px
-    .position
-      font-medium()
-      margin-bottom 5px
-      width 100%
-    .name
-      font-medium()
-      margin-top 10px
-      line-height 0.9
-    .title
-      font-small-x()
-      color textColor3
-      .rating
-        color textColor1
 
+.root-ratings
+  .period-list
+    @media({desktop})
+      position absolute
+      top 20px
+      right 20px
+    @media({mobile})
+      position relative
+      margin 20px 10px
 
-  .place-1
-    align-self flex-start
-    .position
-      color colorGold
-    .avatar
-      width 100px
-      outline-color colorGold
-  .place-2
-    align-self flex-end
-    margin-bottom 20px
-    .position
-      color colorSilver
-    .avatar
-      width 80px
-      outline-color colorSilver
-  .place-3
-    align-self flex-end
-    .position
-      color colorBronze
-    .avatar
-      width 70px
-      outline-color colorBronze
-
-.users-list
-  width 100%
-  margin-top 40px
-  margin-bottom 40px
-  .list
-    margin 0 auto
-    list-style none
-    width min-content
-    block()
-    padding 15px 0
-    .user
-      padding 10px 50px
-      display flex
-      align-items center
-      font-medium()
-      transition all 0.2s ease
-      @media ({mobile})
-        padding 10px 20px
+  .top-3
+    display flex
+    justify-content space-between
+    height 250px
+    max-width 500px
+    margin 30px auto 0 auto
+    padding-right 10px
+    .place-1
+    .place-2
+    .place-3
+      text-align center
+      margin 0
+      transition transform 0.2s ease
+      flex (1/3)
       &:hover
-        background blocksBgColorHover
-      .counter
-        color empColor2_1
-        min-width 25px
-      .rating
-        color textColor2
-        min-width 50px
+        transform scale(1.1)
       .avatar
-        border-radius(50%)
-        width 30px
-        height 30px
-        border 1px solid empColor1_2
-        margin-right 5px
-      .text
-        .name
-          font-middle()
+        --border-width 2px
+        --border-offset 2px
+        display flex
+        justify-content center
+        width 100%
+
+      .position
+        font-medium()
+        margin-bottom 5px
+        width 100%
+      .name
+        font-medium()
+        margin-top 10px
+        line-height 0.9
+      .title
+        font-small-x()
+        color textColor3
+        .rating
           color textColor1
-          line-height 0.8
-          white-space nowrap
-        .title
-          font-small-extra()
-          color textColor3
+
+
+    .place-1
+      align-self flex-start
+      position relative
+      .position
+        color colorGold
+      .avatar
+        margin-top 15px
+        margin-left auto
+        margin-right auto
+        --border-color-user colorGold
+        height 75px
+        width 140px
+      .info-big-bg
+        position absolute
+        inset 0
+        top -10px
+        font-size 30px
+        font-weight bold
+        text-align center
+        text-transform uppercase
+        line-height 80px
+        color mix(textColor4, transparent, 50%)
+    .place-2
+      align-self flex-end
+      margin-bottom 20px
+      .position
+        color colorSilver
+      .avatar
+        --border-color-user colorSilver
+    .place-3
+      align-self flex-end
+      .position
+        color colorBronze
+      .avatar
+        --border-color-user colorBronze
+
+  .users-list
+    width 100%
+    margin-top 40px
+    margin-bottom 40px
+    .list
+      margin 0 auto
+      list-style none
+      width min-content
+      block()
+      padding 15px 0
+      .user
+        padding 10px 50px
+        display flex
+        align-items center
+        font-medium()
+        transition all 0.2s ease
+        @media ({mobile})
+          padding 10px 20px
+        &:hover
+          background blocksBgColorHover
+        .counter
+          color empColor2_1
+          min-width 25px
+        .rating
+          color textColor2
+          min-width 60px
+        .avatar
+          --border-width 1px
+          --border-offset unquote('0px')
+          --border-color-user empColor1_2
+          margin-right 5px
+        .text
+          .name
+            font-middle()
+            color textColor1
+            line-height 0.8
+            white-space nowrap
+          .title
+            font-small-extra()
+            color textColor3
 </style>
 
 <template>
-  <div>
+  <div class="root-ratings">
+    <SelectList class="period-list" ref="periodSearch" v-model="periodSearch" @input="getRatings" :list="allPeriods" :selected-id="-1" title="За период" solid></SelectList>
+
     <header class="top-3">
       <router-link :to="{name: 'userProfile', params: {userId: users[1].id}}" class="place-2" v-if="users[1] !== undefined">
         <div class="position">#2</div>
-        <UserAvatar class="avatar" :image-id="users[1].avatarimageid"></UserAvatar>
+        <UserAvatar class="avatar" :image-id="users[1].avatarimageid" size="85px" :user-id="users[1].id"></UserAvatar>
         <div class="name">{{ users[1].name }}</div>
         <div class="title">
           {{ users[1].title }}
@@ -117,8 +145,9 @@
         </div>
       </router-link>
       <router-link :to="{name: 'userProfile', params: {userId: users[0].id}}" class="place-1" v-if="users[0] !== undefined">
+        <div class="info-big-bg">Жизнь потрепала</div>
         <div class="position">#1</div>
-        <UserAvatar class="avatar" :image-id="users[0].avatarimageid"></UserAvatar>
+        <UserAvatar class="avatar" :image-id="users[0].avatarimageid" size="100%" :user-id="users[0].id"></UserAvatar>
         <div class="name">{{ users[0].name }}</div>
         <div class="title">
           {{ users[0].title }}
@@ -127,7 +156,7 @@
       </router-link>
       <router-link :to="{name: 'userProfile', params: {userId: users[2].id}}" class="place-3" v-if="users[2] !== undefined">
         <div class="position">#3</div>
-        <UserAvatar class="avatar" :image-id="users[2].avatarimageid"></UserAvatar>
+        <UserAvatar class="avatar" :image-id="users[2].avatarimageid" size="70px" :user-id="users[2].id"></UserAvatar>
         <div class="name">{{ users[2].name }}</div>
         <div class="title">
           {{ users[2].title }}
@@ -141,7 +170,7 @@
         <router-link v-for="(user, idx) in users.slice(3)" :to="{name: 'userProfile', params: {userId: user.id}}" class="user">
           <div class="counter">{{ idx + 4 }}</div>
           <div class="rating">★{{ user.rating }}</div>
-          <UserAvatar :image-id="user.avatarimageid" class="avatar"></UserAvatar>
+          <UserAvatar :image-id="user.avatarimageid" class="avatar" size="30px" :user-id="user.id"></UserAvatar>
           <div class="text">
             <div class="name">{{ user.name }}</div>
             <div class="title">{{ user.title }}</div>
@@ -154,28 +183,74 @@
 
 <script>
 import UserAvatar from "../components/UserAvatar.vue";
+import SelectList from "../components/SelectList.vue";
 
 
 export default {
-  components: {UserAvatar},
+  components: {SelectList, UserAvatar},
 
   data() {
     return {
       users: [],
+
+      allPeriods: [],
+      periodSearch: undefined,
+
+      loading: false,
     }
   },
 
   async mounted() {
-    this.loading = true;
-    const response = await this.$api.getParticipationRating();
-    this.loading = false;
-
-    if (!response.ok_) {
-      this.$popups.error('Ошибка', 'Не удалось получить рейтинги');
-      return;
+    await this.getPeriods();
+    const dateNow = new Date();
+    let periodIdx;
+    const currentPeriod = this.allPeriods.find((period, idx) => {
+      periodIdx = idx;
+      return (
+        new Date(period.datestart) <= dateNow &&
+        new Date(period.dateend) > dateNow
+      )
+    });
+    if (currentPeriod !== undefined) {
+      this.$refs.periodSearch.selectItem(periodIdx);
     }
 
-    this.users = response.ratings;
+    await this.getRatings();
+    this.$scroll.restore();
+  },
+
+  methods: {
+    async getRatings() {
+      this.loading = true;
+      let response;
+      if (this.periodSearch !== undefined && this.periodSearch.id !== -1) {
+        response = await this.$api.getParticipationRatingWithDates(this.periodSearch.datestart, this.periodSearch.dateend);
+      } else {
+        response = await this.$api.getParticipationRating();
+      }
+      this.loading = false;
+
+      if (!response.ok_) {
+        this.$popups.error('Ошибка', 'Не удалось получить рейтинги');
+        return;
+      }
+
+      this.users = response.ratings;
+    },
+
+    async getPeriods() {
+      this.loading = true;
+      const response = await this.$api.getPeriods();
+      this.loading = false;
+
+      if (!response.ok_) {
+        this.$popups.error("Ошибка", "Не удалось получить список временных периодов. " + (response.info || ""));
+        return;
+      }
+
+      response.periods.push({id: -1, name: "Всё время"});
+      this.allPeriods = response.periods;
+    }
   }
 }
 </script>

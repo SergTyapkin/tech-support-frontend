@@ -3,9 +3,10 @@
 @require '../styles/fonts.styl'
 @require '../styles/utils.styl'
 
-.root
+.root-filters
   degree = 30deg
-  block()
+  user-select none
+  block-no-bg()
   display flex
   flex-wrap wrap
   align-items center
@@ -56,12 +57,16 @@
       border-color textColor5
     + label
       pointer-events none
+
+.root-filters
+  .root-filters
+    padding 0
 </style>
 
 <template>
-  <div class="root">
+  <div class="root-filters">
     <div class="checkbox-group" v-for="(filter, idx) in filters">
-      <input :id="'__' + filter.name + idx" type="checkbox" @change="$emit('change', filter)" v-model="filter.value">
+      <input :id="'__' + filter.name + idx" :disabled="disabled" type="checkbox" @change="onChange(filter, idx)" v-model="filter.value">
       <label :for="'__' + filter.name + idx">{{ filter.name }}</label>
     </div>
 
@@ -77,6 +82,16 @@ export default {
     filters: {
       type: Array,
       required: true,
+    },
+    canBeNone: Boolean,
+    radio: Boolean,
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    storingName: {
+      type: String,
+      default: undefined
     }
   },
 
@@ -86,13 +101,54 @@ export default {
   },
 
   mounted() {
+    let hasNotFalseFilter = false;
     this.filters.forEach((filter) => {
-      if (filter.value === undefined)
+      if (filter.value === undefined) {
         filter.value = false;
+      }
+      if (filter.value) {
+        hasNotFalseFilter = true;
+      }
     });
+
+    if (this.storingName !== undefined) {
+      if (this.$store.state.__filters === undefined) {
+        this.$store.state.__filters = {}
+      }
+      const storedState = this.$store.state.__filters[this.storingName];
+      if (storedState !== undefined) {
+        this.filters.forEach((filter, i) => {
+          this.filters[i] = storedState[i];
+          if (this.filters[i].value === true) {
+            this.onChange(this.filters[i], i);
+          }
+        });
+      }
+      this.$store.state.__filters[this.storingName] = this.filters;
+    }
+
+    if (!this.canBeNone && !hasNotFalseFilter) { // if filter can't be none => select first filter
+      this.filters[0].value = true;
+    }
   },
 
   methods: {
+    onChange(filter, idx) {
+      if (!this.canBeNone && !this.filters.reduce((sum, filter) => sum || filter.value, false)) { // can't disable only 1 filter
+        filter.value = true;
+        return;
+      }
+
+      if (this.radio) {
+        // Drop all other filters
+        this.filters.forEach((filt) => {
+          if (filt !== filter)
+            filt.value = false;
+        });
+      }
+
+      this.$emit('change', filter);
+    }
   }
 };
 </script>

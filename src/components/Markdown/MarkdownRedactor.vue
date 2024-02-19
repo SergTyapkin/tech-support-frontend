@@ -1,7 +1,7 @@
 <style lang="stylus" scoped>
-@require '../styles/constants.styl'
-@require '../styles/forms.styl'
-@require '../styles/utils.styl'
+@require '../../styles/constants.styl'
+@require '../../styles/forms.styl'
+@require '../../styles/utils.styl'
 
 
 extra-small = 3px
@@ -135,9 +135,9 @@ markdown-button-svg-photo-fill = transparent
 </template>
 
 <script>
-import ImageUploader from "../utils/imageUploader";
-import {IMAGE_MAX_RES} from "../constants";
-import DragNDropLoader from "./DragNDropLoader.vue";
+import ImageUploader from "../../utils/imageUploader";
+import {IMAGE_MAX_RES} from "../../constants";
+import DragNDropLoader from "../DragNDropLoader.vue";
 
 
 const TIME_DIFF_TO_EMIT_CHANGE = 500; // ms
@@ -282,7 +282,7 @@ export default {
     emitChange() {
       this.$emit('change', this.modelValue);
       this.changedFromEmit = false;
-    }
-  }
+    },
+  },
 };
 </script>

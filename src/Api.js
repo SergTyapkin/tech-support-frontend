@@ -8,15 +8,17 @@ export default {
 }
 
 export class Api extends ApiRequest {
-    signIn = (email, password) => this.post(`/user/auth`, {email, password});
+    signIn = (email, password, clientBrowser, clientOS) => this.post(`/user/auth`, {email, password, clientBrowser, clientOS});
     signOut = () => this.delete(`/user/session`);
+    deleteAnotherSessions = () => this.delete('/user/sessions/another');
+    getAllSessions = () => this.get('/user/sessions/all');
     getUser = () => this.get(`/user`)
     getUnconfirmedUsers = () => this.get(`/user/all`, {confirmedByAdmin: false});
     getAllUsers = () => this.get(`/user/all`, {confirmedByAdmin: true});
     getUsersBySearch = (search) => this.get(`/user/all`, {search});
     getAnotherUser = (id) => this.get(`/user`, {id})
-    signUp = (password, email, name) => this.post(`/user`, {password, email, name});
-    updateUser = (userId, email, name, telegram) => this.put(`/user`, {userId, email, name, telegram});
+    signUp = (password, email, firstName, secondName, thirdName, telegram, clientBrowser, clientOS) => this.post(`/user`, {password, email, firstName, secondName, thirdName, telegram, clientBrowser, clientOS});
+    updateUser = (userId, email, firstName, secondName, thirdName, telegram) => this.put(`/user`, {userId, email, firstName, secondName, thirdName, telegram});
     updateUserTitle = (userId, title) => this.put(`/user`, {userId, title});
     updateUserAvatarImageId = (userId, avatarImageId) => this.put(`/user`, {userId, avatarImageId});
     updatePassword = (oldPassword, newPassword) => this.put(`/user/password`, {oldPassword, newPassword});
@@ -24,7 +26,7 @@ export class Api extends ApiRequest {
     sendRestorePasswordEmail = (email) => this.post(`/user/password/restore`, {email});
     restorePassword = (code, newPassword) => this.put(`/user/password/restore`, {code, newPassword});
     sendSignInEmail = (email) => this.post(`/user/auth/code`, {email});
-    signInByEmailCode = (email, code) => this.post(`/user/auth/code`, {email, code});
+    signInByEmailCode = (email, code, clientBrowser, clientOS) => this.post(`/user/auth/code`, {email, code, clientBrowser, clientOS});
     confirmEmailSendMessage = () => this.post(`/user/email/confirm`);
     confirmEmailByCode = (code) => this.put(`/user/email/confirm`, {code});
 
@@ -34,13 +36,16 @@ export class Api extends ApiRequest {
     editEvent = (id, name, description, date, timeStart, timeEnd, placeId, eventTimeStart, eventTimeEnd, peopleNeeds) => this.put(`/event`, {id, name, date, timeStart, timeEnd, description, placeId, eventTimeStart, eventTimeEnd, peopleNeeds});
     deleteEventById = (id) => this.delete(`/event`, {id});
 
-    participateInEvent = (eventId, userId, positionId) => this.post(`/participation/event`, {eventId, userId, positionId});
+    participateInEvent = (eventId, userId, positionId, comment) => this.post(`/participation/event`, {eventId, userId, positionId, comment});
     notParticipateInEvent = (eventId, userId) => this.delete(`/participation/event`, {eventId, userId});
     updateParticipationScore = (id, score) => this.put(`/participation/event`, {id, score});
-    updateParticipationComment = (id, comment) => this.put(`/participation/event`, {id, comment});
+    updateParticipationCommentAdmin = (id, comment) => this.put(`/participation/event`, {id, comment});
+    updateParticipationCommentSelf = (id, comment) => this.put(`/participation/event/comment`, {id, comment});
     getUnvotedParticipations = () => this.get(`/participation/unvoted`);
 
+    getParticipationRatingWithDates = (dateStart, dateEnd) => this.get(`/ratings`, {dateStart, dateEnd});
     getParticipationRating = () => this.get(`/ratings`);
+    getParticipationsExtract = () => this.get(`/participation/extract`);
 
     getPositions = () => this.get(`/position/all`);
     getPositionById = (id) => this.get(`/position`, {id});
@@ -50,6 +55,8 @@ export class Api extends ApiRequest {
 
     getPlaces = () => this.get(`/place/all`);
     getPlaceById = (id) => this.get(`/place`, {id});
+    getPeriods = () => this.get(`/period/all`);
+    getPeriodById = (id) => this.get(`/period`, {id});
     addPlace = (name) => this.post(`/place`, {name});
     editPlace = (id, name) => this.put(`/place`, {id, name});
     deletePlace = (id) => this.delete(`/place`, {id});
@@ -62,8 +69,8 @@ export class Api extends ApiRequest {
 
     getAchievements = () => this.get(`/achievements`);
     getAchievementById = (id) => this.get(`/achievements`, {id});
-    createAchievement = (name, description, levels) => this.post(`/achievements`, {name, description, levels});
-    editAchievement = (id, name, description, levels) => this.put(`/achievements`, {id, name, description, levels});
+    createAchievement = (name, description, levels, special) => this.post(`/achievements`, {name, description, levels, special});
+    editAchievement = (id, name, description, levels, special) => this.put(`/achievements`, {id, name, description, levels, special});
     updateAchievementImage = (id, imageId) => this.put(`/achievements`, {id, imageId});
     deleteAchievement = (id) => this.delete(`/achievements`, {id});
 

@@ -102,7 +102,7 @@ export default {
 
       this.$popups.success('Пароль изменен!');
       this.$refs.formPassword.errors = {};
-      this.$router.push('/signin');
+      this.$router.push({name: 'signin'});
     },
   }
 }

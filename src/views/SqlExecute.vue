@@ -29,10 +29,10 @@
       <div class="fields-container">
         <div id="sql-fields">
           <div class="header-small">Вот сейчас спокойно, дыши, без DROP, DELETE и TRUNCATE, пожалуйста</div>
-          <textarea rows=8 class="textarea scrollable" v-model="sql"></textarea>
+          <textarea rows=4 class="textarea scrollable" v-model="sql" @keydown.ctrl.enter="execute"></textarea>
 
           <label class="header-small">Результат</label>
-          <textarea rows=4 class="textarea scrollable" :value="result" disabled></textarea>
+          <textarea rows=12 class="textarea scrollable" :value="result" disabled></textarea>
           <input type="submit" value="Выполнить">
         </div>
       </div>
@@ -60,8 +60,8 @@ export default {
   },
 
   mounted() {
-    if (!this.$user.isAdmin) {
-      this.$popups.error("Ты не админ", "Не влезай, убьёт");
+    if (!this.$user.canExecuteSQL) {
+      this.$popups.error("Тебе сюда низя", "Не влезай, убьёт");
       this.$router.push({name: 'profile'});
     }
   },

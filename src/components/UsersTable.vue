@@ -17,6 +17,11 @@ user-padding-left = 20px
   @media ({mobile})
     height 100%
 
+  .edit-button
+    button()
+  .edit-button-save
+    button-success()
+
   .eventUsersList
     border-radius(5px)
 
@@ -25,9 +30,8 @@ user-padding-left = 20px
       color mix(textColor1, empColor2_1, 60%)
       padding 0 15px
       margin 10px 0 5px 0
-      width 100px
-      white-space nowrap
       .date
+        white-space nowrap
         margin-left 20px
         color textColor5
         font-small()
@@ -40,6 +44,11 @@ user-padding-left = 20px
 
 <template>
   <div class="usersList scrollable">
+    <div class="edit-buttons-container" v-if="$user.canEditParticipations && (usersLists.reduce((total, cur) => cur.participations?.length || 0 + total, 0) > 0)">
+      <button v-if="!canEditScores" class="edit-button" @click="canEditScores = true">Изменить баллы</button>
+      <button v-else class="edit-button-save" @click="canEditScores = false">Не изменять баллы</button>
+    </div>
+
     <div class="eventUsersList" v-for="usersList in usersLists">
       <div class="eventName" v-if="usersList.eventName">
         <span class="name">{{usersList.eventName}}</span>
@@ -58,10 +67,13 @@ user-padding-left = 20px
             :comment="participation.admincomment"
             :score="participation.score"
             :can-delete="canDelete"
+            :can-edit="($user.canEditParticipations) || (participation.userid === $user.id)"
+            :can-edit-score="canEditScores"
             @delete="(id) => deleteUserFromList(0, id)"
       ></User>
     </div>
 
+    <slot></slot>
   </div>
 </template>
 
@@ -79,6 +91,13 @@ export default {
     usersLists: [],
 
     canDelete: Boolean,
+    canEditSelf: Boolean,
+  },
+
+  data() {
+    return {
+      canEditScores: false,
+    }
   },
 
   methods: {
@@ -86,10 +105,8 @@ export default {
 
     deleteUserFromList(listIdx, id) {
       const index = this.usersLists[listIdx]?.participations?.findIndex(u => u.id === id);
-      console.log(index, this.usersLists[listIdx])
       this.usersLists[listIdx]?.participations?.splice(index, 1);
-      console.log(this.usersLists[listIdx])
     }
-  }
+  },
 };
 </script>

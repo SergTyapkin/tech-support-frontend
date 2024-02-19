@@ -9,29 +9,32 @@
 
 <template>
   <div>
-    <Form class="from"
+    <FormExtended class="from"
           ref="form"
           title="Регистрация" description="Ну давай, покажи всю свою оригинальность"
           :fields="[
-            { title: 'ИМЯ', autocomplete: 'on', jsonName: 'name', name: 'firstname', info: 'Давай знакомиться'},
-            { title: 'ФАМИЛИЯ', autocomplete: 'on', jsonName: 'secondName', name: 'lastname', info: 'Ну надо'},
+            { title: 'ИМЯ', autocomplete: 'on', jsonName: 'firstName', name: 'firstname', info: 'Давай знакомиться'},
+            { title: 'ФАМИЛИЯ', autocomplete: 'on', jsonName: 'secondName', name: 'secondname'},
+            { title: 'ОТЧЕСТВО', autocomplete: 'on', jsonName: 'thirdName', name: 'thirdname'},
             { title: 'ПАРОЛЬ', autocomplete: 'on', jsonName: 'password', name: 'password', type: 'password', info: 'Забыл пароль? - пей таблетки'},
-            { title: 'ПАРОЛЬ ЕЩЁ РАЗ', jsonName: 'passwordConfirm', name: 'password confirm', type: 'password', info: 'Не ошибись'},
+            { title: 'ПАРОЛЬ ЕЩЁ РАЗ', jsonName: 'passwordConfirm', name: 'password confirm', type: 'password', info: 'Не ошибись - это будет фиаско'},
             { title: 'E-mail', autocomplete: 'on', jsonName: 'email', name: 'email', type: 'email', info: 'Когда-нибудь пароль придётся восстанавливать'},
+            { title: 'Telegram', autocomplete: 'on', jsonName: 'telegram', name: 'telegram', type: 'text', info: 'Всё, что после @'},
           ]"
           submit-text="Погнали"
           @submit="signUp"
     >Уже есть аккаунт? <router-link :to="base_url_path + `/signin`" class="link">Войти</router-link>
-    </Form>
+    </FormExtended>
   </div>
 </template>
 
 
 <script>
-import Form from "../../components/FormExtended.vue";
+import FormExtended from "../../components/FormExtended.vue";
+import {detectBrowser, detectOS} from "../../utils/utils";
 
 export default {
-  components: {Form},
+  components: {FormExtended},
 
   data() {
     return {
@@ -40,40 +43,62 @@ export default {
   },
 
   methods: {
-    validate(name, secondName, password, passwordConfirm, email) {
+    validate(firstName, secondName, thirdName, password, passwordConfirm, email, telegram) {
       let funcRes = true;
-      if (name.length === 0) {
-        this.$refs.form.errors.name = 'Имя не может быть пустым';
+      if (firstName.length === 0) {
+        this.$refs.form.errors.firstName = 'Имя не может быть пустым';
         funcRes = false;
       }
       if (secondName.length === 0) {
         this.$refs.form.errors.secondName = 'Фамилия не может быть пустой';
         funcRes = false;
       }
+      if (thirdName.length === 0) {
+        this.$refs.form.errors.thirdName = 'Отчество не может быть пустым';
+        funcRes = false;
+      }
+      // TODO: проверка на пробелы
+      // if (firstName.length === 0) {
+      //   this.$refs.form.errors.firstName = 'Имя не может быть пустым';
+      //   funcRes = false;
+      // }
+      // if (secondName.length === 0) {
+      //   this.$refs.form.errors.secondName = 'Фамилия не может быть пустой';
+      //   funcRes = false;
+      // }
+      // if (thirdName.length === 0) {
+      //   this.$refs.form.errors.thirdName = 'Отчество не может быть пустым';
+      //   funcRes = false;
+      // }
       if (password.length === 0) {
         this.$refs.form.errors.password = 'Пароль не может быть пустым';
         funcRes = false;
       }
       if (password !== passwordConfirm) {
         this.$refs.form.errors.password = 'Пароли не совпадают';
-        this.$refs.form.errors.passwordConfirm = 'Пароли не совпадают';
+        this.$refs.form.errors.passwordConfirm = 'Это фиаско, братан';
         funcRes = false;
       }
       if (email.length === 0) {
         this.$refs.form.errors.email = 'E-mail не может быть пустым';
         funcRes = false;
       }
+      if (telegram.length === 0) {
+        this.$refs.form.errors.telegram = 'Telegram не может быть пустым';
+        funcRes = false;
+      }
       return funcRes;
     },
 
-    async signUp({name, secondName, password, passwordConfirm, email}) {
-      if (!this.validate(name, secondName, password, passwordConfirm, email))
+    async signUp({firstName, secondName, thirdName, password, passwordConfirm, email, telegram}) {
+      this.$refs.form.errors.email = "ОШИБКА";
+      if (!this.validate(firstName, secondName, thirdName, password, passwordConfirm, email, telegram)) {
+        this.$refs.form.showError();
         return;
-
-      const fullname = name + ' ' + secondName;
+      }
 
       this.$refs.form.loading = true;
-      const response = await this.$api.signUp(password, email, fullname);
+      const response = await this.$api.signUp(password, email, firstName, secondName, thirdName, telegram, detectBrowser(), detectOS());
       this.$refs.form.loading = false;
 
       if (response.ok_) {
@@ -82,7 +107,7 @@ export default {
         this.$refs.form.loading = false;
         this.$popups.success('Аккаунт создан!');
         this.$refs.form.errors = {};
-        this.$router.push('/profile');
+        this.$router.push({name: 'profile'});
         return;
       }
 

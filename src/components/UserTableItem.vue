@@ -19,6 +19,7 @@ user-padding-left-mobile = 5px
     padding-left user-padding-left-mobile
   .user-icon-container
   .user-icon
+    border none
     width (avatar-size - 4px)
     height (avatar-size - 4px)
     min-width (avatar-size - 4px)
@@ -140,16 +141,16 @@ user-padding-left-mobile = 5px
 
 <template>
   <div class="user">
-    <router-link :to="{name: 'profile', params: {userId: userId}}" class="user-icon-container" @contextmenu.prevent="deleteParticipation">
-      <UserAvatar :image-id="userImageId" class="user-icon"></UserAvatar>
-      <div v-if="$user.isAdmin && canDelete" class="delete-user" @click.stop.prevent="deleteParticipation"><img src="../res/trash.svg" alt="delete"></div>
+    <router-link :to="{name: 'userProfile', params: {userId: userId}}" class="user-icon-container" @contextmenu.prevent="deleteParticipation">
+      <UserAvatar :image-id="userImageId" class="user-icon" size="80px" size-mobile="50px" :user-id="id"></UserAvatar>
+      <div v-if="canEdit && canDelete" class="delete-user" @click.stop.prevent="deleteParticipation"><img src="../res/trash.svg" alt="delete"></div>
     </router-link>
-    <div class="info" :class="{isAdmin: $user.isAdmin}">
+    <div class="info" :class="{isAdmin: $user.canEditParticipations}">
       <div class="userName">{{ $cropText(userName, 30) }} <span class="position">{{ positionName }}</span></div>
       <div class="userTitle">{{ $cropText(userTitle, 50) }}</div>
-      <div class="range-input-container" :class="{'in-row': !$user.isAdmin}">
-        <Range class="range" :min="0.25" :max="2" :step="0.25" v-model="score" @change="saveRating" :readonly="!$user.isAdmin" :with-delete="$user.isAdmin"></Range>
-        <input class="comm" ref="comment" placeholder="Комментарий" v-model="comment" @change="saveComment" @keydown.enter="$refs.comment.blur()" :readonly="!$user.isAdmin">
+      <div class="range-input-container" :class="{'in-row': !$user.canEditParticipations}">
+        <Range class="range" :min="0.25" :max="2" :step="0.25" v-model="score" @change="saveRating" :readonly="!$user.canEditParticipations" :with-delete="$user.canEditParticipations" :disabled="!canEditScore"></Range>
+        <input class="comm" ref="comment" placeholder="Комментарий" v-model="comment" @change="saveComment" @keydown.enter="$refs.comment.blur()" :readonly="!canEdit">
       </div>
     </div>
     <hr class="hrUserL">
@@ -178,13 +179,15 @@ export default {
     userId: Number,
     userName: String,
     userTitle: String,
-    userImageId: Number,
+    userImageId: String,
     positionId: Number,
     positionName: String,
     comment: String,
     score: Number,
+    canEditScore: Boolean,
 
-    canDelete: Boolean
+    canDelete: Boolean,
+    canEdit: Boolean,
   },
 
   data() {
@@ -196,7 +199,13 @@ export default {
         error: 3,
       },
       state: 0,
+
+      score: this.$props.score,
     };
+  },
+
+  mounted() {
+    console.log("USERTABLEITEM:", this.userId);
   },
 
   methods: {
@@ -213,7 +222,12 @@ export default {
     },
     async saveComment() {
       this.state = this.States.edited;
-      const res = await this.$api.updateParticipationComment(this.id, this.comment);
+      let res;
+      if (this.$user.canEditParticipations) {
+        res = await this.$api.updateParticipationCommentAdmin(this.id, this.comment);
+      } else {
+        res = await this.$api.updateParticipationCommentSelf(this.id, this.comment);
+      }
 
       if (!res.ok_) {
         this.$popups.error("Ошибка", "Не удалось сохранить комментарий");
@@ -245,6 +259,6 @@ export default {
       this.$emit('delete', this.id);
       this.$popups.success('Участие удалено', 'Ещё можно сжечь его на костре...');
     }
-  }
+  },
 };
 </script>

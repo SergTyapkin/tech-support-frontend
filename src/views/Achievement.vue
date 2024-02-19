@@ -20,6 +20,7 @@
     .row-levels
     .row-contacts
     .row-buttons
+    .row-users-achieved
       display flex
       width 100%
 
@@ -29,20 +30,17 @@
         gap 10px
       .image-loader
         position relative
-        border-radius(50%)
-        overflow hidden
-        outline 2px solid empColor2_4
         width 128px
         height 128px
         margin-right 15px
-        .image
-          width 128px
-          height 128px
-          outline-offset 2px
+        .achievement-image
+          --border-color empColor2_4
         .avatar-div::before
         .avatar-div::after
         .image-overlay
           content 'Изменить'
+          border-radius(50%)
+          overflow hidden
           font-family Arial
           padding-left 5px
           font-size 15px
@@ -76,10 +74,14 @@
           color textColor4
 
     .row-levels
+    .row-users-achieved
+      &:not(.is-admin)
+        flex-direction column
       @media ({mobile})
         flex-direction column
       .levels-container
       .avatar-examples
+      .users-achieved
         .info
           font-small()
           color textColor4
@@ -88,8 +90,12 @@
       .levels-container
         min-width 250px
         padding 10px 0
+      .special-container
+        .filters
+          padding 10px
 
       .avatar-examples
+      .users-achieved
         flex 1
         overflow-x scroll
         block-dark-bg()
@@ -98,14 +104,28 @@
           display flex
           gap 40px
           padding 5px
+          .image
+            min-width 60px
 
     .row-contacts
       .user-link
+        text-decoration underline
         cursor pointer
         pointer-events all
         &:hover
           transition all 0.2s ease
           filter brightness(2)
+
+    .row-users-achieved
+      .user-icon-container
+        text-align center
+        .user-avatar
+          margin-left auto
+          margin-right auto
+          margin-bottom 4px
+        .username
+          font-small()
+          color textColor4
 
     .row-buttons
       .button-delete
@@ -123,45 +143,91 @@
         img
           width 26px
           margin-right 10px
+
+    .auto-info
+      text-align center
+      .auto-title
+        font-large()
+        color empColor1_1
+        display flex
+        align-items center
+        justify-content center
+        img
+          height 20px
+          width 20px
+      .auto-description
+        font-small()
+        color textColor4
+        margin-bottom 50px
 </style>
 
 <template>
   <div class="root" css-fullheight @input="onChange">
-    <Form :noSubmit="!$user.isAdmin" class="form-achievement" :class="{'is-admin': $user.isAdmin}" @submit="updateAchievementData">
-      <FloatingInput v-model="achievement.name" title="Название" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
+    <Form :noSubmit="!$user.canEditAchievements" class="form-achievement" :class="{'is-admin': $user.canEditAchievements}" @submit="updateAchievementData">
+      <FloatingInput v-model="achievement.name" title="Название" :readonly="!$user.canEditAchievements" no-info class="input"></FloatingInput>
 
       <div class="row-description">
-        <DragNDropLoader v-if="$user.isAdmin && achievementId !== undefined"
+        <DragNDropLoader v-if="$user.canEditAchievements && achievementId !== undefined"
                          class="image-loader"
                          @load="updateAvatar"
                          :crop-size="cropSize"
                          :compress-size="compressSize"
         >
           <div class="avatar-div" @click.stop="updateAvatar(undefined)">
-            <AchievementAvatar :image-id="achievement.imageid"></AchievementAvatar>
+            <AchievementAvatar class="achievement-image" :image-id="achievement.imageid" size="128px" border-offset="2px" border-width="2px"></AchievementAvatar>
           </div>
         </DragNDropLoader>
         <div v-else class="image-loader">
-          <AchievementAvatar :image-id="achievement.imageid"></AchievementAvatar>
-          <div class="image-overlay" v-if="$user.isAdmin">Изображение можно будет изменить после создания</div>
+          <AchievementAvatar class="achievement-image" :image-id="achievement.imageid" size="128px" border-offset="2px" border-width="2px"></AchievementAvatar>
+          <div class="image-overlay" v-if="$user.canEditAchievements">Изображение можно будет изменить после создания</div>
         </div>
 
         <div class="markdown-container">
-          <MarkdownRedactor v-if="$user.isAdmin" class="redactor" @input="onChange" @change="$refs.renderer?.update" ref="text" v-model="achievement.description" placeholder="Описание"></MarkdownRedactor>
-          <div class="info" v-if="$user.isAdmin">Превью</div>
-          <MarkdownRenderer class="renderer" ref="renderer"></MarkdownRenderer>
+          <RedactorAndRenderer info="Описание" @input="onChange" v-model="achievement.description" placeholder="Описание" :show-initial-preview="achievementId !== undefined" :can-edit="$user.canEditAchievements"></RedactorAndRenderer>
         </div>
       </div>
 
-      <div class="row-levels">
-        <div class="levels-container" v-if="$user.isAdmin">
-          <div class="info">Количество уровней</div>
-          <Range no-value :min="1" :max="5" :step="1" v-model="achievement.levels" class="range" @change="onChange"></Range>
+      <div v-if="achievement.auto" class="auto-info">
+        <div class="auto-title">Авто-достижение <img src="../res/locked.svg" alt="locked"></div>
+        <div class="auto-description">Выставляется автоматически при выполнении каких-то критериев</div>
+      </div>
+
+      <div class="row-levels" :class="{'is-admin': $user.canEditAchievements}">
+        <div class="column-settings">
+          <div class="levels-container" v-if="$user.canEditAchievements">
+            <div class="info">Количество уровней</div>
+            <Range
+              no-value
+              :min="1"
+              :max="5"
+              :step="1"
+              v-model="achievement.levels"
+              class="range"
+              :disabled="achievement.special || achievement.auto"
+              @change="() => {
+                onChange();
+                this.lastLevelsCount = this.achievement.levels
+              }"
+            ></Range>
+          </div>
+          <div class="special-container">
+            <Filters v-if="$user.canEditAchievements || achievement.special"
+                     class="filters"
+                     :filters="filters"
+                     can-be-none
+                     :disabled="!$user.canEditAchievements || achievement.auto"
+                     @change="(filter) => {
+                       onChange();
+                       achievement.special = filter.value;
+                       filter.value ? achievement.levels = 1 : achievement.levels = lastLevelsCount
+                     }"
+            ></Filters>
+          </div>
         </div>
         <div class="avatar-examples scrollable">
           <div class="info">Изображения по уровням</div>
           <div class="images-container">
-            <Achievement v-if="achievement.levels" v-for="i in Number(achievement.levels)" :image-id="achievement.imageid" :level="i" :max-levels="Number(achievement.levels)"></Achievement>
+            <Achievement class="image" v-if="achievement.levels" v-for="i in Number(achievement.levels)" :image-id="achievement.imageid" :level="i" :special="achievement.special" :max-levels="Number(achievement.levels)"></Achievement>
           </div>
         </div>
       </div>
@@ -173,10 +239,22 @@
         </a>
       </div>
 
+      <div class="row-users-achieved">
+        <div class="users-achieved scrollable">
+          <div class="info">Достижение получили</div>
+          <div class="images-container">
+            <router-link v-for="user in achievement.usersachieved" :to="{name: 'userProfile', params: {userId: user.id}}" class="user-icon-container">
+              <UserAvatar class="user-avatar" :image-id="user.avatarimageid" size="80px" :user-id="user.id"></UserAvatar>
+              <div class="username">{{ user.username }}</div>
+            </router-link>
+          </div>
+        </div>
+      </div>
+
       <CircleLoading v-if="loading"></CircleLoading>
-      <div v-else class="row-buttons">
-        <div v-if="$user.isAdmin && achievementId !== undefined" class="button-delete" @click="deleteAchievement"><img src="../res/trash.svg" alt="delete">Удалить</div>
+      <div v-else-if="$user.canEditAchievements" class="row-buttons">
         <div v-if="achievementId === undefined" class="button-create" @click="createAchievement"><img src="../res/save.svg" alt="">Создать достижение</div>
+        <div v-else-if="!achievement.auto" class="button-delete" @click="deleteAchievement"><img src="../res/trash.svg" alt="delete">Удалить</div>
       </div>
     </Form>
 
@@ -198,14 +276,16 @@ import Range from "../components/Range.vue";
 import DragNDropLoader from "../components/DragNDropLoader.vue";
 import {IMAGE_MAX_RES, IMAGE_ACHIEVEMENT_MAX_RES} from "../constants";
 import ImageUploader from "../utils/imageUploader";
-import MarkdownRedactor from "../components/MarkdownRedactor.vue";
-import MarkdownRenderer from "../components/MarkdownRenderer.vue";
+import RedactorAndRenderer from "../components/Markdown/RedactorAndRenderer.vue";
+import UserAvatar from "../components/UserAvatar.vue";
+import Filters from "../components/Filters.vue";
 
 
 export default {
   components: {
-    MarkdownRenderer,
-    MarkdownRedactor,
+    Filters,
+    UserAvatar,
+    RedactorAndRenderer,
     Achievement,
     DragNDropLoader,
     Range, AchievementAvatar, FloatingButton, CircleLoading, Form, FloatingInput},
@@ -221,6 +301,9 @@ export default {
 
       achievement: {},
 
+      filters: [{name: 'Редкое'}],
+      lastLevelsCount: undefined,
+
       loading: false,
       isEdited: false,
     }
@@ -229,6 +312,7 @@ export default {
   async mounted() {
     if (this.achievementId === undefined) {
       this.achievement.levels = 3;
+      this.achievement.special = false;
       return;
     }
     await this.getAchievementData();
@@ -245,12 +329,13 @@ export default {
         return;
       }
       this.achievement = response;
-      this.$refs.renderer.update(this.achievement.description);
+      this.filters[0].value = this.achievement.special;
+      this.lastLevelsCount = this.achievement.levels;
     },
 
     async updateAchievementData() {
       this.loading = true;
-      const res = await this.$api.editAchievement(this.achievementId, this.achievement.name, this.achievement.description, this.achievement.levels, this.achievement.imageid);
+      const res = await this.$api.editAchievement(this.achievementId, this.achievement.name, this.achievement.description, this.achievement.levels, this.achievement.special);
       this.loading = false;
 
       if (!res.ok_) {
@@ -269,7 +354,7 @@ export default {
       }
 
       this.loading = true;
-      const res = await this.$api.createAchievement(this.achievement.name, this.achievement.description, this.achievement.levels);
+      const res = await this.$api.createAchievement(this.achievement.name, this.achievement.description, this.achievement.levels, this.achievement.special);
       this.loading = false;
 
       if (!res.ok_) {

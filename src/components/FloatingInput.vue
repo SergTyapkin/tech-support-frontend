@@ -349,6 +349,10 @@ export default {
     focus() {
       this.$refs.input.focus();
     },
+
+    setError(text) {
+      this.error = text;
+    },
     //
     // showError() {
     //   this.state = this.States.error;

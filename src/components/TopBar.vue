@@ -76,30 +76,30 @@ height-mobile = header-height-mobile
 
 <template>
   <div class="root">
-    <router-link :to="routes.events" class="events button" :class="{active: $route.fullPath === routes.events}">
+    <router-link :to="routes.events" class="events button" :class="{active: $route.fullPath === routes.events}" @click="$emit('click', 'events')">
       <img src="../res/events.svg" alt="">
       <span>Все события</span>
     </router-link>
-    <router-link :to="routes.eventsMy" class="my-events button" :class="{active: $route.fullPath === routes.eventsMy}">
+    <router-link :to="routes.eventsMy" class="my-events button" :class="{active: $route.fullPath === routes.eventsMy}" @click="$emit('click', 'evensMy')">
       <img src="../res/my_events.svg" alt="">
       <span>Мои события</span>
     </router-link>
-    <router-link :to="routes.docs" class="docs button" :class="{active: $route.fullPath === routes.docs}">
+    <router-link :to="routes.docs" class="docs button" :class="{active: $route.fullPath === routes.docs}" @click="$emit('click', 'docs')">
       <img src="../res/doc.svg" alt="">
       <span>Мануалы</span>
     </router-link>
-    <router-link :to="routes.profile" class="profile button" :class="{active: $route.fullPath === routes.profile}">
+    <router-link :to="routes.profile" class="profile button" :class="{active: $route.fullPath === routes.profile}" @click="$emit('click', 'profile')">
       <img src="../res/profile.svg" alt="">
       <span>Профиль</span>
     </router-link>
 
-    <router-link v-if="!$user.isAdmin" :to="routes.ratings" class="ratings button" :class="{active: $route.fullPath === routes.ratings}">
-      <img src="../res/ratings.svg" alt="">
-      <span>Рейтинги</span>
-    </router-link>
-    <router-link v-else :to="routes.admin" class="admin button" :class="{active: $route.fullPath === routes.admin}">
+    <router-link v-if="$user.canAccessAdminPage" :to="routes.admin" class="admin button" :class="{active: $route.fullPath === routes.admin}" @click="$emit('click', 'admin')">
       <img src="../res/admin.svg" alt="">
       <span>Админская</span>
+    </router-link>
+    <router-link v-else :to="routes.ratings" class="ratings button" :class="{active: $route.fullPath === routes.ratings}" @click="$emit('click', 'ratings')">
+      <img src="../res/ratings.svg" alt="">
+      <span>Рейтинги</span>
     </router-link>
   </div>
 </template>

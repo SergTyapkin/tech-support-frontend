@@ -7,13 +7,16 @@ centered()
     margin-right auto
     width 100%
 
-block()
+block-no-bg()
     font-medium()
-    background blocksBgColor
     border-radius(7px)
     //backdrop-filter blur(10px) brightness(3)
     transition all 0.3s ease
     padding 30px
+
+block()
+    block-no-bg()
+    background blocksBgColor
 
 block-dark-bg()
     background blocksBgColorDark

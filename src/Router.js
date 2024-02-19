@@ -17,17 +17,18 @@ import Ratings from "/src/views/Ratings.vue";
 import DocsList from "/src/views/DocsList.vue";
 import Doc from "/src/views/Doc.vue";
 import Achievement from "./views/Achievement.vue";
-
-import table from "/src/components/UsersTable.vue";
+import AchievementsList from "./views/AchievementsList.vue";
 
 import Page404 from '/src/views/Page404.vue'
 
 import {BASE_URL_PATH} from "./constants";
+import {scrollSmoothly, scrollSmoothlyStop} from "./utils/utils";
+import {nextTick} from "vue";
+import ParticipationsExtract from "./views/ParticipationsExtract.vue";
 
 
-export default function createVueRouter(Store, App) {
+export default function createVueRouter(Store, scrollToTopDenyHrefs=[]) {
     const routes = [
-        {path: BASE_URL_PATH + '/', name: 'default'},
         {path: BASE_URL_PATH + '/signin', name: 'signin', component: SignIn, meta: {noLoginRequired: true}},
         {path: BASE_URL_PATH + '/signup', name: 'signup', component: SignUp, meta: {noLoginRequired: true}},
         {path: BASE_URL_PATH + '/profile', name: 'profile', component: Profile, meta: {loginRequired: true}},
@@ -45,14 +46,16 @@ export default function createVueRouter(Store, App) {
 
         {path: BASE_URL_PATH + '/achievement', name: 'createAchievement', component: Achievement, meta: {loginRequired: true}},
         {path: BASE_URL_PATH + '/achievement/:achievementId', name: 'achievement', component: Achievement, meta: {loginRequired: true}},
+        {path: BASE_URL_PATH + '/achievements', name: 'achievements', component: AchievementsList, meta: {loginRequired: true}},
 
         {path: BASE_URL_PATH + '/ratings', name: 'ratings', component: Ratings, meta: {loginRequired: true}},
 
         {path: BASE_URL_PATH + '/admin', name: 'admin', component: AdminPage, meta: {loginRequired: true}},
         {path: BASE_URL_PATH + '/sql', name: 'sql', component: SqlExecute, meta: {loginRequired: true}},
 
+        {path: BASE_URL_PATH + '/participations/extract', name: 'participationsExtract', component: ParticipationsExtract},
+
         {path: BASE_URL_PATH + '/:catchAll(.*)', component: Page404},
-        {path: BASE_URL_PATH + '/table', component: table},
     ]
 
     const Router = createRouter({
@@ -116,6 +119,30 @@ export default function createVueRouter(Store, App) {
 
         smartBasePartRedirect();
         return;
+    });
+
+    Router.getRegExpForPage = (pageName) => {
+        return RegExp(Router.resolve(pageName).fullPath);
+    };
+
+    Router.setScrollToTopDenyPagesList = (list) => {
+        scrollToTopDenyHrefs = list.map((el) => Router.getRegExpForPage(el));
+        return scrollToTopDenyHrefs;
+    };
+
+    Router.appendScrollToTopDenyPagesList = (...pageNames) => {
+        scrollToTopDenyHrefs = scrollToTopDenyHrefs.concat(pageNames.map((el) => Router.getRegExpForPage(el)));
+        return scrollToTopDenyHrefs;
+    };
+
+    Router.afterEach(async (to, from, next) => {
+        const inDenyList = scrollToTopDenyHrefs.reduce((sum, cur) => sum || cur.test(to.fullPath), false);
+        if (!inDenyList || (from.name === to.name)) {
+            await nextTick();
+            scrollSmoothly(document.body, 0);
+        } else {
+            scrollSmoothlyStop();
+        }
     });
 
     Router.beforeResolve(async (to) => {

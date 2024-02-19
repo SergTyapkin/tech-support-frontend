@@ -28,6 +28,7 @@
           padding-right 0
           padding-bottom 10px
         .user-link
+          text-decoration underline
           cursor pointer
           pointer-events all
           &:hover
@@ -48,6 +49,42 @@
         .users-table
           width 100%
           margin 20px auto
+          .add-participation-button
+          .select-user-list
+          .select-position
+            max-height 400px
+            transition all 0.5s ease
+            overflow hidden
+            &.hidden
+              max-height 0
+              transition all 0.5s cubic-bezier(0, 1, 0, 1)
+              opacity 0
+              pointer-events none
+          .add-participation-button
+            button-dashed()
+            margin-bottom 10px
+          .select-user-list
+            list-style none
+            padding 0
+            margin 0
+            max-height 300px
+            overflow-y scroll
+          .select-position
+            display flex
+            flex-direction column
+            align-items center
+            gap 10px
+            padding-bottom 150px
+            .select-list
+              min-width 300px
+            .button-select-user
+              button-submit()
+              width min-content
+              padding 10px 30px
+              img
+                width 30px
+                height 30px
+                margin-right 5px
 
       .main-info
         padding-top 12px
@@ -58,25 +95,24 @@
         margin-bottom 20px
         .input:not(:last-of-type)
           margin-bottom 20px
-      .info
-        font-small()
-        color textColor4
+
 
     .buttons
       display flex
       .button-submit
         flex 0.5
         margin-right 20px
-      .button-participate-group
+      .participation-group
         flex 1
-        display flex
-        gap 20px
-        @media ({mobile})
-          flex-direction column
-      .button-participate
-        button-submit()
-        &.not
-          button-danger()
+        .button-participate-group
+          display flex
+          gap 20px
+          @media ({mobile})
+            flex-direction column
+        .button-participate
+          button-submit()
+      .button-not-participate
+        button-danger()
     .button-delete
       button-danger()
       display flex
@@ -90,24 +126,24 @@
 
 <template>
   <div class="root" css-fullheight @input="onChange">
-    <Form :noSubmit="!$user.isAdmin" class="form-event" :class="{'is-admin': $user.isAdmin}" @submit="updateEventData">
+    <Form :noSubmit="!$user.canEditEvents" class="form-event" :class="{'is-admin': $user.canEditEvents}" @submit="updateEventData">
       <div class="event-info">
         <div class="left-description">
           <div class="main-info">
-            <FloatingInput v-model="event.name" title="Название" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
-            <SelectList v-model="place" @input="onChange" :selected-id="event.placeid" :list="allPlaces" title="Место проведения" solid :readonly="!$user.isAdmin" class="input"></SelectList>
+            <FloatingInput v-model="event.name" title="Название" :readonly="!$user.canEditEvents" no-info class="input"></FloatingInput>
+            <SelectList v-model="place" @input="onChange" :selected-id="event.placeid" :list="allPlaces" title="Место проведения" solid :readonly="!$user.canEditEvents" class="input"></SelectList>
           </div>
 
           <div class="main-info">
-            <FloatingInput v-model="event.date" type="date" title="Дата проведения" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
-            <FloatingInput v-model="event.timestart" type="time" title="Приходить c" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
-            <FloatingInput v-model="event.timeend" type="time" title="Оставаться до" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
-            <FloatingInput v-model="event.peopleneeds" type="number" title="Людей необходимо" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
+            <FloatingInput v-model="event.date" type="date" title="Дата проведения" :readonly="!$user.canEditEvents" no-info class="input"></FloatingInput>
+            <FloatingInput v-model="event.timestart" type="time" title="Приходить c" :readonly="!$user.canEditEvents" no-info class="input"></FloatingInput>
+            <FloatingInput v-model="event.timeend" type="time" title="Оставаться до" :readonly="!$user.canEditEvents" no-info class="input"></FloatingInput>
+            <FloatingInput v-model="event.peopleneeds" type="number" title="Людей необходимо" :readonly="!$user.canEditEvents" no-info class="input"></FloatingInput>
           </div>
 
           <div class="main-info">
-            <FloatingInput v-model="event.eventtimestart" type="time" title="Начало мероприятия" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
-            <FloatingInput v-model="event.eventtimeend" type="time" title="Конец мероприятия" :readonly="!$user.isAdmin" no-info class="input"></FloatingInput>
+            <FloatingInput v-model="event.eventtimestart" type="time" title="Начало мероприятия" :readonly="!$user.canEditEvents" no-info class="input"></FloatingInput>
+            <FloatingInput v-model="event.eventtimeend" type="time" title="Конец мероприятия" :readonly="!$user.canEditEvents" no-info class="input"></FloatingInput>
           </div>
 
           <FloatingInput v-model="event.authorname" title="Автор мероприятия" readonly no-info class="input"></FloatingInput>
@@ -117,24 +153,47 @@
         </div>
 
         <div class="right-description">
-          <div class="input-info">А что мы будем делать?</div>
-          <MarkdownRedactor v-if="$user.isAdmin" class="redactor" @input="onChange" @change="$refs.renderer?.update" ref="text" v-model="event.description" placeholder="Описание"></MarkdownRedactor>
-          <div class="info" v-if="$user.isAdmin">Превью</div>
-          <MarkdownRenderer class="renderer" ref="renderer"></MarkdownRenderer>
+          <RedactorAndRenderer info="А что мы будем делать?" placeholder="Описание" v-model="event.description" @input="onChange()" show-initial-preview :can-edit="$user.canEditEvents"></RedactorAndRenderer>
 
-          <UsersTable class="users-table" :users-lists="[{participations: event.participations}]" @change.stop="" @input.stop="" can-delete></UsersTable>
+          <UsersTable class="users-table"
+                      :users-lists="[{participations: event.participations}]"
+                      @change.stop
+                      @input.stop
+                      can-delete
+                      can-edit-self
+                      ref="usersTable"
+          >
+            <div class="add-participation-button" :class="{hidden: !$user.canEditParticipations || inSelectingUser || selectedUser}" @click="getAllUsers(); inSelectingUser = true">
+              <img src="../res/plus.svg" alt="plus"><div class="text">Записать</div>
+            </div>
+            <ul class="select-user-list scrollable" :class="{hidden: !inSelectingUser}">
+              <li v-for="user in allUsers" class="user" @click="inSelectingUser = false; selectedUser = user">
+                <UserLine v-bind="user" :avatarimageid="user.avatarimageid" clickable></UserLine>
+              </li>
+            </ul>
+            <div class="select-position" :class="{hidden: !selectedUser}" v-if="selectedUser">
+              <UserLine v-bind="selectedUser"></UserLine>
+              <SelectList v-if="selectedUser" v-model="selectedUser.position" :list="allPositions" class="select-list"></SelectList>
+              <div class="button-select-user" @click="participateOtherUser(selectedUser.id, selectedUser.position.id); selectedUser = undefined;"><img src="../res/save.svg" alt="save">Добавить</div>
+            </div>
+          </UsersTable>
         </div>
       </div>
 
       <div class="buttons">
         <CircleLoading v-if="loading"></CircleLoading>
-        <div v-else-if="!event.isyouparticipate && event.isnext" class="button-participate-group">
-          <div class="button-participate" @click="participate">Пойду</div>
-          <SelectList v-model="position" :list="allPositions" title="Чем займёшься" solid class="input"></SelectList>
+        <div v-else-if="!event.isyouparticipate && event.isnext" class="participation-group">
+          <div class="button-participate-group">
+            <div class="button-participate" @click="participate" :disabled="!position">Пойду</div>
+            <SelectList v-model="position" :list="allPositions" title="Чем займёшься" solid class="input"></SelectList>
+          </div>
+          <div class="participation-comment">
+            <FloatingInput @input.stop v-model="participationComment" placeholder="Комментарий к участию" no-info></FloatingInput>
+          </div>
         </div>
-        <div v-else-if="event.isnext" class="button-participate not" @click="notParticipate">Не пойду</div>
+        <div v-else-if="event.isnext" class="button-not-participate" @click="notParticipate">Не пойду</div>
       </div>
-      <div v-if="$user.isAdmin" class="button-delete" @click="deleteEvent"><img src="../res/trash.svg" alt="delete">Удалить</div>
+      <div v-if="$user.canEditEvents" class="button-delete" @click="deleteEvent"><img src="../res/trash.svg" alt="delete">Удалить</div>
     </Form>
 
     <FloatingButton v-if="isEdited" title="Сохранить" green @click="updateEventData">
@@ -151,14 +210,12 @@ import FloatingInput from "../components/FloatingInput.vue";
 import FloatingButton from "../components/FloatingButton.vue";
 import SelectList from "../components/SelectList.vue";
 import UsersTable from "../components/UsersTable.vue";
-import MarkdownRedactor from "../components/MarkdownRedactor.vue";
-import MarkdownRenderer from "../components/MarkdownRenderer.vue";
+import UserLine from "../components/UserLine.vue";
+import RedactorAndRenderer from "../components/Markdown/RedactorAndRenderer.vue";
 
 
 export default {
-  components: {
-    MarkdownRenderer,
-    MarkdownRedactor, SelectList, FloatingButton, CircleLoading, Form, FloatingInput, UsersTable},
+  components: {RedactorAndRenderer, UserLine, SelectList, FloatingButton, CircleLoading, Form, FloatingInput, UsersTable},
 
   data() {
     return {
@@ -167,19 +224,24 @@ export default {
       event: {},
       position: undefined,
       place: undefined,
+      participationComment: '',
 
       allPlaces: [],
       allPositions: [],
 
       loading: true,
       isEdited: false,
+
+      allUsers: undefined,
+      inSelectingUser: false,
+      selectedUser: undefined,
     }
   },
 
   async mounted() {
     if (this.eventId === undefined) {
       this.$popups.error("Ошибка", "id события нет в строке запроса");
-      this.$router.push({name: "default"});
+      this.$router.push({name: "events"});
       return;
     }
 
@@ -204,6 +266,8 @@ export default {
       return;
     }
     this.allPositions = response.positions;
+
+    this.$refs.usersTable.$el.scrollIntoView({block: "start", inline: "nearest", behavior: "smooth"});
   },
 
 
@@ -217,26 +281,34 @@ export default {
         return;
       }
       this.event = response;
-      this.$refs.renderer.update(this.event.description);
     },
 
-    async participate() {
-      if (!this.position) {
+    async addUserParticipation(userId, positionId, participationComment) {
+      if (!positionId) {
         this.$modal.alert("Не выбрана направленность работы", "Выбери, чем будешь заниматься");
-        return;
+        return false;
       }
 
       this.loading = true;
-      const res = await this.$api.participateInEvent(this.eventId, this.$user.id, this.position.id);
+      const res = await this.$api.participateInEvent(this.eventId, userId, positionId, participationComment);
       this.loading = false;
 
       if (!res.ok_) {
         this.$popups.error("Ошибка", "Не удалось записаться на мероприятие. " + (res.info || ""));
-        return;
+        return false;
       }
-      this.event.isyouparticipate = true;
 
       await this.getEventData();
+      return true;
+    },
+
+    async participate() {
+      if (await this.addUserParticipation(this.$user.id, this.position?.id, this.participationComment))
+        this.event.isyouparticipate = true;
+    },
+    async participateOtherUser(userId, positionId) {
+      if (await this.addUserParticipation(userId, positionId))
+        this.selectedUser = undefined;
     },
 
     async notParticipate() {
@@ -286,6 +358,19 @@ export default {
       }
       this.$popups.success("Удалено", "Мероприятия будто никогда и не сущестовало");
       this.$router.push({name: "events"});
+    },
+
+    async getAllUsers() {
+      this.loading = true;
+      const res = await this.$api.getAllUsers();
+      this.loading = false;
+
+      if (!res.ok_) {
+        this.$popups.error('Ошибка', 'Не удалось получить список всех пользователей');
+        return;
+      }
+
+      this.allUsers = res.users;
     }
   },
 }

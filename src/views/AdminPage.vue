@@ -16,6 +16,7 @@
 
 
 .allBoards
+  overflow-x scroll
   display flex
   @media ({mobile})
     flex-direction column
@@ -29,6 +30,14 @@
     flex-direction column
     gap 20px
     flex 1
+
+  .execute-sql-button
+    button-danger()
+    button-dashed()
+    padding 20px
+    width 100%
+    text-align center
+
   .newUsersBoard
   .participationsBoard
   .searchUsersBoard
@@ -172,15 +181,16 @@
 
 <template>
   <CircleLoading v-if="loading" class="loading"></CircleLoading>
-  <div v-else class="allBoards" css-fullheight>
+  <div v-else class="allBoards scrollable" css-fullheight>
     <div class="column">
       <div class="newUsersBoard">
         <header class="header">Подтверждение новых пользователей</header>
-        <div v-if="newUsers.length === 0" class="not-found-info">Новых пользователей нет</div>
+        <div v-if="!$user.canConfirmNewUsers" class="not-found-info">Нет доступа</div>
+        <div v-else-if="newUsers.length === 0" class="not-found-info">Новых пользователей нет</div>
         <ul v-else class="container scrollable">
           <li class="newUser" v-for="(user, listIdx) in newUsers">
             <div class="username-container">
-              <div class="username">{{ user.name }}</div>
+              <div class="username">{{ $usernameLow(user) }}</div>
               <div class="email">
                 <img src="../res/email-logo.svg" alt="email">
                 <span>{{ user.email }}</span>
@@ -196,9 +206,11 @@
         </ul>
       </div>
 
+
       <div class="setupPlacesBoard">
         <header class="header">Возможные места проведения</header>
-        <div class="container">
+        <div v-if="!$user.canEditPlaces" class="not-found-info">Нет доступа</div>
+        <div v-else class="container">
           <AddableList class="addable-list scrollable"
                        v-model="places"
                        placeholder="название места"
@@ -210,18 +222,22 @@
           ></AddableList>
         </div>
       </div>
+
+      <router-link v-if="$user.canExecuteSQL" :to="{name: 'sql'}" class="execute-sql-button">Выполнение SQL</router-link>
     </div>
 
     <div class="column">
       <div class="participationsBoard">
         <header class="header">Раздача баллов за мероприятия</header>
-        <UsersTable :users-lists="participations" v-if="participations.length"></UsersTable>
-        <div v-else class="not-found-info">Неоцененных участий нет</div>
+        <div v-if="!$user.canEditParticipations" class="not-found-info">Нет доступа</div>
+        <div v-else-if="participations.length === 0" class="not-found-info">Неоцененных участий нет</div>
+        <UsersTable v-else :users-lists="participations"></UsersTable>
       </div>
 
       <div class="setupPositionsBoard">
         <header class="header">Возможные направления работы</header>
-        <div class="container">
+        <div v-if="!$user.canEditPositions" class="not-found-info">Нет доступа</div>
+        <div v-else class="container">
           <AddableList class="addable-list scrollable"
                        v-model="positions"
                        placeholder="направление"
@@ -245,20 +261,15 @@
         <CircleLoading v-if="searchLoading" class="loading"></CircleLoading>
         <div v-else-if="searchUsers.length === 0" class="not-found-info">Пользователей не найдено</div>
         <ul v-else class="container scrollable">
-          <router-link v-for="user in searchUsers" :to="{name: 'userProfile', params: {userId: user.id}}" class="user">
-            <UserAvatar :image-id="user.avatarimageid" class="avatar"></UserAvatar>
-            <div class="text">
-              <div class="name">{{ $cropText(user.name, 30) }}</div>
-              <div class="title">{{ $cropText(user.title, 30) }}</div>
-            </div>
-          </router-link>
+          <UserLine v-for="user in searchUsers" v-bind="user" clickable link with-thirdname></UserLine>
         </ul>
       </div>
 
       <div class="achievementsBoard">
         <header class="header">Достижения</header>
 
-        <CircleLoading v-if="achievementsLoading" class="loading"></CircleLoading>
+        <div v-if="!$user.canEditAchievements" class="not-found-info">Нет доступа</div>
+        <CircleLoading v-else-if="achievementsLoading" class="loading"></CircleLoading>
         <ul v-else class="container scrollable">
           <li v-if="achievements.length === 0" class="not-found-info">Достижений нет</li>
           <router-link v-else v-for="achievement in achievements" :to="{name: 'achievement', params: {achievementId: achievement.id}}" class="user">
@@ -274,6 +285,7 @@
         </ul>
       </div>
     </div>
+
     <CircleLoading v-if="overlayLoading" class="overlay-loading"></CircleLoading>
   </div>
 </template>
@@ -283,13 +295,13 @@ import Form from "/src/components/Form.vue";
 import CircleLoading from "../components/loaders/CircleLoading.vue";
 import FloatingInput from "../components/FloatingInput.vue";
 import UsersTable from "../components/UsersTable.vue";
-import UserAvatar from "../components/UserAvatar.vue";
 import AchievementAvatar from "../components/AchievementAvatar.vue";
 import AddableList from "../components/AddableList/AddableList.vue";
 import {cleanupMarkdownPreview} from "../utils/utils";
+import UserLine from "../components/UserLine.vue";
 
 export default {
-  components: {AchievementAvatar, AddableList, UserAvatar, CircleLoading, Form, FloatingInput, UsersTable},
+  components: {UserLine, AchievementAvatar, AddableList, CircleLoading, Form, FloatingInput, UsersTable},
 
   data () {
 	  return {
@@ -321,6 +333,9 @@ export default {
 
   methods: {
     async getNewUsers() {
+      if (!this.$user.canConfirmNewUsers)
+        return;
+
       this.loading = true;
       const res = await this.$api.getUnconfirmedUsers();
       this.loading = false;
@@ -334,6 +349,9 @@ export default {
     },
 
     async getUnvotedParticipations() {
+      if (!this.$user.canEditParticipations)
+        return;
+
       this.loading = true;
       const res = await this.$api.getUnvotedParticipations();
       this.loading = false;
@@ -377,6 +395,9 @@ export default {
     },
 
     async getPlaces() {
+      if (!this.$user.canEditPlaces)
+        return;
+
       this.loading = true;
       const res = await this.$api.getPlaces();
       this.loading = false;
@@ -390,6 +411,9 @@ export default {
     },
 
     async getPositions() {
+      if (!this.$user.canEditPositions)
+        return;
+
       this.loading = true;
       const res = await this.$api.getPositions();
       this.loading = false;
@@ -403,6 +427,9 @@ export default {
     },
 
     async getAchievements() {
+      if (!this.$user.canEditAchievements)
+        return;
+
       this.achievementsLoading = true;
       const res = await this.$api.getAchievements();
       this.achievementsLoading = false;

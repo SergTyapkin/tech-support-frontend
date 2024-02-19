@@ -9,6 +9,7 @@ slider-length = 200px
 thumb-size = 3px
 
 .slider-container
+  user-select none
   display flex
   align-items center
   position relative
@@ -44,6 +45,9 @@ thumb-size = 3px
       &::-webkit-inner-spin-button
         display none
 
+      &.disabled
+        cursor not-allowed
+
   .input-container
     flex 1
     display flex
@@ -63,6 +67,9 @@ thumb-size = 3px
       border-radius(thumb-size)
       overflow hidden
       cursor pointer
+      &[disabled]
+        cursor not-allowed
+        opacity 0.5
     .slider::-webkit-slider-thumb
       -webkit-appearance none
       width thumb-size
@@ -95,6 +102,11 @@ thumb-size = 3px
       > *:last-child
         padding-right 0
 
+      &.disabled
+        pointer-events none
+        opacity 0.5
+
+
     position relative
     .splitters-container
       mix-blend-mode overlay
@@ -123,16 +135,19 @@ thumb-size = 3px
       justify-content center
       &:hover
         transform rotate(180deg) scale(1.1)
+      &.disabled
+        pointer-events none
+        opacity 0.5
 </style>
 
 <template>
   <div class="slider-container">
     <div class="value-container" :class="{hidden: noValue}">
-      <input type="number" aria-controls="off" ref="value" class="value" v-model="modelValue" :step="step" @change="updateVModel" :readonly="readonly">
+      <input type="number" aria-controls="off" ref="value" class="value" v-model="modelValue" :step="step" @change="updateVModel" :readonly="readonly" :disabled="disabled">
     </div>
     <div class="input-container" v-if="!readonly">
-      <input type="range" class="slider" ref="range" :min="min" :max="max" :step="step" v-model="modelValue" @change="updateVModel">
-      <div class="range-labels">
+      <input type="range" class="slider" ref="range" :min="min" :max="max" :step="step" v-model="modelValue" @change="updateVModel" :disabled="disabled">
+      <div class="range-labels" :class="{disabled}">
         <div v-for="val in ((max-min) / step + 1)" @click="setModelValue(min + (val - 1) * step)">{{ min + (val - 1) * step }}</div>
       </div>
       <div class="splitters-container">
@@ -140,7 +155,7 @@ thumb-size = 3px
       </div>
     </div>
     <div class="delete-container" v-if="withDelete">
-      <div class="delete-button" @click="setModelValue(null)">
+      <div class="delete-button" @click="setModelValue(null)" :class="{disabled}">
         <img src="../res/cross.svg" alt="clear">
       </div>
     </div>
@@ -167,15 +182,10 @@ export default {
     noValue: Boolean,
     readonly: Boolean,
     withDelete: Boolean,
+    disabled: Boolean,
 
     modelValue: null,
     labels: Array,
-  },
-
-  data() {
-    return {
-
-    }
   },
 
   methods: {
@@ -191,7 +201,7 @@ export default {
       this.$emit('update:modelValue', value);
       this.$emit('change');
     },
-  }
+  },
 }
 </script>
 

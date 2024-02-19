@@ -12,18 +12,16 @@
     padding-bottom (header-height-mobile + 20px)
     padding-left 10px
     padding-right 10px
+
+  .info-inputs
+    margin-bottom 20px
+
   .title
     font-large()
     border-bottom 1px solid borderColor
     padding-bottom 10px
     margin-bottom 20px
     letter-spacing 2px
-  .redactor
-    margin-top 15px
-    margin-bottom 15px
-  .info
-    font-small()
-    color textColor4
   .error-text
     color colorNo
     margin-top 10px
@@ -63,6 +61,7 @@
       padding 10px 20px
 
   .user-link
+    text-decoration underline
     cursor pointer
     pointer-events all
     &:hover
@@ -72,26 +71,24 @@
 
 <template>
   <div class="root" css-fullheight @input="onChange">
-    <FloatingInput title="Название" ref="title" :readonly="!$user.isAdmin" v-model="title" no-info class="title input"></FloatingInput>
+    <FloatingInput title="Название" ref="title" :readonly="!$user.canEditDocs" v-model="title" no-info class="title input"></FloatingInput>
     <div class="info-inputs">
-      <SelectList v-model="place" @input="onChange" :selected-id="placeId" :list="allPlaces" ref="place" title="Место" :readonly="!$user.isAdmin" class="place input" solid></SelectList>
-      <SelectList v-model="position" @input="onChange" :selected-id="positionId" :list="allPositions" ref="position" title="Направленность" :readonly="!$user.isAdmin" class="position input" solid></SelectList>
+      <SelectList v-model="place" @input="onChange" :selected-id="placeId" :list="allPlaces" ref="place" title="Место" :readonly="!$user.canEditDocs" class="place input" solid></SelectList>
+      <SelectList v-model="position" @input="onChange" :selected-id="positionId" :list="allPositions" ref="position" title="Направленность" :readonly="!$user.canEditDocs" class="position input" solid></SelectList>
     </div>
     <div class="error-text" v-if="errorText.length">{{ errorText }}</div>
-    <MarkdownRedactor v-if="$user.isAdmin" class="redactor" :class="{error: errorText.length}" @input="errorText = ''; onChange()" @change="$refs.renderer?.update" ref="text" v-model="text" placeholder="Текст"></MarkdownRedactor>
-    <div class="info" v-if="$user.isAdmin">Превью</div>
-    <MarkdownRenderer class="renderer" ref="renderer"></MarkdownRenderer>
+    <RedactorAndRenderer info="Редактор" v-model="text" @input="errorText = ''; onChange()" :class="{error: errorText.length}" placeholder="Текст" :show-initial-preview="docId !== undefined" :can-edit="$user.canEditDocs"></RedactorAndRenderer>
 
-    <FloatingInput v-model="authorname" title="Автор мероприятия" readonly no-info class="input"></FloatingInput>
+    <FloatingInput v-model="authorname" title="Автор" readonly no-info class="input"></FloatingInput>
     <a v-if="authortelegram" :href="`https://t.me/${authortelegram}`" target="_blank" class="user-link">
       <FloatingInput :model-value="`@${authortelegram}`" title="Связь с автором" readonly no-info class="input"></FloatingInput>
     </a>
 
     <CircleLoading v-if="loading"></CircleLoading>
-    <div class="buttons-container" v-else-if="$user.isAdmin && this.docId === undefined">
+    <div class="buttons-container" v-else-if="$user.canEditDocs && this.docId === undefined">
       <div class="save-button" @click="createDoc"><img src="../res/save.svg" alt="">Создать документ</div>
     </div>
-    <div class="buttons-container" v-else-if="$user.isAdmin">
+    <div class="buttons-container" v-else-if="$user.canEditDocs">
       <div class="delete-button" @click="deleteDoc"><img src="../res/trash.svg" alt="">Удалить</div>
     </div>
 
@@ -106,12 +103,11 @@ import CircleLoading from "../components/loaders/CircleLoading.vue";
 import FloatingInput from "../components/FloatingInput.vue";
 import SelectList from "../components/SelectList.vue";
 import FloatingButton from "../components/FloatingButton.vue";
-import MarkdownRedactor from "../components/MarkdownRedactor.vue";
-import MarkdownRenderer from "../components/MarkdownRenderer.vue";
+import RedactorAndRenderer from "../components/Markdown/RedactorAndRenderer.vue";
+
 
 export default {
-  components: {
-    MarkdownRenderer, MarkdownRedactor, FloatingButton, SelectList, FloatingInput, CircleLoading, FormExtended},
+  components: {RedactorAndRenderer, FloatingButton, SelectList, FloatingInput, CircleLoading, FormExtended},
 
   data() {
     return {
@@ -137,9 +133,9 @@ export default {
 
   async mounted() {
     if (this.docId === undefined) {
-      if (!this.$user.isAdmin) {
+      if (!this.$user.canEditDocs) {
         this.$popups.error("Ошибка", "id документа нет в строке запроса");
-        this.$router.push({name: "default"});
+        this.$router.push({name: "docs"});
         return;
       }
     } else {
@@ -158,9 +154,8 @@ export default {
       this.positionId = response.positionid;
       this.authorname = response.authorname;
       this.authortelegram = response.authortelegram;
-
-      this.$refs.renderer.update(this.text);
     }
+    this.$scroll.restore();
 
     this.loading = true;
     const allPlaces = await this.$api.getPlaces();

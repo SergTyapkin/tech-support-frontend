@@ -4,36 +4,30 @@
   "license": "MIT",
   "private": true,
   "author": {
-    "name": "Sergey Tyapkin, Konstantin Naraykin"
+    "name": "Sergey Tyapkin"
   },
   "scripts": {
-    "dev": "npx webpack-cli serve --mode development",
-    "dist": "npx webpack-cli build --mode production"
+    "dev": "vite --open",
+    "preview": "vite preview --open --port 8080",
+    "dist": "vite build --out-dir dist",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
   },
   "dependencies": {
-    "@jitbit/htmlsanitizer": "^1.0.0",
     "@korolion/get-image-as-dataurl": "^0.3.0",
+    "@vitejs/plugin-vue": "^4.2.3",
     "marked": "^4.0.12",
-    "vue": "^3.2.31",
+    "sanitize-html": "^2.10.0",
+    "stylus": "^0.54.7",
+    "typescript": "^4.6.2",
+    "vite": "^4.3.9",
+    "vue": "3.2.37",
     "vue-router": "^4.0.14",
+    "vue-template-compiler": "^2.6.14",
     "vue3-autocounter": "^1.0.6",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
-    "@types/node": "^17.0.21",
-    "css-loader": "^3.4.2",
-    "file-loader": "^6.2.0",
-    "html-webpack-plugin": "^5.5.0",
-    "script-loader": "^0.7.2",
-    "style-loader": "^1.1.3",
-    "stylus": "^0.54.7",
-    "stylus-loader": "^6.2.0",
-    "ts-loader": "^9.2.8",
-    "typescript": "^4.6.2",
-    "vue-loader": "^17.0.0",
-    "vue-template-compiler": "^2.6.14",
-    "webpack": "^5.75.0",
-    "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.11.1"
+    "@vitejs/plugin-basic-ssl": "^1.0.1"
   }
 }

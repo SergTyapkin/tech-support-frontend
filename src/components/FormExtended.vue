@@ -71,6 +71,7 @@
                      :name="field.name"
                      :error="errors[field.jsonName]"
                      v-model="values[field.jsonName]"
+                     ref="inputs"
       >
         <router-link v-if="field.infoHref" :to="field.infoHref" class="input-info link" v-html="field.info"></router-link>
         <div class="input-info" v-else-if="field.info" v-html="field.info"></div>
@@ -161,6 +162,17 @@ export default {
       this.$refs.form.info = this.info;
       this.$refs.form.showSuccess();
     },
+  },
+
+  watch: {
+    errors: {
+      handler(to, from) {
+        this.fields.forEach((field, idx) => {
+          this.$refs.inputs[idx].setError(this.errors[field.jsonName]);
+        });
+      },
+      deep: true,
+    }
   }
 };
 </script>

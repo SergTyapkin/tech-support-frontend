@@ -22,35 +22,55 @@
   .card
     margin 20px
 
-  .create-event
-    block-clickable()
-    block-dark-bg()
-    background none
-    border 2px dashed borderColor
+.filters-container
+  block()
+  display flex
+  gap 40px
+  .filters
+    padding 0
+  .select-lists-container
+    width 30%
     display flex
-    align-items center
-    justify-content center
-    width 300px
-    min-height 300px
-    img
-      margin-right 10px
-      width 40px
+    flex-direction column-reverse
+    gap 20px
 
 @media ({mobile})
-  .filters
-    > *
+  .filters-container
+    flex-direction column
+    .filters
+      > *
+        width 100%
+    .select-lists-container
       width 100%
-
 .loading
   width 100%
 </style>
 
 <template>
   <div>
-    <Filters :filters="filters" @change="onChangeFilters" class="filters">
-      <FloatingInput placeholder="Название мероприятия" no-info class="search-input" v-model="searchText" @input="getEvents"></FloatingInput>
-      <SelectList v-model="placeSearch" @input="getEvents" :list="allPlaces" :selected-id="-1" title="Место проведения" solid></SelectList>
-    </Filters>
+    <div class="filters-container">
+      <Filters class="filters"
+               :filters="filters"
+               @change="onChangeFilters"
+               radio
+               storing-name="eventsList"
+      >
+        <FloatingInput placeholder="Поиск по названию" no-info class="search-input" v-model="searchText" @input="getEvents"></FloatingInput>
+        <Filters :filters="reversedOrderFilters"
+                 can-be-none
+                 @change="(filter) => {
+                   this.isReversedEventsOrder = filter.value;
+                   this.events?.reverse();
+                 }"
+                 storing-name="eventsListReversedOrder"
+                 class="filters-newers-first"
+        ></Filters>
+      </Filters>
+      <div class="select-lists-container">
+        <SelectList class="period-list" ref="periodSearch" v-model="periodSearch" @input="getEvents" :list="allPeriods" :selected-id="-1" title="За период" solid></SelectList>
+        <SelectList class="place-list" ref="placeSearch" v-model="placeSearch" @input="getEvents" :list="allPlaces" :selected-id="-1" title="Поиск по месту" solid></SelectList>
+      </div>
+    </div>
 
     <ul class="events-list">
       <li v-if="loading" class="loading">
@@ -78,7 +98,7 @@
       </li>
     </ul>
 
-    <router-link :to="{name: 'createEvent'}"><FloatingButton title="Создать"><img src="../res/plus_bold.svg" alt="plus"></FloatingButton></router-link>
+    <router-link v-if="$user.canEditEvents" :to="{name: 'createEvent'}"><FloatingButton title="Создать"><img src="../res/plus_bold.svg" alt="plus"></FloatingButton></router-link>
   </div>
 </template>
 
@@ -105,18 +125,36 @@ export default {
       loading: true,
 
       events: undefined,
+      isReversedEventsOrder: false,
 
       userId: this.$route.query.userId,
 
       allPlaces: [],
+      allPeriods: [],
 
       filters: [{id: 0, name: 'Прошедшие'}, {id: 1, name: 'Все'}, {id: 2, name: 'Предстояшие', value: true}],
+      reversedOrderFilters: [{name: 'Сначала новые'}],
       searchText: '',
       placeSearch: undefined,
+      periodSearch: undefined,
     }
   },
 
   async mounted() {
+    await this.getPeriods();
+    const dateNow = new Date();
+    let periodIdx;
+    const currentPeriod = this.allPeriods.find((period, idx) => {
+      periodIdx = idx;
+      return (
+        new Date(period.datestart) <= dateNow &&
+        new Date(period.dateend) > dateNow
+      )
+    });
+    if (currentPeriod !== undefined) {
+      this.$refs.periodSearch.selectItem(periodIdx);
+    }
+
     this.getPlaces();
     this.init();
   },
@@ -124,15 +162,17 @@ export default {
   methods: {
     async init() {
       await this.getEvents();
+      this.$scroll.restore();
     },
 
     onChangeFilters(filter) {
-      // Drop all other filters
-      this.filters.forEach((filt) => {
-        if (filt !== filter)
-          filt.value = false;
-      });
-
+      if (filter.id === 2) {
+        this.isReversedEventsOrder = false;
+        this.reversedOrderFilters[0].value = false;
+      } else {
+        this.isReversedEventsOrder = true;
+        this.reversedOrderFilters[0].value = true;
+      }
       this.getEvents();
     },
 
@@ -142,16 +182,23 @@ export default {
       if (this.filters[0].value) {
         filtersObj.type = "past";
       } else if (this.filters[1].value) {
-        ;
+
       } else if (this.filters[2].value) {
         filtersObj.type = "next";
       }
 
-      if (this.searchText)
+      if (this.searchText) {
         filtersObj.search = this.searchText;
+      }
 
-      if (this.placeSearch !== undefined && this.placeSearch.id !== -1)
+      if (this.placeSearch !== undefined && this.placeSearch.id !== -1) {
         filtersObj.placeId = this.placeSearch.id;
+      }
+
+      if (this.periodSearch !== undefined && this.periodSearch.id !== -1) {
+        filtersObj.dateStart = this.periodSearch.datestart;
+        filtersObj.dateEnd = this.periodSearch.dateend;
+      }
 
 
       this.loading = true;
@@ -170,6 +217,8 @@ export default {
       }
 
       this.events = response.events || [];
+      if (this.isReversedEventsOrder)
+        this.events.reverse();
     },
 
     async getPlaces() {
@@ -183,8 +232,21 @@ export default {
       }
 
       response.places.push({id: -1, name: "---"});
-      console.log(response.places);
       this.allPlaces = response.places;
+    },
+
+    async getPeriods() {
+      this.loading = true;
+      const response = await this.$api.getPeriods();
+      this.loading = false;
+
+      if (!response.ok_) {
+        this.$popups.error("Ошибка", "Не удалось получить список временных периодов. " + (response.info || ""));
+        return;
+      }
+
+      response.periods.push({id: -1, name: "Всё время"});
+      this.allPeriods = response.periods;
     }
   },
 

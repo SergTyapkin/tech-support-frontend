@@ -115,7 +115,6 @@ field()
       field()
       color textColor3
       height item-height
-      white-space nowrap
       background bg-color
       &.selected
         color textColor1
@@ -230,7 +229,7 @@ export default {
     },
 
     setOpen() {
-      const bottomY = this.$refs.root.offsetTop + Math.min(ITEM_HEIGHT * this.list.length + INITIAL_HEIGHT, MAX_LIST_HEIGHT);
+      const bottomY = this.$refs.root.offsetTop + INITIAL_HEIGHT + Math.min(ITEM_HEIGHT * this.list.length, MAX_LIST_HEIGHT);
       const maxHeight = /*HEADER_HEIGHT()*/ + document.querySelector('.main').scrollHeight;
       this.overflowYLength = Math.min(maxHeight - bottomY - MOBILE_HEADER_HEIGHT() - BOTTOM_MARGIN, 0);
       this.unrolled = true;
