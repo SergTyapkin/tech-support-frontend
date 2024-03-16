@@ -16,6 +16,8 @@
     bottom var(--bottom)
     width 100%
     height 100%
+    object-fit cover
+    overflow visible
     transform scale(var(--scale))
 </style>
 
@@ -41,12 +43,19 @@ import defaultAvatarImage from '../res/default_avatar.png';
 import CircleServerImage from "./CircleServerImage.vue";
 
 import ShamanCap from "../res/trophies/shamanСap.png"
+import LeshaCap from "../res/trophies/leshaCap.png"
 
 const USERS_TROPHIES = {
   20: {
     image: ShamanCap,
     top: "-40%",
     left: "-30%",
+    scale: "0.9"
+  },
+  53: {
+    image: LeshaCap,
+    top: "-35%",
+    left: "-20%",
     scale: "0.9"
   },
 }
