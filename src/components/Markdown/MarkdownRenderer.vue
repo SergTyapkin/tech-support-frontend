@@ -71,11 +71,12 @@ export default {
       html: '',
       text: this.$props.initialText,
       sanitizeOptions: {
-        allowedTags: sanitizeHtml.defaults.allowedTags.concat(['audio', 'video', 's', 'del', 'b', 'i', 'em', 'strong', 'a', 'iframe', 'code']),
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat(['audio', 'video', 's', 'del', 'b', 'i', 'em', 'strong', 'a', 'iframe', 'code', 'img']),
         allowedIframeHostnames: ['www.youtube.com'],
         allowedAttributes:  Object.assign(sanitizeHtml.defaults.allowedAttributes, {
           'a': [ 'href' ],
-          'iframe': [ 'src', 'width', 'height', 'allow', 'allowfullscreen', 'title', 'frameborder' ]
+          'iframe': [ 'src', 'width', 'height', 'allow', 'allowfullscreen', 'title', 'frameborder' ],
+          'img': ['src', 'alt'],
         }),
       }
     }
