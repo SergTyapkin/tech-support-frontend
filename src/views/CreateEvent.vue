@@ -43,6 +43,8 @@
         all unset
         margin-top 40px
         button-submit()
+      .input-checkbox
+        padding 0 0 20px 0
 </style>
 
 <template>
@@ -54,14 +56,16 @@
         <RedactorAndRenderer v-model="description" can-edit placeholder="Описание - что нужно будет делать" info="Превью"></RedactorAndRenderer>
         <div class="timeNewEvent">
           <FloatingInput v-model="date" type="date" title="Дата" class="inputDT"></FloatingInput>
-          <FloatingInput v-model="timeEventStart" type="time" title="Начало в" class="inputDT"></FloatingInput>
-          <FloatingInput v-model="timeEventEnd" type="time" title="Конец в" class="inputDT"></FloatingInput>
+          <FloatingInput v-model="timeEventStart" type="time" title="Начало в" class="inputDT" @change="checkboxValue[0].value ? this.timeStart = this.timeEventStart : null"></FloatingInput>
+          <FloatingInput v-model="timeEventEnd" type="time" title="Конец в" class="inputDT" @change="checkboxValue[0].value ? this.timeEnd = this.timeEventEnd : null"></FloatingInput>
         </div>
       </div>
 
       <div class="right-column">
-        <FloatingInput v-model="timeStart" title="Приходить с" type="time" class="right-input"></FloatingInput>
-        <FloatingInput v-model="timeEnd" title="Оставаться до" type="time" class="right-input"></FloatingInput>
+<!--        <FloatingInput v-model="isTimesEqual" title="Совпадает с мероприятием" type="checkbox"></FloatingInput>-->
+        <FloatingInput v-model="timeStart" :disabled="checkboxValue[0].value" title="Приходить с" type="time" class="right-input"></FloatingInput>
+        <FloatingInput v-model="timeEnd" :disabled="checkboxValue[0].value" title="Оставаться до" type="time" class="right-input"></FloatingInput>
+        <Filters :filters="checkboxValue" @change="onChangeFilters" can-be-none class="input-checkbox"></Filters>
         <FloatingInput v-model="peopleNeeds" title="Сколько людей нужно" type="number" class="right-input"></FloatingInput>
         <SelectList v-model="place" :list="allPlaces" title="Место проведения"  class="right-input" solid></SelectList>
         <input class="submit-input" value="Создать" type="submit" @click="createEvent">
@@ -76,10 +80,11 @@ import FloatingInput from "../components/FloatingInput.vue";
 import SelectList from "../components/SelectList.vue";
 import MarkdownRedactor from "../components/Markdown/MarkdownRedactor.vue";
 import RedactorAndRenderer from "../components/Markdown/RedactorAndRenderer.vue";
+import Filters from "~/components/Filters.vue";
 
 
 export default {
-  components: {RedactorAndRenderer, MarkdownRedactor, SelectList, FloatingInput, Form},
+  components: {Filters, RedactorAndRenderer, MarkdownRedactor, SelectList, FloatingInput, Form},
 
   data() {
     return {
@@ -88,6 +93,7 @@ export default {
       date: undefined,
       timeStart: undefined,
       timeEnd: undefined,
+      checkboxValue: [{id: 0, name: 'Совпадает с мероприятием', value: true}],
       timeEventStart: undefined,
       timeEventEnd: undefined,
       peopleNeeds: undefined,
@@ -113,6 +119,13 @@ export default {
   },
 
   methods: {
+    onChangeFilters(filter) {
+      console.log(filter)
+      if (filter.id === 0) {
+        this.checkboxValue[0].value = filter.value;
+      }
+    },
+
     validate() {
       let ok = false;
       if (!this.name) {
@@ -137,6 +150,10 @@ export default {
         return;
       }
 
+      if (this.isTimesEqual) {
+        this.timeStart = this.timeEventStart;
+        this.timeEnd = this.timeEventEnd;
+      }
       this.loading = true;
       const response = await this.$api.createEvent(this.name, this.description, this.date, this.timeStart, this.timeEnd, this.place.id, this.timeEventStart, this.timeEventEnd, this.peopleNeeds);
       this.loading = false;

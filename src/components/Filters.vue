@@ -134,6 +134,7 @@ export default {
 
   methods: {
     onChange(filter, idx) {
+      console.log(filter, idx)
       if (!this.canBeNone && !this.filters.reduce((sum, filter) => sum || filter.value, false)) { // can't disable only 1 filter
         filter.value = true;
         return;

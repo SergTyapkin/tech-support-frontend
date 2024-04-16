@@ -10,6 +10,9 @@ error-color = colorNo
 .floating-input-fields
   position relative
   min-width 150px
+  transition all 0.2s ease
+  &.disabled
+    filter contrast(0)
   input:not([type=checkbox]) ~ label
     position absolute
     top 22px
@@ -245,7 +248,7 @@ error-color = colorNo
 </style>
 
 <template>
-  <div :class="{error: error?.length}" class="floating-input-fields">
+  <div :class="{error: error?.length, disabled}" class="floating-input-fields">
     <span class="error-text">{{ error }}</span>
     <input ref="input"
            :type="type"

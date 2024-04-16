@@ -25,7 +25,7 @@ input()
     &[readonly] + .underline
     &[submit] + .underline
         display none
-    &:not([readonly]):not([type=submit]):not([type=range]):focus
+    &:not([readonly]):not([type=submit]):not([type=range]):not([type=checkbox]):focus
         background colorShadowDark
         & + .underline
             background-size 250%

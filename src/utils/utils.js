@@ -79,13 +79,12 @@ export function dateToStr(date, strict = false) {
   const dateYear = date.getFullYear();
   const dateMonth = date.getMonth();
   const dateDay = date.getDate();
+  const dateWeekday = date.getDay();
 
-  let year = '';
-  if (now.getFullYear() !== dateYear)
-    year = ' ' + dateYear;
-  const months = ['янв', 'фев', 'марта', 'апр', 'мая', 'июня', 'июля', 'авг', 'сент', 'окт', 'ноя', 'дек'];
+  const months = ['янв', 'фев', 'марта', 'апр', 'мая', 'июня', 'июля', 'авг', 'сент', 'окт', 'нояб', 'дек'];
+  const weekDays = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
   if (!strict)
-    return `${dateDay} ${months[Number(dateMonth)]}${year}`;
+    return `${dateDay} ${months[Number(dateMonth)]}${now.getFullYear() !== dateYear ? ' ' + dateYear : ', ' + weekDays[Number(dateWeekday)]}`;
   return `${String(dateDay).padStart(2, '0')}.${String(dateMonth + 1).padStart(2, '0')}.${String(dateYear).padStart(4, '0')}`
 }
 
