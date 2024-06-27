@@ -76,7 +76,7 @@
     <div class="title">
       Пользователь: <span class="username">{{ $usernameFull($user) }}</span>
       <br>
-      Отчетный период: <span class="period">I семестр 23/24 учебного года</span>
+      Отчетный период: <span class="period">{{ periodName }}</span>
     </div>
 
     <table class="table">
@@ -113,6 +113,10 @@ export default {
     return {
       participations: [],
       lightTheme: false,
+
+      periodName: undefined,
+      periodDateStart: undefined,
+      periodDateEnd: undefined,
     }
   },
 
@@ -122,10 +126,11 @@ export default {
     this.loading = false;
 
     if (!response.ok_) {
-      this.$popups.error('Ошибка', 'Не удалось получить рейтинги');
+      this.$popups.error('Ошибка', 'Не удалось получить выписку по мероприятиям');
       return;
     }
 
+    this.periodName = response.periodName;
     this.participations = response.participations;
 
     this.participations.forEach(par => {
