@@ -113,9 +113,12 @@ markdown-button-svg-photo-fill = transparent
 
 <template>
   <div class="markdown" @change.stop="" @input="onInput">
-    <DragNDropLoader class="image-loader" @load="attachPhoto"
-                     :crop-size="cropSize"
-                     :compress-size="compressSize">
+    <DragNDropLoader class="image-loader"
+                     @load="attachPhoto"
+                     @error="(errText) => $popups.error('Не удалось загрузить', errText)"
+                     :crop-to-square="true"
+                     :compress-size="IMAGE_MAX_RES"
+    >
       <textarea class="markdowned scrollable link" ref="textarea" :rows="rows" v-model="modelValue" @input="updateVModel()" :placeholder="placeholder"></textarea>
       <div class="markdown-panel">
         <div class="_bold" @click="encaseInputText('**', '**')">B</div>
@@ -135,9 +138,8 @@ markdown-button-svg-photo-fill = transparent
 </template>
 
 <script>
-import ImageUploader from "../../utils/imageUploader";
 import {IMAGE_MAX_RES} from "../../constants";
-import DragNDropLoader from "../DragNDropLoader.vue";
+import {DragNDropLoader} from "@sergtyapkin/image-uploader";
 
 
 const TIME_DIFF_TO_EMIT_CHANGE = 500; // ms
@@ -157,10 +159,7 @@ export default {
 
   data() {
     return {
-      cropSize: null,
-      compressSize: IMAGE_MAX_RES,
-
-      ImageUploader: new ImageUploader(this.$popups, this.$api.uploadImage, this.cropSize, this.compressSize),
+      IMAGE_MAX_RES,
 
       attachedImages: [],
       lastInputTime: Date.now(),
@@ -178,7 +177,7 @@ export default {
     },
 
     /**
-     * Ensace text in message-input between fragments of text
+     * Encase text in message-input between fragments of text
      *
      * @param leftText - text to add on left side
      * @param rightText - text to add on left side
@@ -200,7 +199,7 @@ export default {
     },
 
     /**
-     * Ensace text lines in message-input between fragments of text
+     * Encase text lines in message-input between fragments of text
      *
      * @param leftText - text to add on begin of line
      * @param rightText - text to add on end of line
@@ -255,7 +254,13 @@ export default {
       if (!dataURL)
         end = element.selectionEnd ? element.selectionEnd : 0;
 
-      const imageId = await this.ImageUploader.upload(dataURL);
+      const response = await this.$api.uploadImage(dataURL);
+      if (!response.ok_) {
+        this.$popups.error(`Ошибка ${response.status_}!`, `Не удалось загрузить картинку на сервер: ${response.info}`);
+        return;
+      }
+      this.$popups.success('Загружено', 'Картинка загружена');
+      const imageId = response.id;
 
       text = text.substring(0, end) + '![image](' + /*this.$api.apiUrl + */ '/image/' + imageId + ')' + element.value.substring(end);
 

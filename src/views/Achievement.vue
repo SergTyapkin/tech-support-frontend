@@ -170,8 +170,9 @@
         <DragNDropLoader v-if="$user.canEditAchievements && achievementId !== undefined"
                          class="image-loader"
                          @load="updateAvatar"
-                         :crop-size="cropSize"
-                         :compress-size="compressSize"
+                         @error="(errText) => $popups.error('Не удалось загрузить', errText)"
+                         :crop-to-square="true"
+                         :compress-size="IMAGE_ACHIEVEMENT_MAX_RES"
         >
           <div class="avatar-div" @click.stop="updateAvatar(undefined)">
             <AchievementAvatar class="achievement-image" :image-id="achievement.imageid" size="128px" border-offset="2px" border-width="2px"></AchievementAvatar>
@@ -273,9 +274,8 @@ import FloatingButton from "../components/FloatingButton.vue";
 import AchievementAvatar from "../components/AchievementAvatar.vue";
 import Achievement from "../components/Achievement.vue";
 import Range from "../components/Range.vue";
-import DragNDropLoader from "../components/DragNDropLoader.vue";
+import {DragNDropLoader} from "@sergtyapkin/image-uploader";
 import {IMAGE_MAX_RES, IMAGE_ACHIEVEMENT_MAX_RES} from "../constants";
-import ImageUploader from "../utils/imageUploader";
 import RedactorAndRenderer from "../components/Markdown/RedactorAndRenderer.vue";
 import UserAvatar from "../components/UserAvatar.vue";
 import Filters from "../components/Filters.vue";
@@ -292,10 +292,7 @@ export default {
 
   data() {
     return {
-      cropSize: IMAGE_ACHIEVEMENT_MAX_RES,
-      compressSize: IMAGE_MAX_RES,
-
-      ImageUploader: new ImageUploader(this.$popups, this.$api.uploadImage, IMAGE_ACHIEVEMENT_MAX_RES, IMAGE_MAX_RES),
+      IMAGE_ACHIEVEMENT_MAX_RES,
 
       achievementId: this.$route.params.achievementId,
 
@@ -393,13 +390,20 @@ export default {
     },
 
     async updateAvatar(dataURL) {
-      // this.loading = true;
-      const imageId = await this.ImageUploader.upload(dataURL);
-      // this.loading = false;
+      this.loading = true;
+      const response = await this.$api.uploadImage(dataURL);
+      this.loading = false;
+      if (!response.ok_) {
+        this.$popups.error(`Ошибка ${response.status_}!`, `Не удалось загрузить картинку на сервер: ${response.info}`);
+        return;
+      }
+      this.$popups.success('Загружено', 'Картинка загружена');
+      const imageId = response.id;
+
       if (imageId === undefined)
         return;
 
-      const res = await this.deleteAvatar();
+      await this.deleteAvatar();
 
       this.achievement.imageid = imageId;
       await this.saveAvatar();

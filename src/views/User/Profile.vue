@@ -294,9 +294,11 @@ hr
               <CircleLoading v-if="loading" size="80px"></CircleLoading>
 
               <div v-else-if="yours" class="avatar-container">
-                <DragNDropLoader class="image-loader" @load="updateAvatar"
-                                 :crop-size="cropSize"
-                                 :compress-size="compressSize"
+                <DragNDropLoader class="image-loader"
+                                 @load="updateAvatar"
+                                 @error="(errText) => $popups.error('Не удалось загрузить', errText)"
+                                 :crop-to-square="true"
+                                 :compress-size="IMAGE_PROFILE_MAX_RES"
                 >
                   <div class="avatar-div" @click.stop="updateAvatar(undefined)">
                     <UserAvatar :image-id="user.avatarImageId" size="80px" :user-id="user.id"></UserAvatar>
@@ -448,8 +450,7 @@ import {closeRoll, isClosedRoll, openRoll, openRollList} from "../../utils/show-
 import CircleLoading from "../../components/loaders/CircleLoading.vue";
 import {nextTick} from "vue";
 import {BASE_URL_PATH, IMAGE_MAX_RES, IMAGE_PROFILE_MAX_RES} from "../../constants";
-import ImageUploader from "../../utils/imageUploader";
-import DragNDropLoader from "../../components/DragNDropLoader.vue";
+import {DragNDropLoader} from "@sergtyapkin/image-uploader";
 import ArrowListElement from "../../components/ArrowListElement.vue";
 import TopBar from "../../components/TopBar.vue";
 import UserAvatar from "../../components/UserAvatar.vue";
@@ -473,10 +474,7 @@ export default {
 
   data() {
     return {
-      cropSize: IMAGE_PROFILE_MAX_RES,
-      compressSize: IMAGE_MAX_RES,
-
-      ImageUploader: new ImageUploader(this.$popups, this.$api.uploadImage, IMAGE_PROFILE_MAX_RES, IMAGE_MAX_RES),
+      IMAGE_PROFILE_MAX_RES,
 
       userId: this.$route.params.userId,
       yours: this.$route.params.userId === undefined,
@@ -701,13 +699,20 @@ export default {
     },
 
     async updateAvatar(dataURL) {
-      // this.loading = true;
-      const imageId = await this.ImageUploader.upload(dataURL);
-      // this.loading = false;
+      this.loading = true;
+      const response = await this.$api.uploadImage(dataURL);
+      this.loading = false;
+      if (!response.ok_) {
+        this.$popups.error(`Ошибка ${response.status_}!`, `Не удалось загрузить картинку на сервер: ${response.info}`);
+        return;
+      }
+      this.$popups.success('Загружено', 'Картинка загружена');
+      const imageId = response.id;
+
       if (imageId === undefined)
         return;
 
-      const res = await this.deleteAvatar();
+      await this.deleteAvatar();
 
       this.user.avatarImageId = imageId;
       await this.saveAvatar();
