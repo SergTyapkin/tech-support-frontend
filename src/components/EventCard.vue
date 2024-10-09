@@ -77,7 +77,8 @@ minHeight = 300px
           <div class="description">{{ description }}</div>
           <div class="place"><img class="icon" src="../res/place.svg" alt="Place:"> {{ placeName }}</div>
           <div class="time" v-if="eventTimeStart || eventTimeEnd"><img class="icon" src="../res/time_dashed.svg" alt="Time:"> {{eventTimeStart || '???'}} - {{eventTimeEnd || '???'}}</div>
-          <div class="people"><img class="icon" src="../res/people.svg" alt="People:">{{ participationsCount }} / {{ needPeople }}</div>
+          <div class="people" v-if="!isAcademy"><img class="icon" src="../res/people.svg" alt="People:">{{ participationsCount }} / {{ needPeople }}</div>
+          <div class="people" v-else><img class="icon" src="../res/academy.svg" alt="People:">АКАДЕМИЯ</div>
         </main>
       </div>
     </router-link>
@@ -104,6 +105,7 @@ export default {
     placeName: String,
     authorId: Number,
     authorName: String,
+    isAcademy: Boolean,
   },
 
   data() {

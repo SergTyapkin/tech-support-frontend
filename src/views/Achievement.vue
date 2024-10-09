@@ -33,39 +33,10 @@
         width 128px
         height 128px
         margin-right 15px
+        border-radius(99999px)
+        overflow hidden
         .achievement-image
           --border-color empColor2_4
-        .avatar-div::before
-        .avatar-div::after
-        .image-overlay
-          content 'Изменить'
-          border-radius(50%)
-          overflow hidden
-          font-family Arial
-          padding-left 5px
-          font-size 15px
-          text-align center
-          display flex
-          align-items center
-          justify-content center
-          position absolute
-          inset 0
-          background #000000AA
-          z-index 1
-          opacity 0
-          transition opacity 0.3s ease
-          cursor pointer
-          user-select none
-        .avatar-div::after
-          content 'Отпустите, чтобы загрузить'
-        .avatar-div:hover::before
-          opacity 1
-        .image-overlay
-          opacity 1
-          cursor not-allowed
-      .image-loader.in-drag
-        .avatar-div::after
-          opacity 1
 
       .markdown-container
         flex 1
@@ -174,7 +145,7 @@
                          :crop-to-square="true"
                          :compress-size="IMAGE_ACHIEVEMENT_MAX_RES"
         >
-          <div class="avatar-div" @click.stop="updateAvatar(undefined)">
+          <div class="avatar-div">
             <AchievementAvatar class="achievement-image" :image-id="achievement.imageid" size="128px" border-offset="2px" border-width="2px"></AchievementAvatar>
           </div>
         </DragNDropLoader>
@@ -274,7 +245,7 @@ import FloatingButton from "../components/FloatingButton.vue";
 import AchievementAvatar from "../components/AchievementAvatar.vue";
 import Achievement from "../components/Achievement.vue";
 import Range from "../components/Range.vue";
-import {DragNDropLoader} from "@sergtyapkin/image-uploader";
+import DragNDropLoader from "@sergtyapkin/image-uploader/vue";
 import {IMAGE_MAX_RES, IMAGE_ACHIEVEMENT_MAX_RES} from "../constants";
 import RedactorAndRenderer from "../components/Markdown/RedactorAndRenderer.vue";
 import UserAvatar from "../components/UserAvatar.vue";

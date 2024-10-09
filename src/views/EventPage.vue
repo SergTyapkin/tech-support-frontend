@@ -146,6 +146,8 @@
             <FloatingInput v-model="event.eventtimeend" type="time" title="Конец мероприятия" :readonly="!$user.canEditEvents" no-info class="input"></FloatingInput>
           </div>
 
+          <Filters :filters="isAcademyValue" @change="onChangeAcademy" can-be-none class="input-checkbox" :disabled="!$user.canEditEvents"></Filters>
+
           <FloatingInput v-model="event.authorname" title="Автор мероприятия" readonly no-info class="input"></FloatingInput>
           <a v-if="event.authortelegram" :href="`https://t.me/${event.authortelegram}`" target="_blank" class="user-link">
             <FloatingInput :model-value="`@${event.authortelegram}`" title="Связь с автором" readonly no-info class="input"></FloatingInput>
@@ -212,10 +214,13 @@ import SelectList from "../components/SelectList.vue";
 import UsersTable from "../components/UsersTable.vue";
 import UserLine from "../components/UserLine.vue";
 import RedactorAndRenderer from "../components/Markdown/RedactorAndRenderer.vue";
+import Filters from "~/components/Filters.vue";
 
 
 export default {
-  components: {RedactorAndRenderer, UserLine, SelectList, FloatingButton, CircleLoading, Form, FloatingInput, UsersTable},
+  components: {
+    Filters,
+    RedactorAndRenderer, UserLine, SelectList, FloatingButton, CircleLoading, Form, FloatingInput, UsersTable},
 
   data() {
     return {
@@ -235,6 +240,8 @@ export default {
       allUsers: undefined,
       inSelectingUser: false,
       selectedUser: undefined,
+
+      isAcademyValue: [{id: 0, name: 'Это академия', value: undefined}],
     }
   },
 
@@ -272,6 +279,12 @@ export default {
 
 
   methods: {
+    onChangeAcademy(filter) {
+      if (filter.id === 0) {
+        this.isAcademyValue[0].value = filter.value;
+      }
+    },
+
     async getEventData() {
       this.loading = true;
       let response = await this.$api.getEventById(this.eventId);
@@ -327,7 +340,7 @@ export default {
 
     async updateEventData() {
       this.loading = true;
-      const res = await this.$api.editEvent(this.eventId, this.event.name, this.event.description, this.event.date, this.event.timestart, this.event.timeend, this.place.id, this.event.eventtimestart, this.event.eventtimeend, this.event.peopleneeds);
+      const res = await this.$api.editEvent(this.eventId, this.event.name, this.event.description, this.event.date, this.event.timestart, this.event.timeend, this.place.id, this.event.eventtimestart, this.event.eventtimeend, this.event.peopleneeds, this.isAcademyValue[0].value);
       this.loading = false;
 
       if (!res.ok_) {

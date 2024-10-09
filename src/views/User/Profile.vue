@@ -214,6 +214,9 @@ hr
   position relative
 
 .avatar-container
+  border-radius(99999px)
+  overflow hidden
+  padding 2px
   position relative
 
   .delete-avatar
@@ -229,40 +232,10 @@ hr
   .delete-avatar:hover
     transform scale(1.1)
 
-.avatar-container:hover
-  .delete-avatar
-    opacity 1
-    pointer-events auto
-
-.avatar-container
-  .avatar-div::before
-  .avatar-div::after
-    content 'Изменить'
-    border-radius(50%)
-    overflow hidden
-    font-family Arial
-    padding-left 5px
-    font-size 15px
-    text-align center
-    display flex
-    align-items center
-    position absolute
-    inset 0
-    background #000000AA
-    z-index 1
-    opacity 0
-    transition opacity 0.3s ease
-    cursor pointer
-
-  .avatar-div::after
-    content 'Отпустите, чтобы загрузить'
-
-  .avatar-div:hover::before
-    opacity 1
-
-  .image-loader.in-drag
-    .avatar-div::after
+  &:hover
+    .delete-avatar
       opacity 1
+      pointer-events auto
 
 .button-logout
   button()
@@ -293,23 +266,20 @@ hr
 
               <CircleLoading v-if="loading" size="80px"></CircleLoading>
 
-              <div v-else-if="yours" class="avatar-container">
+              <div v-else class="avatar-container">
                 <DragNDropLoader class="image-loader"
                                  @load="updateAvatar"
                                  @error="(errText) => $popups.error('Не удалось загрузить', errText)"
                                  :crop-to-square="true"
                                  :compress-size="IMAGE_PROFILE_MAX_RES"
+                                 :disabled="!(yours || $user.canEditUsersData)"
                 >
-                  <div class="avatar-div" @click.stop="updateAvatar(undefined)">
-                    <UserAvatar :image-id="user.avatarImageId" size="80px" :user-id="user.id"></UserAvatar>
+                  <div class="avatar-div">
+                    <UserAvatar :image-id="user.avatarImageId" size="80px" border-offset="0px" border-width="1px" :user-id="user.id"></UserAvatar>
                   </div>
                 </DragNDropLoader>
                 <img v-if="user.avatarImageId" class="delete-avatar" src="../../res/trash.svg" alt="delete"
                      @click.stop="deleteAvatarClick">
-              </div>
-              <div v-else class="avatar-div">
-                <UserAvatar :image-id="user.avatarImageId" size="80px" border-offset="0px" border-width="1px"
-                            :user-id="user.id"></UserAvatar>
               </div>
 
               <router-link :to="{name: 'ratings'}" class="position">
@@ -317,14 +287,14 @@ hr
                 <div class="info ">позиция</div>
               </router-link>
             </div>
-            <div v-if="!yours" class="username">
+            <div v-if="!(yours || $user.canEditUsersData)" class="username">
               <div class="another-user-info">{{ $usernameFull(user) }}</div>
             </div>
             <input v-if="$user.canEditUsersTitles && !yours" type="text" class="title" v-model="user.title"
                    @change="saveAnotherUserTitle" @keydown.enter="(event) => event.target.blur()">
             <div v-else class="title">{{ user.title }}</div>
 
-            <a v-if="!yours && user.telegram" :href="`https://t.me/${user.telegram}`" target="_blank" class="user-link">
+            <a v-if="!(yours || $user.canEditUsersData) && user.telegram" :href="`https://t.me/${user.telegram}`" target="_blank" class="user-link">
               <FloatingInput :model-value="`@${user.telegram}`" title="Telegram" readonly no-info
                              class="input"></FloatingInput>
             </a>
@@ -385,7 +355,7 @@ hr
           </div>
           <!-- ACHIEVEMENTS (END) -->
 
-          <div v-if="yours">
+          <div v-if="yours || $user.canEditUsersData">
             <FormExtended ref="form" no-bg
                           :fields="[
                             { title: 'ТВОЯ ФАМИЛИЯ', jsonName: 'secondName' },
@@ -450,14 +420,14 @@ import {closeRoll, isClosedRoll, openRoll, openRollList} from "../../utils/show-
 import CircleLoading from "../../components/loaders/CircleLoading.vue";
 import {nextTick} from "vue";
 import {BASE_URL_PATH, IMAGE_MAX_RES, IMAGE_PROFILE_MAX_RES} from "../../constants";
-import {DragNDropLoader} from "@sergtyapkin/image-uploader";
+import DragNDropLoader from "@sergtyapkin/image-uploader/vue";
 import ArrowListElement from "../../components/ArrowListElement.vue";
 import TopBar from "../../components/TopBar.vue";
 import UserAvatar from "../../components/UserAvatar.vue";
 import Achievement from "../../components/Achievement.vue";
 import AchievementAvatar from "../../components/AchievementAvatar.vue";
 import Range from "../../components/Range.vue";
-import {cleanupMarkdownPreview, dateToStr, deepClone, timeToStr} from "../../utils/utils";
+import {dateToStr, deepClone, timeToStr} from "../../utils/utils";
 import FloatingButton from "../../components/FloatingButton.vue";
 import AchievementsList from "../../components/AchievementsList.vue";
 
@@ -507,11 +477,11 @@ export default {
   methods: {
     async init() {
       if (this.yours) {
-        this.$refs.form.values = this.$user;
         this.user = this.$user;
       } else {
         await this.getAnotherUser();
       }
+      this.$refs.form.values = this.user;
 
       this.addTitlesToArrowListings();
       this.getAchievements();
@@ -540,7 +510,7 @@ export default {
         this.$refs.form.errors.thirdName = 'Отчество не может быть пустым';
         ok = false;
       }
-      if (email.length === 0) {
+      if (email !== undefined && email.length === 0) {
         this.$refs.form.errors.email = 'Email не может быть пустым';
         ok = false;
       }
@@ -702,6 +672,7 @@ export default {
       this.loading = true;
       const response = await this.$api.uploadImage(dataURL);
       this.loading = false;
+      console.log(response);
       if (!response.ok_) {
         this.$popups.error(`Ошибка ${response.status_}!`, `Не удалось загрузить картинку на сервер: ${response.info}`);
         return;
@@ -839,7 +810,7 @@ export default {
           return;
 
         this.userId = to;
-        this.yours = this.userId === undefined;
+        this.yours = (this.userId === undefined);
         await nextTick();
         await this.init();
       },

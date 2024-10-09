@@ -14,7 +14,7 @@
     "lint:fix": "eslint src --fix"
   },
   "dependencies": {
-    "@sergtyapkin/image-uploader": "^1.1.4",
+    "@sergtyapkin/image-uploader": "^1.1.10",
     "@vitejs/plugin-vue": "^4.2.3",
     "marked": "^4.0.12",
     "sanitize-html": "^2.10.0",

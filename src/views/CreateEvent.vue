@@ -65,8 +65,10 @@
 <!--        <FloatingInput v-model="isTimesEqual" title="Совпадает с мероприятием" type="checkbox"></FloatingInput>-->
         <FloatingInput v-model="timeStart" :disabled="checkboxValue[0].value" title="Приходить с" type="time" class="right-input"></FloatingInput>
         <FloatingInput v-model="timeEnd" :disabled="checkboxValue[0].value" title="Оставаться до" type="time" class="right-input"></FloatingInput>
-        <Filters :filters="checkboxValue" @change="onChangeFilters" can-be-none class="input-checkbox"></Filters>
-        <FloatingInput v-model="peopleNeeds" title="Сколько людей нужно" type="number" class="right-input"></FloatingInput>
+        <Filters :filters="checkboxValue" can-be-none class="input-checkbox"></Filters>
+
+        <Filters :filters="isAcademyValue" can-be-none class="input-checkbox"></Filters>
+        <FloatingInput v-model="peopleNeeds" title="Сколько людей нужно" type="number" class="right-input" :disabled="isAcademyValue[0].value"></FloatingInput>
         <SelectList v-model="place" :list="allPlaces" title="Место проведения"  class="right-input" solid></SelectList>
         <input class="submit-input" value="Создать" type="submit" @click="createEvent">
       </div>
@@ -97,7 +99,7 @@ export default {
       timeEventStart: undefined,
       timeEventEnd: undefined,
       peopleNeeds: undefined,
-
+      isAcademyValue: [{id: 0, name: 'Это академия', value: false}],
       allPlaces: [],
       place: undefined,
 
@@ -119,13 +121,6 @@ export default {
   },
 
   methods: {
-    onChangeFilters(filter) {
-      console.log(filter)
-      if (filter.id === 0) {
-        this.checkboxValue[0].value = filter.value;
-      }
-    },
-
     validate() {
       let ok = false;
       if (!this.name) {
@@ -155,7 +150,7 @@ export default {
         this.timeEnd = this.timeEventEnd;
       }
       this.loading = true;
-      const response = await this.$api.createEvent(this.name, this.description, this.date, this.timeStart, this.timeEnd, this.place.id, this.timeEventStart, this.timeEventEnd, this.peopleNeeds);
+      const response = await this.$api.createEvent(this.name, this.description, this.date, this.timeStart, this.timeEnd, this.place.id, this.timeEventStart, this.timeEventEnd, this.peopleNeeds, this.isAcademyValue[0].value);
       this.loading = false;
 
       if (!response.ok_) {

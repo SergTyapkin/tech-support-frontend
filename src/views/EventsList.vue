@@ -42,6 +42,10 @@
         width 100%
     .select-lists-container
       width 100%
+
+.academy-filters
+  padding 0
+
 .loading
   width 100%
 </style>
@@ -70,6 +74,13 @@
         <SelectList class="period-list" ref="periodSearch" v-model="periodSearch" @input="getEvents" :list="allPeriods" :selected-id="-1" title="За период" solid></SelectList>
         <SelectList class="place-list" ref="placeSearch" v-model="placeSearch" @input="getEvents" :list="allPlaces" :selected-id="-1" title="Поиск по месту" solid></SelectList>
       </div>
+      <Filters :filters="isAcademyFilters"
+               can-be-none
+               @change="getEvents()"
+               storing-name="eventsListIsAcademy"
+               class="academy-filters"
+               radio
+      ></Filters>
     </div>
 
     <ul class="events-list">
@@ -94,6 +105,7 @@
                    :place-id="event.placeid"
                    :author-name="event.authorname"
                    :author-id="event.authorid"
+                   :is-academy="event.isacademy"
         ></EventCard>
       </li>
     </ul>
@@ -134,6 +146,7 @@ export default {
 
       filters: [{id: 0, name: 'Прошедшие'}, {id: 1, name: 'Все'}, {id: 2, name: 'Предстояшие', value: true}],
       reversedOrderFilters: [{name: 'Сначала новые'}],
+      isAcademyFilters: [{id: 0, name: 'Академии'}, {id: 1, name: 'Мероприятия'}],
       searchText: '',
       placeSearch: undefined,
       periodSearch: undefined,
@@ -198,6 +211,12 @@ export default {
       if (this.periodSearch !== undefined && this.periodSearch.id !== -1) {
         filtersObj.dateStart = this.periodSearch.datestart;
         filtersObj.dateEnd = this.periodSearch.dateend;
+      }
+
+      if (this.isAcademyFilters[0].value) {
+        filtersObj.typeAcademy = "academy";
+      } else if (this.isAcademyFilters[1].value) {
+        filtersObj.typeAcademy = "events";
       }
 
 

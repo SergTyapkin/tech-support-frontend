@@ -89,26 +89,6 @@ markdown-button-svg-photo-fill = transparent
   > div._strikethrough
     text-decoration line-through
 
-.image-loader
-  position relative
-.image-loader::before
-  content 'Отпустите, чтобы загрузить фото'
-  position absolute
-  inset 0
-  padding-left 20px
-  text-align center
-  display flex
-  align-items center
-  background colorShadowDark-x
-  color textColor1
-  font-size 25px
-  opacity 0
-  transition opacity 0.2s ease
-  pointer-events none
-  z-index 999
-.image-loader.in-drag::before
-  opacity 1
-
 </style>
 
 <template>
@@ -116,8 +96,9 @@ markdown-button-svg-photo-fill = transparent
     <DragNDropLoader class="image-loader"
                      @load="attachPhoto"
                      @error="(errText) => $popups.error('Не удалось загрузить', errText)"
-                     :crop-to-square="true"
+                     :crop-to-square="false"
                      :compress-size="IMAGE_MAX_RES"
+                     :works-on-click="false"
     >
       <textarea class="markdowned scrollable link" ref="textarea" :rows="rows" v-model="modelValue" @input="updateVModel()" :placeholder="placeholder"></textarea>
       <div class="markdown-panel">
@@ -139,7 +120,8 @@ markdown-button-svg-photo-fill = transparent
 
 <script>
 import {IMAGE_MAX_RES} from "../../constants";
-import {DragNDropLoader} from "@sergtyapkin/image-uploader";
+import DragNDropLoader from "@sergtyapkin/image-uploader/vue";
+import {loadImageInBase64} from "@sergtyapkin/image-uploader";
 
 
 const TIME_DIFF_TO_EMIT_CHANGE = 500; // ms
@@ -247,12 +229,14 @@ export default {
     },
 
     async attachPhoto(dataURL) {
-      let text = this.modelValue;
+      let text = this.modelValue || '';
       const element = this.$refs.textarea;
 
       let end = text.length;
-      if (!dataURL)
+      if (!dataURL) {
         end = element.selectionEnd ? element.selectionEnd : 0;
+        dataURL = await loadImageInBase64(false, IMAGE_MAX_RES);
+      }
 
       const response = await this.$api.uploadImage(dataURL);
       if (!response.ok_) {

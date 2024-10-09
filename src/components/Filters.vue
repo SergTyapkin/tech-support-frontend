@@ -10,10 +10,11 @@
   display flex
   flex-wrap wrap
   align-items center
+  gap 20px
   @media ({mobile})
     flex-direction column
     align-items flex-start
-  gap 20px
+    gap 8px
   position relative
   width 100%
   color textColor2
