@@ -367,7 +367,7 @@ hr
                           :no-submit="true"
                           @input="onChange"
             ></FormExtended>
-            <input v-if="!user.isConfirmedEmail && !loadingConfirmEmail" type="submit" value="Подтвердить E-mail"
+            <input v-if="!user.isConfirmedEmail && !loadingConfirmEmail && yours" type="submit" value="Подтвердить E-mail"
                    class="confirm-email-input" @click="confirmEmailSendMessage">
             <CircleLoading v-if="loadingConfirmEmail"></CircleLoading>
           </div>
@@ -651,6 +651,8 @@ export default {
         rating: user.rating,
         telegram: user.telegram,
         title: user.title,
+        email: user.email,
+        isConfirmedEmail: user.isconfirmedemail,
       };
     },
 
