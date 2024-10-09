@@ -24,27 +24,30 @@
 
 .filters-container
   block()
-  display flex
-  gap 40px
-  .filters
-    padding 0
-  .select-lists-container
-    width 30%
+  .top-row
     display flex
-    flex-direction column-reverse
-    gap 20px
+    gap 40px
+    .filters
+      padding 0
+    .select-lists-container
+      width 30%
+      display flex
+      flex-direction column-reverse
+      gap 20px
 
 @media ({mobile})
   .filters-container
-    flex-direction column
-    .filters
-      > *
+    .top-row
+      flex-direction column
+      .filters
+        > *
+          width 100%
+      .select-lists-container
         width 100%
-    .select-lists-container
-      width 100%
 
 .academy-filters
   padding 0
+  padding-top 10px
 
 .loading
   width 100%
@@ -53,34 +56,41 @@
 <template>
   <div>
     <div class="filters-container">
-      <Filters class="filters"
-               :filters="filters"
-               @change="onChangeFilters"
-               radio
-               storing-name="eventsList"
-      >
-        <FloatingInput placeholder="Поиск по названию" no-info class="search-input" v-model="searchText" @input="getEvents"></FloatingInput>
-        <Filters :filters="reversedOrderFilters"
+      <div class="top-row">
+        <Filters class="filters"
+                 :filters="filters"
+                 @change="onChangeFilters"
+                 radio
                  can-be-none
-                 @change="(filter) => {
-                   this.isReversedEventsOrder = filter.value;
-                   this.events?.reverse();
-                 }"
-                 storing-name="eventsListReversedOrder"
-                 class="filters-newers-first"
-        ></Filters>
-      </Filters>
-      <div class="select-lists-container">
-        <SelectList class="period-list" ref="periodSearch" v-model="periodSearch" @input="getEvents" :list="allPeriods" :selected-id="-1" title="За период" solid></SelectList>
-        <SelectList class="place-list" ref="placeSearch" v-model="placeSearch" @input="getEvents" :list="allPlaces" :selected-id="-1" title="Поиск по месту" solid></SelectList>
+                 storing-name="eventsList"
+        >
+          <FloatingInput placeholder="Поиск по названию" no-info class="search-input" v-model="searchText" @input="getEvents"></FloatingInput>
+          <Filters :filters="reversedOrderFilters"
+                   can-be-none
+                   @change="(filter) => {
+                     this.isReversedEventsOrder = filter.value;
+                     this.events?.reverse();
+                   }"
+                   storing-name="eventsListReversedOrder"
+                   class="filters-newers-first"
+          ></Filters>
+        </Filters>
+        <div class="select-lists-container">
+          <SelectList class="period-list" ref="periodSearch" v-model="periodSearch" @input="getEvents" :list="allPeriods" :selected-id="-1" title="За период" solid></SelectList>
+          <SelectList class="place-list" ref="placeSearch" v-model="placeSearch" @input="getEvents" :list="allPlaces" :selected-id="-1" title="Поиск по месту" solid></SelectList>
+        </div>
       </div>
-      <Filters :filters="isAcademyFilters"
-               can-be-none
-               @change="getEvents()"
-               storing-name="eventsListIsAcademy"
-               class="academy-filters"
-               radio
-      ></Filters>
+
+
+      <div class="bottom-row">
+        <Filters :filters="isAcademyFilters"
+                 can-be-none
+                 @change="getEvents()"
+                 storing-name="eventsListIsAcademy"
+                 class="academy-filters"
+                 radio
+        ></Filters>
+      </div>
     </div>
 
     <ul class="events-list">
@@ -144,7 +154,7 @@ export default {
       allPlaces: [],
       allPeriods: [],
 
-      filters: [{id: 0, name: 'Прошедшие'}, {id: 1, name: 'Все'}, {id: 2, name: 'Предстояшие', value: true}],
+      filters: [{id: 0, name: 'Прошедшие'}, {id: 1, name: 'Предстояшие', value: true}],
       reversedOrderFilters: [{name: 'Сначала новые'}],
       isAcademyFilters: [{id: 0, name: 'Академии'}, {id: 1, name: 'Мероприятия'}],
       searchText: '',
@@ -179,7 +189,7 @@ export default {
     },
 
     onChangeFilters(filter) {
-      if (filter.id === 2) {
+      if (filter.id === 1) {
         this.isReversedEventsOrder = false;
         this.reversedOrderFilters[0].value = false;
       } else {
@@ -195,8 +205,6 @@ export default {
       if (this.filters[0].value) {
         filtersObj.type = "past";
       } else if (this.filters[1].value) {
-
-      } else if (this.filters[2].value) {
         filtersObj.type = "next";
       }
 
