@@ -20,16 +20,7 @@ user-padding-left-mobile = 5px
   .user-icon-container
   .user-icon
     border none
-    width (avatar-size - 4px)
-    height (avatar-size - 4px)
-    min-width (avatar-size - 4px)
-    min-height (avatar-size - 4px)
     border-radius(50%)
-    @media ({mobile})
-      width (avatar-size-mobile - 4px)
-      height (avatar-size-mobile - 4px)
-      min-width (avatar-size-mobile - 4px)
-      min-height (avatar-size-mobile - 4px)
   .user-icon
     overflow hidden
 
@@ -142,7 +133,7 @@ user-padding-left-mobile = 5px
 <template>
   <div class="user">
     <router-link :to="{name: 'userProfile', params: {userId: userId}}" class="user-icon-container" @contextmenu.prevent="deleteParticipation">
-      <UserAvatar :image-id="userImageId" class="user-icon" size="80px" size-mobile="50px" :user-id="id"></UserAvatar>
+      <UserAvatar :image-id="userImageId" class="user-icon" size="80px" size-mobile="50px" :user-id="id" border-width="0"></UserAvatar>
       <div v-if="canEdit && canDelete" class="delete-user" @click.stop.prevent="deleteParticipation"><img src="../res/trash.svg" alt="delete"></div>
     </router-link>
     <div class="info" :class="{isAdmin: $user.canEditParticipations}">

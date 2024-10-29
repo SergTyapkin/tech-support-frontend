@@ -4,6 +4,9 @@
 
 .user-avatar-root
   position relative
+  display flex
+  align-items center
+  justify-content center
   .avatar-root
     --border-color var(--border-color-user, mix(textColor2, transparent))
     margin auto

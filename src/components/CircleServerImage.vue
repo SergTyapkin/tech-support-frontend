@@ -6,6 +6,9 @@ borderColor = var(--border-color, #ff00ff)
 
 .avatar
   position relative
+  display flex
+  align-items center
+  justify-content center
   width var(--size)
   min-width var(--size)
   height var(--size)
@@ -17,8 +20,8 @@ borderColor = var(--border-color, #ff00ff)
     min-height var(--size-mobile)
 
   .avatar-image
-    width 100%
-    height 100%
+    width calc(100% - var(--border-offset, var(--border-offset-default__)))
+    height calc(100% - var(--border-offset, var(--border-offset-default__)))
     &:not(.no-border-radius)
       // border borderColor 1px solid // not works on Safari
       border-radius(50%)
@@ -27,7 +30,7 @@ borderColor = var(--border-color, #ff00ff)
 
   .border // and on Safari we need this shit
     position absolute
-    inset calc(-1 * (var(--border-offset, var(--border-offset-default__)) + var(--border-width, var(--border-width-default__))))
+    inset 0
     background radial-gradient(transparent 0%, transparent calc(70% - var(--border-width, var(--border-width-default__))), borderColor calc(70%), transparent calc(70% + 1px))
 
   &.no-border
@@ -53,7 +56,6 @@ borderColor = var(--border-color, #ff00ff)
 
 <script>
 import ServerImage from "./ServerImage.vue";
-import defaultAvatarImage from '../res/default_avatar.png';
 
 
 export default {
