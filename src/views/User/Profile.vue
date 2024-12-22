@@ -478,10 +478,13 @@ export default {
     async init() {
       if (this.yours) {
         this.user = this.$user;
+        this.$refs.form.values = this.user;
       } else {
         await this.getAnotherUser();
+        if (this.$user.canEditUsersData) {
+          this.$refs.form.values = this.user;
+        }
       }
-      this.$refs.form.values = this.user;
 
       this.addTitlesToArrowListings();
       this.getAchievements();

@@ -13,8 +13,11 @@ export default defineConfig({
     basicSsl(),
     robots(),
     VitePWA({
-      registerType: 'prompt',
-      includeAssets: ['/assets/web-app-manifest-192x192.png', '/assets/web-app-manifest-512x512.png', 'masked-icon.svg'],
+      strategies: 'generateSW',
+      registerType: 'autoUpdate',
+      injectRegister: 'script-defer',
+
+      includeAssets: [],
       manifest: {
         "short_name": "TechTeam",
         "name": "TechTeam Art Club BMSTU",
